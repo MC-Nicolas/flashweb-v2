@@ -1,0 +1,36 @@
+@import '@/styles/variables';
+
+.homeButtonWithText {
+  background-color: $main-background-dark;
+  border-radius: $main-radius;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  border: 0.0625rem solid transparent;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #181818, #141414);
+  box-shadow: 10px 10px 20px #090909, -10px -10px 20px #232323;
+  color: $main-text-dark;
+}
+
+.submitFormBtn {
+  font-family: 'Nunito Sans', sans-serif;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 0.0625rem solid transparent;
+  padding: 0.55rem 0.95rem;
+  line-height: 1.5;
+  border-radius: 0.55rem;
+  position: relative;
+  transition: all 0.2s ease;
+  letter-spacing: 0.025em;
+  font-size: 1rem;
+  border-color: #262626;
+  box-shadow: 3px 3px 6px #373737, -3px -3px 6px rgb(0, 0, 0);
+  color: #31344b;
+  background-color: #1c1c1d;
+  cursor: pointer;
+}
