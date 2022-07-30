@@ -1,0 +1,10 @@
+.neumorphicContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #222222;
+  box-shadow: -7px -5px 4px #262626, 8px 7px 14px 4px rgba(0, 0, 0, 0.27);
+  border-radius: 10px;
+  width: 450px;
+  height: 550px;
+}

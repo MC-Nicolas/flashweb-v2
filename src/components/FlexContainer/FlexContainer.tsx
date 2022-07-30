@@ -18,6 +18,7 @@ export interface FlexContainerProps {
   isTest?: boolean;
   theme?: any;
   style?: any;
+  className?: any;
 }
 
 const FlexContainer = ({
@@ -31,6 +32,7 @@ const FlexContainer = ({
   gap = '5px',
   isTest,
   style = {},
+  className,
 }: FlexContainerProps) => {
   return (
     <div
@@ -46,6 +48,7 @@ const FlexContainer = ({
         backgroundColor: isTest ? 'red' : '',
         ...style,
       }}
+      className={className}
     >
       {children}
     </div>

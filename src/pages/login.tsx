@@ -1,6 +1,6 @@
 import React from 'react';
-import PageContainer from 'src/components/PageContainer/PageContainer';
-import FlexContainer from 'src/components/FlexContainer/FlexContainer';
+import PageContainer from '@/components/PageContainer/PageContainer';
+import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import LoginForm from '@/components/LoginForm/LoginForm';
 import Head from 'next/head';
 

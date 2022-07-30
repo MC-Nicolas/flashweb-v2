@@ -6,9 +6,12 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.scss';
 
 import HomeButtonWithText from '@/components/Buttons/HomeButtonWithText';
+import { useAppSelector } from '@/redux/redux.hooks';
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const { isUserAuthenticated } = useAppSelector((state) => state.user);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -23,8 +26,10 @@ const Home: NextPage = () => {
           The one platform to learn everything you need.
         </p>
         <HomeButtonWithText
-          title='Login'
-          onClick={() => router.push('/login')}
+          title={isUserAuthenticated ? 'Dashboard' : 'Login'}
+          onClick={() =>
+            router.push(`${isUserAuthenticated ? '/dashboard' : '/login'}`)
+          }
         />
       </main>
     </div>

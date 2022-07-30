@@ -26,7 +26,7 @@ const BasicInput = ({
       alignItems='flex-start'
       flexWrap='nowrap'
     >
-      <label>{label} </label>
+      <label style={{ color: 'white', letterSpacing: '2px' }}>{label} </label>
       <input
         className={styles.basicInput}
         type={type}
