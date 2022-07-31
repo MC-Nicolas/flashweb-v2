@@ -7,11 +7,7 @@ type NeumorphicButtonWithIconProps = {
 };
 
 const NeumorphicButtonWithIcon = ({ icon }: NeumorphicButtonWithIconProps) => {
-  return (
-    <button className={styles.neumorphicButtonBorder}>
-      <div className={styles.neumorphicButtonInner}>{icon}</div>
-    </button>
-  );
+  return <span className={styles.neumorphicButtonInner}>{icon}</span>;
 };
 
 export default NeumorphicButtonWithIcon;

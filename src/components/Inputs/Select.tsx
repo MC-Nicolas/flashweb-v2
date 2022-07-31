@@ -7,17 +7,34 @@ type SelectProps = {
   label: string;
   options: { name: string; value: string }[];
   width?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const Select = ({ label, options, width = '100%' }: SelectProps) => {
+const Select = ({
+  value,
+  onChange,
+  label,
+  options,
+  width = '100%',
+}: SelectProps) => {
   return (
     <FlexContainer height='50px' width={width} justifyContent='flex-start'>
       <label
         className={styles.label}
-        style={{ display: 'flex', flexDirection: 'column' }}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          color: 'grey',
+          letterSpacing: 1,
+        }}
       >
         {label}
-        <select className={styles.neumorphicSelect}>
+        <select
+          value={value}
+          className={styles.neumorphicSelect}
+          onChange={onChange}
+        >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.name}

@@ -1,21 +1,24 @@
+import React, { useState } from 'react';
+
 import NeumorphicBasicButton from '@/components/Buttons/Neumorphics/NeumorphicBasicButton';
-import NeumorphicSquaredButton from '@/components/Buttons/Neumorphics/NeumorphicSquaredButton';
 import SubmitForm from '@/components/Buttons/SubmitForm';
 import InsetNeumorphicContainer from '@/components/Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
-import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
 import PageContainerWithNav from '@/components/Containers/PageContainerWithNav/PageContainerWithNav';
+import ClassicFlashcard from '@/components/Flashcard/Classic';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
-import BasicInput from '@/components/Inputs/BasicInput';
-import Select from '@/components/Inputs/Select';
+import NewFlashcardSelectors from '@/components/NewFlashcardSelectors/NewFlashcardSelectors';
 import SectionTitle from '@/components/Texts/SectionTitle';
-import React, { useState } from 'react';
 
 type Props = {};
 
 const Flashcard = (props: Props) => {
-  const [deckToAddTo, setDeckToAddTo] = useState('');
-  const [folderToAddTo, setFolderToAddTo] = useState('');
   const [isFrontActive, setIsFrontActive] = useState(true);
+  const [typeOfFlashcard, setTypeOfFlashcard] = useState('classic');
+  const [paramsAreCollapsed, setParamsAreCollapsed] = useState(true);
+  const [flashcardData, setFlashcardData] = useState({
+    front: '',
+    back: '',
+  });
 
   const handleCreateNewFlashcard = () => {
     console.log('create new flashcard');
@@ -30,55 +33,49 @@ const Flashcard = (props: Props) => {
         <FlexContainer height='100px'>
           <SectionTitle title='New Flashcard' color='white' />
         </FlexContainer>
-        <NeumorphicContainer width='80%' height='300px'>
-          <FlexContainer width='95%' height='50%'>
-            <Select
-              width='30%'
-              label='Folder to add to'
-              options={[
-                { name: 'PPL', value: 'ppl' },
-                { name: 'Math', value: 'math' },
-              ]}
-            />
-            <Select
-              width='30%'
-              label='Folder to add to'
-              options={[
-                { name: 'Meteo', value: 'ppl' },
-                { name: 'Navigation', value: 'math' },
-              ]}
-            />
-          </FlexContainer>
-          <Select
-            width='30%'
-            label='Type of flashcard'
-            options={[
-              { name: 'Classic', value: 'ppl' },
-              { name: 'QCM', value: 'math' },
-            ]}
-          />
-        </NeumorphicContainer>
+
+        <NewFlashcardSelectors
+          typeOfFlashcard={typeOfFlashcard}
+          setTypeOfFlashcard={setTypeOfFlashcard}
+          isCollapsed={paramsAreCollapsed}
+          setIsCollapsed={setParamsAreCollapsed}
+        />
+
         <InsetNeumorphicContainer
           width='80%'
-          height='50%'
-          style={{ marginTop: '40px' }}
+          height={paramsAreCollapsed ? '50%' : '70%'}
+          style={{ marginTop: '40px', transition: 'all 0.2s ease-in-out' }}
         >
-          <FlexContainer width='100%' height='100%' flexDirection='column'>
-            <FlexContainer width='50%' height='50px'>
-              <NeumorphicBasicButton
-                text='Front'
-                active={isFrontActive}
-                onClick={() => setIsFrontActive(true)}
+          {typeOfFlashcard === 'classic' && (
+            <FlexContainer width='100%' height='100%' flexDirection='column'>
+              <FlexContainer width='50%' height='50px'>
+                <NeumorphicBasicButton
+                  text='Front'
+                  active={isFrontActive}
+                  onClick={() => setIsFrontActive(true)}
+                />
+                <NeumorphicBasicButton
+                  text='Back'
+                  active={!isFrontActive}
+                  onClick={() => setIsFrontActive(false)}
+                />
+              </FlexContainer>
+              <ClassicFlashcard
+                front={flashcardData.front}
+                setFront={(e: { target: { value: string } }) =>
+                  setFlashcardData({ ...flashcardData, front: e.target.value })
+                }
+                back={flashcardData.back}
+                setBack={(e: { target: { value: string } }) =>
+                  setFlashcardData({ ...flashcardData, back: e.target.value })
+                }
+                isFlipped={!isFrontActive}
+                editable
               />
-              <NeumorphicBasicButton
-                text='Back'
-                active={!isFrontActive}
-                onClick={() => setIsFrontActive(false)}
-              />
-            </FlexContainer>
 
-            <SubmitForm title='Save' />
-          </FlexContainer>
+              <SubmitForm title='Save' />
+            </FlexContainer>
+          )}
         </InsetNeumorphicContainer>
       </FlexContainer>
     </PageContainerWithNav>

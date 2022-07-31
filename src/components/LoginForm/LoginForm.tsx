@@ -60,11 +60,14 @@ const LoginForm = (props: Props) => {
   };
   return (
     <NeumorphicContainer
+      width='450px'
+      height='500px'
       style={{
         padding: '10px',
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        textAlign: 'center',
       }}
     >
       <TitleAndDescription

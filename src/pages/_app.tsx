@@ -1,4 +1,5 @@
 import RouteGuard from '@/components/RouteGuard/RouteGuard';
+import UserData from '@/hooks/UserData/UserData.hook';
 import type { AppProps } from 'next/app';
 
 import { Toaster } from 'react-hot-toast';
@@ -10,10 +11,13 @@ import '../styles/global.scss';
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ReduxProvider store={store}>
-      <RouteGuard>
-        <Toaster />
+      {/* <RouteGuard> */}
+
+      <Toaster />
+      <UserData>
         <Component {...pageProps} />
-      </RouteGuard>
+      </UserData>
+      {/* </RouteGuard> */}
     </ReduxProvider>
   );
 };

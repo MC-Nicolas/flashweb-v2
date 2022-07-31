@@ -8,6 +8,7 @@
   font-size: 1rem;
   letter-spacing: 1px;
   cursor: pointer;
+  transition: all 0.4s;
 }
 
 .active {
@@ -15,4 +16,5 @@
   box-shadow: inset 0px 0px 6px 4px rgba(0, 0, 0, 0.37);
   border-radius: 5px;
   color: black;
+  transition: all 0.4s;
 }

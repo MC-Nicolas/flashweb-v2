@@ -13,16 +13,18 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import userReducer from './user/UserSlice';
+import foldersReducer from './folders/FolderSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  folders: foldersReducer,
 });
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: [],
+  blacklist: ['folders'],
 };
 
 const persitedReducer = persistReducer(persistConfig, rootReducer);

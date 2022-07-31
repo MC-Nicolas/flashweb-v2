@@ -6,14 +6,27 @@ import PageContainerWithNav from '@/components/Containers/PageContainerWithNav/P
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import BasicInput from '@/components/Inputs/BasicInput';
 import SectionTitle from '@/components/Texts/SectionTitle';
+import { useAppSelector } from '@/redux/redux.hooks';
+import { createFolderInDB } from '@/database/createInDB';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 type Props = {};
 
 const Folder = (props: Props) => {
+  const router = useRouter();
+  const { email } = useAppSelector((state) => state.user);
   const [folderName, setFolderName] = useState('');
 
-  const handleCreateNewFolder = () => {
-    console.log(folderName);
+  const handleCreateNewFolder = async (e: any) => {
+    e.preventDefault();
+    const { success, error } = await createFolderInDB(email, folderName);
+    if (success) {
+      toast.success('Folder created successfully');
+      setFolderName('');
+      router.push('/create/deck');
+    }
+    error && toast.error(error);
   };
   return (
     <PageContainerWithNav pageTitle='GLP - New Folder'>

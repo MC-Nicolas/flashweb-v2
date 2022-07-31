@@ -7,16 +7,42 @@ import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import BasicInput from '@/components/Inputs/BasicInput';
 import SectionTitle from '@/components/Texts/SectionTitle';
 import Select from '@/components/Inputs/Select';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import { setActiveFolder } from '@/redux/folders/FolderSlice';
+import { createNewDeckInDB } from '@/database/createInDB';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 type Props = {};
 
 const Deck = (props: Props) => {
-  const [folderToAddTo, setFolderToAddTo] = useState('');
-  const [deckName, setDeckName] = useState('');
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { email } = useAppSelector((state) => state.user);
+  const { foldersOptions, activeFolder } = useAppSelector(
+    (state) => state.folders
+  );
 
-  const handleCreateNewDeck = () => {
-    console.log(folderToAddTo, '->', deckName);
+  const [deckName, setDeckName] = useState('');
+  const [deckIsImportant, setDeckIsImportant] = useState(false);
+
+  const handleCreateNewDeck = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const { success, error } = await createNewDeckInDB(
+      email,
+      activeFolder,
+      deckName,
+      deckIsImportant
+    );
+    if (success) {
+      toast.success('Folder created successfully');
+      setDeckName('');
+      router.push('/create/flashcard');
+    }
+    error && toast.error(error);
   };
+
   return (
     <PageContainerWithNav pageTitle='GLP - New Folder'>
       <FlexContainer
@@ -50,11 +76,11 @@ const Deck = (props: Props) => {
               }}
             >
               <Select
+                width='70%'
                 label='Folder to add to'
-                options={[
-                  { name: 'PPL', value: 'ppl' },
-                  { name: 'Math', value: 'math' },
-                ]}
+                options={foldersOptions}
+                value={activeFolder}
+                onChange={(e) => dispatch(setActiveFolder(e.target.value))}
               />
               <BasicInput
                 label="Deck's name"
@@ -62,6 +88,26 @@ const Deck = (props: Props) => {
                 value={deckName}
                 onChange={(e: { target: { value: string } }) =>
                   setDeckName(e.target.value)
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    sx={{ color: 'white' }}
+                    value={deckIsImportant}
+                    onChange={(e: any) => setDeckIsImportant(e.target.checked)}
+                  />
+                }
+                label={
+                  <p
+                    style={{
+                      color: 'lightgrey',
+                      fontSize: '16px',
+                      letterSpacing: 1,
+                    }}
+                  >
+                    Want to make this deck part of you daily study ?
+                  </p>
                 }
               />
               <SubmitForm title='Save' />

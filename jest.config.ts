@@ -17,6 +17,7 @@ const customJestConfig = {
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@/redux/(.*)$': '<rootDir>/src/redux/$1',
     '^@/database/(.*)$': '<rootDir>/src/database/$1',
+    '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
   },
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',

@@ -31,9 +31,17 @@ const FolderRow = ({ folder }: any) => {
           <EqualizerIcon />
         </Link>
       </div>
-      <div style={{ color: 'white', cursor: 'pointer' }}>
+      <div style={{ color: 'white' }}>
         <Link href={folder.pushTo}>
-          <Image src={ArrowRight} alt='Study' width={20} height={20} />
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+            }}
+          >
+            <Image src={ArrowRight} alt='Study' width={20} height={20} />
+          </button>
         </Link>
       </div>
     </div>

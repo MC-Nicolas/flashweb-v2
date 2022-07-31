@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useAppSelector } from 'src/redux/redux.hooks';
 
 import { publicPaths } from './publicPaths';
+import PageContainer from '../PageContainer/PageContainer';
 
 type Props = {};
 
@@ -43,7 +44,7 @@ const RouteGuard = ({ children }: { children: any }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return authorized && children;
+  return authorized && <PageContainer>{children}</PageContainer>;
 };
 
 export default RouteGuard;
