@@ -18,7 +18,7 @@ const UserData = ({ children }: { children: any }) => {
       }
     });
     return () => unsub();
-  }, [email, dispatch]);
+  }, [email, dispatch, isUserAuthenticated]);
 
   return children;
 };

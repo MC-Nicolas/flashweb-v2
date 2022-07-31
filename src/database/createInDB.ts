@@ -26,6 +26,7 @@ export const createFolderInDB = async (email: string, folderName: string) => {
             folders: {
               [formattedFolderName]: {
                 title: folderName,
+                decks: [],
               },
             },
           },
@@ -61,32 +62,72 @@ export const createNewDeckInDB = async (
     if (docSnapshot.exists()) {
       const { folders } = docSnapshot.data();
 
-      if (folders[folderName][formattedDeckName]) {
-        response.error = 'Deck already exists';
-        return response;
-      }
+      const deckFound = folders[folderName].decks.find(
+        (deck: any) => deck.id === formattedDeckName
+      );
 
-      // Get doc and merge both decks
-
-      await setDoc(
-        doc(database, 'users', email),
-        {
-          folders: {
-            [folderName]: {
-              decks: [
-                {
-                  title: deckName,
-                  isImportant: isDeckImportant,
-                  id: formattedDeckName,
-                },
-              ],
+      if (!deckFound) {
+        await setDoc(
+          doc(database, 'users', email),
+          {
+            folders: {
+              [folderName]: {
+                decks: [
+                  ...folders[folderName].decks,
+                  {
+                    title: deckName,
+                    isImportant: isDeckImportant,
+                    id: formattedDeckName,
+                    flashcards: [],
+                  },
+                ],
+              },
             },
           },
-        },
-        { merge: true }
-      );
+          { merge: true }
+        );
+      }
     }
 
+    response.success = true;
+  } catch (err) {
+    response.error = err;
+  }
+  return response;
+};
+
+export const createNewFlashcardInDb = async (
+  email: string,
+  folderName: string,
+  deckName: string,
+  typeOfFlashcard: string,
+  flashcardData: { front: string; back: any }
+) => {
+  let response: { success: boolean; error: any } = {
+    success: false,
+    error: null,
+  };
+
+  try {
+    const docRef = doc(database, 'users', email);
+    const docSnapshot = await getDoc(docRef);
+
+    console.log(email, folderName, deckName, typeOfFlashcard, flashcardData);
+
+    if (docSnapshot.exists()) {
+      const { folders } = docSnapshot.data();
+
+      const deckFound = folders[folderName].decks.findIndex(
+        (deck: any) => deck.id === deckName
+      );
+
+      if (deckFound !== -1) {
+        response.error = 'Deck not found';
+        return;
+      } else {
+        // Add flashcard to deck
+      }
+    }
     response.success = true;
   } catch (err) {
     response.error = err;

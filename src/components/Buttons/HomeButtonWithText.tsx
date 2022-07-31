@@ -9,7 +9,11 @@ type Props = {
 
 const HomeButtonWithText = ({ title, onClick }: Props) => {
   return (
-    <button className={styles.homeButtonWithText} onClick={onClick}>
+    <button
+      className={styles.homeButtonWithText}
+      onClick={onClick}
+      style={{ marginTop: '50px' }}
+    >
       {title}
     </button>
   );
