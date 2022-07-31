@@ -7,9 +7,10 @@ import { setFolders } from '@/redux/folders/FolderSlice';
 
 const UserData = ({ children }: { children: any }) => {
   const dispatch = useAppDispatch();
-  const { email } = useAppSelector((state) => state.user);
+  const { email, isUserAuthenticated } = useAppSelector((state) => state.user);
 
   useEffect(() => {
+    if (!isUserAuthenticated) return;
     const unsub = onSnapshot(doc(database, 'users', email), (doc) => {
       const userFolders = doc.data();
       if (JSON.stringify(userFolders) !== '{}') {
