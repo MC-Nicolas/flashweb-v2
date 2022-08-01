@@ -24,6 +24,8 @@ const NewFlashcardSelectors = ({
   const { activeFolder, foldersOptions, activeDeck, decksOptions } =
     useAppSelector((state) => state.folders);
 
+  console.log(activeFolder);
+
   return (
     <NeumorphicContainer
       width='80%'

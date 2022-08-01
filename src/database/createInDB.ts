@@ -68,7 +68,7 @@ export const createNewDeckInDB = async (
 
       if (!deckFound) {
         await setDoc(
-          doc(database, 'users', email),
+          docRef,
           {
             folders: {
               [folderName]: {
@@ -79,6 +79,8 @@ export const createNewDeckInDB = async (
                     isImportant: isDeckImportant,
                     id: formattedDeckName,
                     flashcards: [],
+                    timeSpent: 0,
+                    reviews: [],
                   },
                 ],
               },
@@ -112,20 +114,35 @@ export const createNewFlashcardInDb = async (
     const docRef = doc(database, 'users', email);
     const docSnapshot = await getDoc(docRef);
 
-    console.log(email, folderName, deckName, typeOfFlashcard, flashcardData);
-
     if (docSnapshot.exists()) {
       const { folders } = docSnapshot.data();
 
-      const deckFound = folders[folderName].decks.findIndex(
-        (deck: any) => deck.id === deckName
-      );
+      let decks = folders[folderName].decks;
+      const deckIndex = decks.findIndex((deck: any) => deck.id === deckName);
 
-      if (deckFound !== -1) {
+      decks[deckIndex] = {
+        ...decks[deckIndex],
+        flashcards: [
+          ...decks[deckIndex].flashcards,
+          {
+            flashcardData,
+            typeOfFlashcard,
+          },
+        ],
+      };
+
+      if (deckIndex === -1) {
         response.error = 'Deck not found';
         return;
       } else {
-        // Add flashcard to deck
+        await setDoc(docRef, {
+          folders: {
+            [folderName]: {
+              ...folders[folderName],
+              decks,
+            },
+          },
+        });
       }
     }
     response.success = true;

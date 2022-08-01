@@ -68,12 +68,18 @@ const Flashcard = (props: Props) => {
                   <NeumorphicBasicButton
                     text='Front'
                     active={isFrontActive}
-                    onClick={() => setIsFrontActive(true)}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(true);
+                    }}
                   />
                   <NeumorphicBasicButton
                     text='Back'
                     active={!isFrontActive}
-                    onClick={() => setIsFrontActive(false)}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(false);
+                    }}
                   />
                 </FlexContainer>
                 <ClassicFlashcard

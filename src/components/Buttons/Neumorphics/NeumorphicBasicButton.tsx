@@ -7,7 +7,7 @@ type NeumorphicBasicButtonProps = {
   width?: string;
   height?: string;
   active?: boolean;
-  onClick?: () => void;
+  onClick?: any;
 };
 
 const NeumorphicBasicButton = ({
