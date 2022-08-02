@@ -6,7 +6,7 @@ export const foldersDummyData = [
     timeSpent: 4,
     avgSuccess: null,
     doneToday: null,
-    pushTo: '/study/errors/myerrors',
+    pushTo: '/study?folder=errors&deck=myerrors',
   },
   {
     id: 'navigation',
@@ -15,7 +15,7 @@ export const foldersDummyData = [
     timeSpent: 47,
     avgSuccess: 87,
     doneToday: 100,
-    pushTo: '/study/ppl/navigation',
+    pushTo: '/study?folder=ppl&deck=navigation',
   },
   {
     id: 'meteorology',
@@ -24,6 +24,6 @@ export const foldersDummyData = [
     timeSpent: 15,
     avgSuccess: 65,
     doneToday: 75,
-    pushTo: '/study/ppl/meteorology',
+    pushTo: '/study?folder=ppl&deck=meteorology',
   },
 ];
