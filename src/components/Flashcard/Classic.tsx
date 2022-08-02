@@ -6,9 +6,9 @@ import styles from './Classic.module.scss';
 
 type ClassicProps = {
   front: string;
-  setFront: any;
+  setFront?: any;
   back: string;
-  setBack: any;
+  setBack?: any;
   isFlipped: boolean;
   editable?: boolean;
 };
