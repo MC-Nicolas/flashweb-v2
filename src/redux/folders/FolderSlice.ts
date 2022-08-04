@@ -1,23 +1,19 @@
-import { FoldersOptionType } from '@/types/folders';
-import {
-  sortOptionsByName,
-  transformDecksToOptions,
-  transformFoldersToOptions,
-} from '@/utils/foldersFormatting';
+import { FoldersOptionType, FolderType } from '@/types/folders';
+import { removeSpecialChars } from '@/utils/dataFormatting';
+import { transformFoldersFromDBToOptions } from '@/utils/foldersFormatting';
+
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState: {
-  folders: {};
+  folders: FolderType[];
   foldersOptions: FoldersOptionType[];
   activeFolder: string;
-  decks: [];
   decksOptions: FoldersOptionType[];
   activeDeck: string;
 } = {
-  folders: {},
+  folders: [],
   foldersOptions: [],
   activeFolder: '',
-  decks: [],
   decksOptions: [],
   activeDeck: '',
 };
@@ -27,39 +23,85 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setFolders: (state, action) => {
-      const foldersOptions = sortOptionsByName(
-        transformFoldersToOptions(action.payload)
-      );
       state.folders = action.payload;
-      state.foldersOptions = foldersOptions;
-      if (foldersOptions.length > 0) {
-        const decks = action.payload[foldersOptions[0].value]?.decks || [];
-        state.activeFolder = foldersOptions[0].value;
-        state.decks = decks;
-        if (decks.length > 0) {
-          state.activeDeck = decks[0].id;
-          state.decksOptions = transformDecksToOptions(decks);
-        }
-      }
     },
     setFoldersOptions: (state, action) => {
       state.foldersOptions = action.payload;
     },
-    setActiveFolder: (state: any, action) => {
+    setActiveFolder: (state, action) => {
       state.activeFolder = action.payload;
-      const decks = state.folders[action.payload].decks || [];
-      if (decks.length > 0) {
-        state.activeDeck = decks[0].id;
-        state.decksOptions = transformDecksToOptions(decks);
-      }
+    },
+    setDecksOptions: (state, action) => {
+      state.decksOptions = action.payload;
     },
     setActiveDeck: (state, action) => {
       state.activeDeck = action.payload;
     },
+    addFolder: (state, action) => {
+      const formattedFolder = {
+        title: action.payload,
+        decks: [],
+      };
+      state.folders.push(formattedFolder);
+      state.activeFolder = action.payload;
+      state.foldersOptions.push({
+        name: formattedFolder.title,
+        value: removeSpecialChars(formattedFolder.title),
+      });
+    },
+    addDeck: (state, action) => {
+      const { isImportant, title, folderId } = action.payload;
+      const formattedDeck = {
+        title,
+        isImportant,
+        folderId,
+        id: removeSpecialChars(title),
+        flashcards: [],
+      };
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+      state.folders[folderIndex].decks.push(formattedDeck);
+      state.decksOptions.push({
+        name: formattedDeck.title,
+        value: removeSpecialChars(formattedDeck.title),
+      });
+    },
+    addFlashcard: (state, action) => {
+      const { typeOfFlashcard, deckId, front, back, folderId } = action.payload;
+      const formattedFlashcard = {
+        typeOfFlashcard,
+        flashcardData: {
+          front,
+          back,
+        },
+      };
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+
+      const deckIndex = state.folders[folderIndex].decks.findIndex(
+        (deck: any) =>
+          removeSpecialChars(deck.id) === removeSpecialChars(deckId)
+      );
+      state.folders[folderIndex].decks[deckIndex].flashcards.push(
+        formattedFlashcard
+      );
+    },
   },
 });
 
-export const { setFolders, setFoldersOptions, setActiveFolder, setActiveDeck } =
-  userSlice.actions;
+export const {
+  setFolders,
+  setFoldersOptions,
+  setDecksOptions,
+  setActiveFolder,
+  setActiveDeck,
+  addFolder,
+  addDeck,
+  addFlashcard,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -8,24 +8,26 @@ import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import StudySection from '@/components/StudySection/StudySection';
 import StudySelectors from '@/components/StudySelectors/StudySelectors';
 import SectionTitle from '@/components/Texts/SectionTitle';
+import { DeckType } from '@/types/folders';
+import { removeSpecialChars } from '@/utils/dataFormatting';
 
 type Props = {};
 
 const StudyP = (props: Props) => {
   const { query } = useRouter();
   const dispatch = useAppDispatch();
-  const { activeFolder, foldersOptions, activeDeck, decksOptions, decks } =
+  const { folders, activeFolder, foldersOptions, activeDeck, decksOptions } =
     useAppSelector((state) => state.folders);
 
   const [deck, setDeck] = useState<any>(null);
 
   const [flashcards, setFlashcards] = useState([]);
 
-  useEffect(() => {
-    if (activeFolder && activeDeck && deck) {
-      setFlashcards(deck.flashcards);
-    }
-  }, [deck]);
+  // useEffect(() => {
+  //   if (activeFolder && activeDeck && deck) {
+  //     setFlashcards(deck.flashcards);
+  //   }
+  // }, [deck]);
 
   useEffect(() => {
     if (query.folder && query.folder !== activeFolder) {
@@ -38,10 +40,14 @@ const StudyP = (props: Props) => {
 
   useEffect(() => {
     if (activeFolder && activeDeck) {
-      const deckData: any = decks.find((deck: any) => deck.id === activeDeck);
-      if (activeDeck) {
-        setDeck(deckData);
-      }
+      const activeFolderIndex = foldersOptions.findIndex(
+        (folder) => removeSpecialChars(folder.name) === activeFolder
+      );
+      const activeDeckIndex = folders[activeFolderIndex].decks.findIndex(
+        (deck: any) => removeSpecialChars(deck.name) === activeDeck
+      );
+      const deckData: any = folders[activeFolderIndex].decks[activeDeckIndex];
+      setDeck(deckData);
     }
     // Might be possible with is first init use state
   }, [activeFolder, activeDeck]);

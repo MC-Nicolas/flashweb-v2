@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import Image from 'next/image';
 
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import ArrowRight from '@/assets/icons/arrowRight.png';
+
+import { FolderType, DeckType } from '@/types/folders';
 
 import styles from './FolderRow.module.scss';
 
@@ -14,25 +16,35 @@ const handleColorFromPercentage = (percentage: number) => {
   return 'green';
 };
 
-const FolderRow = ({ folder }: any) => {
+const FolderRow = ({ deck }: { deck: DeckType }) => {
+  const { title, flashcards, reviews } = deck;
+  const [totalTimeSpent, setTotalTimeSpent] = useState(0);
+  const totalFlashcards = flashcards.length;
+
+  useEffect(() => {
+    let totalTime = 0;
+    console.log(reviews);
+  }, []);
+
+  // const avgSuccess = reviews.reduce((acc, review) => acc + review.right, 0) / reviews.length;
   return (
     <div className={styles.folderRow}>
-      <div>{folder.name}</div>
-      <div>{folder.numberOfFlashcards}</div>
-      <div>{folder.timeSpent}</div>
-      <div style={{ color: handleColorFromPercentage(folder.avgSuccess) }}>
+      <div>{title}</div>
+      <div>{flashcards.length}</div>
+      <div>{totalTimeSpent}</div>
+      {/* <div style={{ color: handleColorFromPercentage(folder.avgSuccess) }}>
         {folder.avgSuccess && folder.avgSuccess.toFixed(0) + '%'}
       </div>
       <div style={{ color: handleColorFromPercentage(folder.avgSuccess) }}>
         {folder.doneToday && folder.doneToday.toFixed(0) + '%'}
-      </div>
+      </div> */}
       <div style={{ cursor: 'pointer' }}>
         <Link href='/'>
           <EqualizerIcon />
         </Link>
       </div>
       <div style={{ color: 'white' }}>
-        <Link href={folder.pushTo}>
+        {/* <Link href={folder.pushTo}>
           <button
             style={{
               border: 'none',
@@ -42,7 +54,7 @@ const FolderRow = ({ folder }: any) => {
           >
             <Image src={ArrowRight} alt='Study' width={20} height={20} />
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

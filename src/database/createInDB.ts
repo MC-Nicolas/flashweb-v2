@@ -9,31 +9,24 @@ export const createFolderInDB = async (email: string, folderName: string) => {
   };
 
   try {
-    const docRef = doc(database, 'users', email);
+    const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
+    const docRef = doc(
+      database,
+      'users',
+      email,
+      'folders',
+      formattedFolderName
+    );
     const docSnapshot = await getDoc(docRef);
 
-    const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
-
     if (docSnapshot.exists()) {
-      const { folders } = docSnapshot.data();
-      if (folders && folders[formattedFolderName]) {
-        response.error = 'Folder already exists';
-        return response;
-      } else {
-        await setDoc(
-          doc(database, 'users', email),
-          {
-            folders: {
-              [formattedFolderName]: {
-                title: folderName,
-                decks: [],
-              },
-            },
-          },
-          { merge: true }
-        );
-      }
+      response.error = 'Folder already exists';
+      return response;
     }
+
+    await setDoc(docRef, {
+      title: folderName,
+    });
 
     response.success = true;
   } catch (err) {
@@ -54,42 +47,30 @@ export const createNewDeckInDB = async (
   };
 
   try {
-    const docRef = doc(database, 'users', email);
-    const docSnapshot = await getDoc(docRef);
-
+    const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
     const formattedDeckName = removeSpecialChars(deckName).toLowerCase();
 
+    const docRef = doc(
+      database,
+      'users',
+      email,
+      'folders',
+      formattedFolderName,
+      'decks',
+      formattedDeckName
+    );
+    const docSnapshot = await getDoc(docRef);
+
     if (docSnapshot.exists()) {
-      const { folders } = docSnapshot.data();
-
-      const deckFound = folders[folderName].decks.find(
-        (deck: any) => deck.id === formattedDeckName
-      );
-
-      if (!deckFound) {
-        await setDoc(
-          docRef,
-          {
-            folders: {
-              [folderName]: {
-                decks: [
-                  ...folders[folderName].decks,
-                  {
-                    title: deckName,
-                    isImportant: isDeckImportant,
-                    id: formattedDeckName,
-                    flashcards: [],
-                    timeSpent: 0,
-                    reviews: [],
-                  },
-                ],
-              },
-            },
-          },
-          { merge: true }
-        );
-      }
+      response.error = 'Deck already exists';
+      return response;
     }
+
+    await setDoc(docRef, {
+      title: deckName,
+      id: formattedDeckName,
+      isImportant: isDeckImportant,
+    });
 
     response.success = true;
   } catch (err) {
@@ -111,40 +92,35 @@ export const createNewFlashcardInDb = async (
   };
 
   try {
-    const docRef = doc(database, 'users', email);
+    const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
+    const formattedDeckName = removeSpecialChars(deckName).toLowerCase();
+    const formattedFlashcardFront = removeSpecialChars(
+      flashcardData.front
+    ).toLowerCase();
+
+    const docRef = doc(
+      database,
+      'users',
+      email,
+      'folders',
+      formattedFolderName,
+      'decks',
+      formattedDeckName,
+      'flashcards',
+      formattedFlashcardFront
+    );
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
-      const { folders } = docSnapshot.data();
-
-      let decks = folders[folderName].decks;
-      const deckIndex = decks.findIndex((deck: any) => deck.id === deckName);
-
-      decks[deckIndex] = {
-        ...decks[deckIndex],
-        flashcards: [
-          ...decks[deckIndex].flashcards,
-          {
-            flashcardData,
-            typeOfFlashcard,
-          },
-        ],
-      };
-
-      if (deckIndex === -1) {
-        response.error = 'Deck not found';
-        return;
-      } else {
-        await setDoc(docRef, {
-          folders: {
-            [folderName]: {
-              ...folders[folderName],
-              decks,
-            },
-          },
-        });
-      }
+      response.error = 'Flashcard already exists';
+      return response;
     }
+
+    await setDoc(docRef, {
+      typeOfFlashcard,
+      flashcardData,
+    });
+
     response.success = true;
   } catch (err) {
     response.error = err;

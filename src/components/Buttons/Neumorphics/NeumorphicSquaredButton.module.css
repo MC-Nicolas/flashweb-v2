@@ -1,0 +1,29 @@
+.neumorphicSquaredButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(125.54deg, #222222 3.91%, rgba(34, 34, 34, 0) 106.68%);
+  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.4)) drop-shadow(-3px -2px 4px rgba(118, 116, 116, 0.4));
+          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.4)) drop-shadow(-3px -2px 4px rgba(118, 116, 116, 0.4));
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+
+.active {
+  background: #bbbbbb;
+  -webkit-box-shadow: inset 0px 0px 6px 2px rgba(0, 0, 0, 0.59);
+          box-shadow: inset 0px 0px 6px 2px rgba(0, 0, 0, 0.59);
+  border-radius: 10px;
+  color: black;
+}
+/*# sourceMappingURL=NeumorphicSquaredButton.module.css.map */

@@ -1,18 +1,63 @@
-import { FoldersOptionType } from '@/types/folders';
+import { DeckReviewType, DeckType, FoldersOptionType } from '@/types/folders';
 
-export const transformFoldersToOptions = (folders: {
-  [key: string]: { title: string };
-}) => {
-  return Object.keys(folders).map((key) => ({
-    value: key,
-    name: folders[key].title,
-  }));
+// check if a key exists in object
+export const keyExists = (obj: any, key: string) => {
+  return Object.prototype.hasOwnProperty.call(obj, key);
 };
 
-export const transformDecksToOptions = (
-  decks: { title: string; id: string; isImportant: boolean }[]
+export const transformFromDatabaseToReduxFolders = (
+  folders: any,
+  decks: any
 ) => {
-  return decks.map((deck) => ({ name: deck.title, value: deck.id }));
+  const foldersRedux: {}[] = [];
+  for (const folder of folders) {
+    const decksRedux: any[] = [];
+    for (const deck of decks) {
+      if (deck.folderId === folder.id) {
+        if (keyExists(deck, 'flashcards')) {
+          decksRedux.push(deck);
+        } else {
+          decksRedux.push({
+            ...deck,
+            flashcards: [],
+          });
+        }
+      }
+    }
+    foldersRedux.push({
+      id: folder.id,
+      title: folder.title,
+      decks: decksRedux,
+    });
+  }
+  return foldersRedux;
+};
+
+export const transformFoldersFromDBToOptions = (
+  folders: { id: string; title: string }[]
+): FoldersOptionType[] => {
+  const foldersOptions: FoldersOptionType[] = [];
+  for (const folder of folders) {
+    foldersOptions.push({
+      name: folder.title,
+      value: folder.id,
+    });
+  }
+  return foldersOptions;
+};
+
+export const transformDecksFromDBToOptions = (
+  decks: DeckType[]
+): FoldersOptionType[] => {
+  const decksOptions: FoldersOptionType[] = [];
+
+  for (const deck of decks) {
+    decksOptions.push({
+      name: deck.title,
+      value: deck.id,
+    });
+  }
+  return decksOptions;
 };
 
 export const sortOptionsByName = (options: FoldersOptionType[]) => {
