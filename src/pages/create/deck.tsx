@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import SubmitForm from '@/components/Buttons/SubmitForm';
 import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
@@ -9,10 +9,16 @@ import SectionTitle from '@/components/Texts/SectionTitle';
 import Select from '@/components/Inputs/Select';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
-import { setActiveFolder } from '@/redux/folders/FolderSlice';
+import {
+  addDeck,
+  setActiveDeck,
+  setActiveFolder,
+  setFoldersOptions,
+} from '@/redux/folders/FolderSlice';
 import { createNewDeckInDB } from '@/database/createInDB';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { removeSpecialChars } from '@/utils/dataFormatting';
 
 type Props = {};
 
@@ -37,6 +43,14 @@ const Deck = (props: Props) => {
     );
     if (success) {
       toast.success('Folder created successfully');
+      dispatch(setActiveDeck(deckName));
+      dispatch(
+        addDeck({
+          isImportant: deckIsImportant,
+          title: deckName,
+          folderId: removeSpecialChars(activeFolder),
+        })
+      );
       setDeckName('');
       router.push('/create/flashcard');
     }
@@ -44,14 +58,14 @@ const Deck = (props: Props) => {
   };
 
   return (
-    <PageContainerWithNav pageTitle='GLP - New Folder'>
+    <PageContainerWithNav pageTitle='GLP - New Deck'>
       <FlexContainer
         height='100vh'
         flexDirection='column'
         justifyContent='flex-start'
       >
         <FlexContainer height='100px'>
-          <SectionTitle title='New Folder' color='white' />
+          <SectionTitle title='New Deck' color='white' />
         </FlexContainer>
         <FlexContainer width='80%' height='80%'>
           <NeumorphicContainer

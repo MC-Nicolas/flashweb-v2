@@ -12,7 +12,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ReduxProvider store={store}>
       {/* <RouteGuard> */}
-
       <Toaster />
       <UserData>
         <Component {...pageProps} />

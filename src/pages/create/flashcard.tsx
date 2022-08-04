@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import NeumorphicBasicButton from '@/components/Buttons/Neumorphics/NeumorphicBasicButton';
 import SubmitForm from '@/components/Buttons/SubmitForm';
@@ -10,10 +10,15 @@ import NewFlashcardSelectors from '@/components/NewFlashcardSelectors/NewFlashca
 import SectionTitle from '@/components/Texts/SectionTitle';
 import { createNewFlashcardInDb } from '@/database/createInDB';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { addFlashcard } from '@/redux/folders/FolderSlice';
+import { removeSpecialChars } from '@/utils/dataFormatting';
 
 type Props = {};
 
 const Flashcard = (props: Props) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user);
   const { activeDeck, activeFolder } = useAppSelector((state) => state.folders);
@@ -27,13 +32,35 @@ const Flashcard = (props: Props) => {
 
   const handleCreateNewFlashcard = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    await createNewFlashcardInDb(
+    if (!email || !activeDeck || !activeFolder) {
+      return toast.error('Oops error');
+    }
+
+    const { success, error } = await createNewFlashcardInDb(
       email,
       activeFolder,
       activeDeck,
       typeOfFlashcard,
       flashcardData
     );
+
+    if (success) {
+      const { front, back } = flashcardData;
+      toast.success('Flashcard created successfully');
+      setFlashcardData({ front: '', back: '' });
+      dispatch(
+        addFlashcard({
+          title: removeSpecialChars(front),
+          deckId: removeSpecialChars(activeDeck),
+          front: front,
+          typeOfFlashcard,
+          back: back,
+          folderId: removeSpecialChars(activeFolder),
+        })
+      );
+    } else {
+      toast.error(error);
+    }
   };
   return (
     <PageContainerWithNav pageTitle='GLP - New Flashcard'>

@@ -6,15 +6,17 @@ import PageContainerWithNav from '@/components/Containers/PageContainerWithNav/P
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import BasicInput from '@/components/Inputs/BasicInput';
 import SectionTitle from '@/components/Texts/SectionTitle';
-import { useAppSelector } from '@/redux/redux.hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { createFolderInDB } from '@/database/createInDB';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { addFolder, setActiveFolder } from '@/redux/folders/FolderSlice';
 
 type Props = {};
 
 const Folder = (props: Props) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user);
   const [folderName, setFolderName] = useState('');
 
@@ -23,6 +25,7 @@ const Folder = (props: Props) => {
     const { success, error } = await createFolderInDB(email, folderName);
     if (success) {
       toast.success('Folder created successfully');
+      dispatch(addFolder(folderName));
       setFolderName('');
       router.push('/create/deck');
     }
