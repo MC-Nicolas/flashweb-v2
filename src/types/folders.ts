@@ -11,7 +11,7 @@ export interface AnswersType {
   right: string[];
 }
 export interface DeckReviewType {
-  date: string;
+  date: number;
   timeSpent: number;
   answers: AnswersType[];
 }
@@ -21,6 +21,7 @@ export interface DeckType {
   title: string;
   folderId: string;
   flashcards: FlashcardType[];
+  reviews?: DeckReviewType[];
 }
 
 export interface FoldersOptionType {

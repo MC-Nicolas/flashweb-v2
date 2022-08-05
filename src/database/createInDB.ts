@@ -1,3 +1,4 @@
+import { AnswersType } from '@/types/folders';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import database from './firebase';
@@ -90,7 +91,6 @@ export const createNewFlashcardInDb = async (
     success: false,
     error: null,
   };
-  console.log(email, folderName, deckName, typeOfFlashcard, flashcardData);
   try {
     const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
     const formattedDeckName = removeSpecialChars(deckName).toLowerCase();
@@ -121,6 +121,42 @@ export const createNewFlashcardInDb = async (
       flashcardData,
     });
 
+    response.success = true;
+  } catch (err) {
+    response.error = err;
+  }
+  return response;
+};
+
+export const saveReviewInDB = async (
+  email: string,
+  folderId: string,
+  deckId: string,
+  answers: AnswersType,
+  timeSpent: number
+) => {
+  let response: { success: boolean; error: any } = {
+    success: false,
+    error: null,
+  };
+  const nowInSec = Math.floor(Date.now() / 1000);
+  try {
+    const docRef = doc(
+      database,
+      'users',
+      email,
+      'folders',
+      folderId,
+      'decks',
+      deckId,
+      'reviews',
+      nowInSec.toString()
+    );
+    await setDoc(docRef, {
+      answers,
+      date: nowInSec,
+      timeSpent,
+    });
     response.success = true;
   } catch (err) {
     response.error = err;

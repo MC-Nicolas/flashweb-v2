@@ -5,6 +5,8 @@ import SectionTitle from '@/components/Texts/SectionTitle';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
 import ImportantFolderTable from '@/components/ImportantFolderTable/ImportantFolderTable';
+import Rechart from '@/components/Highchart/Highchart';
+import Highchart from '@/components/Highchart/Highchart';
 
 const Dashboard = () => {
   return (
@@ -27,7 +29,7 @@ const Dashboard = () => {
             color: 'white',
           }}
         >
-          Graphs container
+          <Highchart />
         </NeumorphicContainer>
         <FlexContainer width='80%' height='40%' style={{ marginTop: '50px' }}>
           <ImportantFolderTable />

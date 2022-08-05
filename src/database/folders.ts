@@ -1,4 +1,4 @@
-import { DeckType, FlashcardType } from '@/types/folders';
+import { DeckReviewType, DeckType, FlashcardType } from '@/types/folders';
 import { collection, getDocs } from 'firebase/firestore';
 import database from './firebase';
 
@@ -70,4 +70,36 @@ export const getFlashcardsForDeck = async (
   });
 
   return flashcards;
+};
+
+export const getReviewsForDeck = async (
+  email: string,
+  folderId: string,
+  deckId: string
+): Promise<DeckReviewType[]> => {
+  const reviews: DeckReviewType[] = [];
+  const querySnapshot = await getDocs(
+    collection(
+      database,
+      'users',
+      email,
+      'folders',
+      folderId,
+      'decks',
+      deckId,
+      'reviews'
+    )
+  );
+
+  querySnapshot.docs.map((doc) => {
+    const { answers, date, timeSpent } = doc.data();
+
+    reviews.push({
+      answers,
+      date,
+      timeSpent,
+    });
+  });
+
+  return reviews;
 };

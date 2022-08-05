@@ -9,19 +9,26 @@ import FolderRow from './FolderRow';
 
 const ImportantFolderTable = () => {
   const { folders } = useAppSelector((state) => state.folders);
-  const [importantDecks, setImportantDecks] = useState<null | DeckType[]>(null);
+  const [importantDecks, setImportantDecks] = useState<DeckType[]>([]);
 
-  // useEffect(() => {
-  //   if (decks.length > 0) {
-  //     const importantDecks = decks.filter((deck: DeckType) => deck.isImportant);
-  //     setImportantDecks(importantDecks);
-  //   }
-  // }, [decks]);
+  useEffect(() => {
+    // for each folder, check for important deck inside and setImportantDecks
+    const importantDecks: DeckType[] = folders.reduce((acc: any, folder) => {
+      const importantDeck: DeckType | undefined = folder.decks.find(
+        (deck) => deck.isImportant
+      );
+      if (importantDeck) {
+        acc.push(importantDeck);
+      }
+      return acc;
+    }, []);
+    setImportantDecks(importantDecks);
+  }, [folders]);
   return (
     <FlexContainer>
       <FolderHeaderRow />
-      {/* {importantDecks &&
-        importantDecks.map((deck) => <FolderRow key={deck.id} deck={deck} />)} */}
+      {importantDecks.length > 0 &&
+        importantDecks.map((deck) => <FolderRow key={deck.id} deck={deck} />)}
     </FlexContainer>
   );
 };

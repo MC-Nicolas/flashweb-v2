@@ -1,4 +1,9 @@
-import { FoldersOptionType, FolderType } from '@/types/folders';
+import {
+  AnswersType,
+  DeckReviewType,
+  FoldersOptionType,
+  FolderType,
+} from '@/types/folders';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import { transformFoldersFromDBToOptions } from '@/utils/foldersFormatting';
 
@@ -10,12 +15,14 @@ export const initialState: {
   activeFolder: string;
   decksOptions: FoldersOptionType[];
   activeDeck: string;
+  allReviews: DeckReviewType[];
 } = {
   folders: [],
   foldersOptions: [],
   activeFolder: '',
   decksOptions: [],
   activeDeck: '',
+  allReviews: [],
 };
 
 export const userSlice = createSlice({
@@ -99,6 +106,42 @@ export const userSlice = createSlice({
         formattedFlashcard
       );
     },
+
+    addReview: (
+      state,
+      action: {
+        payload: {
+          deckId: string;
+          folderId: string;
+          answers: any;
+          timeSpent: number;
+        };
+      }
+    ) => {
+      const { deckId, folderId, answers, timeSpent } = action.payload;
+      const formattedReview = {
+        answers,
+        date: (new Date().getTime() / 1000).toFixed(),
+        timeSpent,
+      };
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+
+      const deckIndex = state.folders[folderIndex].decks.findIndex(
+        (deck: any) =>
+          removeSpecialChars(deck.id) === removeSpecialChars(deckId)
+      );
+      state.folders[folderIndex]?.decks[deckIndex]?.reviews?.push(
+        formattedReview
+      );
+      state.allReviews.push(formattedReview);
+    },
+
+    setAllReview: (state, action) => {
+      state.allReviews = action.payload;
+    },
   },
 });
 
@@ -111,6 +154,8 @@ export const {
   addFolder,
   addDeck,
   addFlashcard,
+  addReview,
+  setAllReview,
 } = userSlice.actions;
 
 export default userSlice.reducer;

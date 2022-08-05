@@ -25,7 +25,8 @@
     "**/*.tsx",
     "types.d.ts",
     "./jest-setup.ts",
-    "jest.config.ts"
+    "jest.config.ts",
+    "src/components/Loader/Loader.jsx"
   ],
   "exclude": ["node_modules"]
 }

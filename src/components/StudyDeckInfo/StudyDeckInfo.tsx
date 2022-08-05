@@ -1,11 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { studySections } from '@/redux/study/StudySections';
-import {
-  resetStudyState,
-  setStudyIsActive,
-  setStudySection,
-  setTimeSpent,
-} from '@/redux/study/StudySlice';
+import { setStudySection, setTimeSpent } from '@/redux/study/StudySlice';
 import React, { useEffect, useState } from 'react';
 import FlexContainer from '../FlexContainer/FlexContainer';
 
@@ -14,7 +9,6 @@ const StudyDeckInfo = () => {
   const { flashcards, totalAnswers } = useAppSelector((state) => state.study);
   const [timer, setTimer] = useState(0);
   useEffect(() => {
-    // update timer every second
     const interval = setInterval(() => {
       setTimer(timer + 1);
     }, 1000);

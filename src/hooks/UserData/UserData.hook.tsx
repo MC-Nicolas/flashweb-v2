@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   setActiveDeck,
   setActiveFolder,
+  setAllReview,
   setDecksOptions,
   setFolders,
   setFoldersOptions,
@@ -12,13 +13,14 @@ import {
   getDecksFromDB,
   getFlashcardsForDeck,
   getFoldersFromDB,
+  getReviewsForDeck,
 } from '@/database/folders';
 import {
   transformDecksFromDBToOptions,
   transformFoldersFromDBToOptions,
   transformFromDatabaseToReduxFolders,
 } from '@/utils/foldersFormatting';
-import { DeckType } from '@/types/folders';
+import { DeckReviewType, DeckType } from '@/types/folders';
 
 const UserData = ({ children }: { children: any }) => {
   const dispatch = useAppDispatch();
@@ -29,6 +31,7 @@ const UserData = ({ children }: { children: any }) => {
   const getUserData = async () => {
     const foldersFromDB = await getFoldersFromDB(email);
     let decksFromDB = await getDecksFromDB(email, foldersFromDB);
+    let allReviews: DeckReviewType[] = [];
 
     if (decksFromDB.length > 0) {
       decksFromDB.map(async (deck: DeckType, i: number) => {
@@ -37,11 +40,16 @@ const UserData = ({ children }: { children: any }) => {
           deck.folderId,
           deck.id
         );
+        let reviews = await getReviewsForDeck(email, deck.folderId, deck.id);
 
         if (flashcards.length > 0) {
           decksFromDB[i].flashcards = flashcards;
         }
-
+        if (reviews.length > 0) {
+          allReviews.push(...reviews);
+          decksFromDB[i].reviews = reviews;
+        }
+        dispatch(setAllReview(allReviews));
         setDecks(decksFromDB);
       });
     }

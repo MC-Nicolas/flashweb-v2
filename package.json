@@ -18,6 +18,8 @@
     "@mui/styled-engine-sc": "^5.8.0",
     "@reduxjs/toolkit": "^1.8.3",
     "firebase": "^9.9.1",
+    "highcharts": "^10.2.0",
+    "highcharts-react-official": "^3.1.0",
     "next": "12.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
