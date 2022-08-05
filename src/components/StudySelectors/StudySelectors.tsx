@@ -6,14 +6,12 @@ import Select from '../Inputs/Select';
 import EastIcon from '@mui/icons-material/East';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
+import { setStudyIsActive } from '@/redux/study/StudySlice';
 
-type StudySelectorsProps = {
-  deck: any;
-};
-
-const StudySelectors = ({ deck }: StudySelectorsProps) => {
+const StudySelectors = () => {
   const dispatch = useAppDispatch();
-  const { activeFolder, foldersOptions, activeDeck, decksOptions, decks } =
+  const { flashcards } = useAppSelector((state) => state.study);
+  const { activeFolder, foldersOptions, activeDeck, decksOptions } =
     useAppSelector((state) => state.folders);
 
   return (
@@ -35,12 +33,12 @@ const StudySelectors = ({ deck }: StudySelectorsProps) => {
         />
       </FlexContainer>
       <FlexContainer height='80%'>
-        {deck && deck?.flashcards?.length > 0 ? (
+        {flashcards && flashcards.length > 0 ? (
           <ButtonWithIcon
             style={{ width: '180px', backgroundColor: 'green' }}
             title='Study'
             icon={<EastIcon />}
-            onClick={() => console.log('submitting')}
+            onClick={() => dispatch(setStudyIsActive(true))}
             iconIsComponent
             iconPosition='right'
           />

@@ -1,6 +1,5 @@
-import { DeckType } from '@/types/folders';
+import { DeckType, FlashcardType } from '@/types/folders';
 import { collection, getDocs } from 'firebase/firestore';
-import { doc, getDoc } from 'firebase/firestore';
 import database from './firebase';
 
 export const getFoldersFromDB = async (email: string) => {
@@ -18,22 +17,57 @@ export const getDecksFromDB = async (
   email: string,
   folders: { id: string; title: string }[]
 ): Promise<DeckType[]> => {
-  const decks: DeckType[] = [];
+  let decks: DeckType[] = [];
 
-  for (const folder of folders) {
-    const querySnapshot = await getDocs(
-      collection(database, 'users', email, 'folders', folder.id, 'decks')
-    );
-    querySnapshot.docs.map((doc) => {
-      const { title, isImportant } = doc.data();
-      decks.push({
-        folderId: folder.id,
-        title: title,
-        id: doc.id,
-        isImportant,
+  try {
+    for (const folder of folders) {
+      const querySnapshot = await getDocs(
+        collection(database, 'users', email, 'folders', folder.id, 'decks')
+      );
+      querySnapshot.docs.map(async (doc) => {
+        const { title, isImportant } = doc.data();
+        decks.push({
+          folderId: folder.id,
+          title: title,
+          id: doc.id,
+          isImportant,
+          flashcards: [],
+        });
       });
-    });
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   return decks;
+};
+
+export const getFlashcardsForDeck = async (
+  email: string,
+  folderId: string,
+  deckId: string
+): Promise<FlashcardType[]> => {
+  const flashcards: FlashcardType[] = [];
+  const querySnapshot = await getDocs(
+    collection(
+      database,
+      'users',
+      email,
+      'folders',
+      folderId,
+      'decks',
+      deckId,
+      'flashcards'
+    )
+  );
+
+  querySnapshot.docs.map((doc) => {
+    const { typeOfFlashcard, flashcardData } = doc.data();
+    flashcards.push({
+      typeOfFlashcard,
+      flashcardData,
+    });
+  });
+
+  return flashcards;
 };

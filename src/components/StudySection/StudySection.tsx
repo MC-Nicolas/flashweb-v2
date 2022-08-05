@@ -10,58 +10,51 @@ import ButtonWithIcon from '../Buttons/ButtonWithIcon';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 import { Button } from '@mui/material';
+import ActiveFlashcard from './ActiveFlashcard';
+import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import {
+  addRightAnswer,
+  addWrongAnswer,
+  setFlashcardIsFlipped,
+} from '@/redux/study/StudySlice';
 
 type StudySectionProps = {
   deck: any;
 };
 
 const StudySection = ({ deck }: StudySectionProps) => {
-  const [rightAnswers, setRightAnswers] = useState(0);
-  const [wrongAnswers, setWrongAnswers] = useState(0);
-  const [flashcardIsFlipped, setFlashcardIsFlipped] = useState(false);
-  const [shuffledFlashcards, setshuffledFlashcards] = useState<any>(null);
+  const dispatch = useAppDispatch();
+  const { flashcardIsFlipped } = useAppSelector((state) => state.study);
+  const [shuffledFlashcards, setShuffledFlashcards] = useState<any>(null);
   const [usedOrders, setUsedOrders] = useState<any>([]);
   const [order, setOrder] = useState(0);
 
   const { flashcards } = deck;
 
   useEffect(() => {
-    setshuffledFlashcards(shuffleFlashcards(flashcards));
-  }, [flashcards]);
-
-  const ActiveFlashcard = ({ index }: { index: number }) => {
-    const { typeOfFlashcard, flashcardData } = shuffledFlashcards[index];
-    const { front, back } = flashcardData;
-    if (typeOfFlashcard === 'classic') {
-      return (
-        <ClassicFlashcard
-          front={front}
-          back={back}
-          isFlipped={flashcardIsFlipped}
-        />
-      );
-    } else {
-      return <></>;
+    if (flashcards.length > 0) {
+      setShuffledFlashcards(shuffleFlashcards(flashcards));
     }
-  };
+  }, [flashcards]);
 
   return (
     <InsetNeumorphicContainer width='80%' height='80vh'>
-      <StudyDeckInfo deck={deck} cardsDone={usedOrders} />
+      <StudyDeckInfo />
       <FlexContainer height='70%'>
         {shuffledFlashcards &&
-          shuffledFlashcards.length > usedOrders.length && (
-            <ActiveFlashcard index={order} />
+          shuffledFlashcards?.length > usedOrders.length && (
+            <ActiveFlashcard index={order} flashcards={shuffledFlashcards} />
           )}
       </FlexContainer>
       <FlexContainer height='20%'>
-        {flashcardIsFlipped && shuffledFlashcards.length > usedOrders.length && (
+        {flashcardIsFlipped && shuffledFlashcards?.length > usedOrders.length && (
           <>
             <Button
               variant='contained'
               color='error'
               onClick={() => {
-                setFlashcardIsFlipped(false);
+                dispatch(setFlashcardIsFlipped(false));
+                dispatch(addWrongAnswer(flashcards[order].flashcardData.front));
                 setUsedOrders([...usedOrders, order]);
                 setOrder(order + 1);
               }}
@@ -72,7 +65,8 @@ const StudySection = ({ deck }: StudySectionProps) => {
               variant='contained'
               color='success'
               onClick={() => {
-                setFlashcardIsFlipped(false);
+                dispatch(setFlashcardIsFlipped(false));
+                dispatch(addRightAnswer(flashcards[order].flashcardData.front));
                 setUsedOrders([...usedOrders, order]);
                 setOrder(order + 1);
               }}
@@ -94,7 +88,7 @@ const StudySection = ({ deck }: StudySectionProps) => {
               iconPosition='right'
               iconIsComponent
               icon={<SwapHorizIcon />}
-              onClick={() => setFlashcardIsFlipped(true)}
+              onClick={() => dispatch(setFlashcardIsFlipped(true))}
             />
           )}
 

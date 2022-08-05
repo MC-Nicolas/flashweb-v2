@@ -29,7 +29,16 @@ export const userSlice = createSlice({
       state.foldersOptions = action.payload;
     },
     setActiveFolder: (state, action) => {
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.id) === removeSpecialChars(action.payload)
+      );
+      const decks = state.folders[folderIndex].decks;
       state.activeFolder = action.payload;
+      if (decks.length > 0) {
+        state.activeDeck = state.folders[folderIndex].decks[0].title;
+        state.decksOptions = transformFoldersFromDBToOptions(decks);
+      }
     },
     setDecksOptions: (state, action) => {
       state.decksOptions = action.payload;
