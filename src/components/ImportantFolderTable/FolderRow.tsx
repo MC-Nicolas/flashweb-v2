@@ -17,13 +17,13 @@ const handleColorFromPercentage = (percentage: number) => {
 };
 
 const FolderRow = ({ deck }: { deck: DeckType }) => {
-  const { title, flashcards, reviews } = deck;
+  const { title, flashcards } = deck;
   const [totalTimeSpent, setTotalTimeSpent] = useState(0);
   const totalFlashcards = flashcards.length;
 
   useEffect(() => {
     let totalTime = 0;
-    console.log(reviews);
+    // console.log(reviews);
   }, []);
 
   // const avgSuccess = reviews.reduce((acc, review) => acc + review.right, 0) / reviews.length;
