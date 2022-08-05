@@ -90,7 +90,7 @@ export const createNewFlashcardInDb = async (
     success: false,
     error: null,
   };
-
+  console.log(email, folderName, deckName, typeOfFlashcard, flashcardData);
   try {
     const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
     const formattedDeckName = removeSpecialChars(deckName).toLowerCase();

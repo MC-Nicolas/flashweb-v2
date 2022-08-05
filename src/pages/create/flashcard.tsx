@@ -33,7 +33,9 @@ const Flashcard = (props: Props) => {
   const handleCreateNewFlashcard = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!email || !activeDeck || !activeFolder) {
-      return toast.error('Oops error');
+      return toast.error(
+        'Oops There was a problem with the folders, can you reload and try again please ? '
+      );
     }
 
     const { success, error } = await createNewFlashcardInDb(
