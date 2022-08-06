@@ -121,7 +121,7 @@ export const userSlice = createSlice({
       const { deckId, folderId, answers, timeSpent } = action.payload;
       const formattedReview = {
         answers,
-        date: (new Date().getTime() / 1000).toFixed(),
+        date: parseInt((new Date().getTime() / 1000).toFixed()),
         timeSpent,
       };
       const folderIndex = state.folders.findIndex(
