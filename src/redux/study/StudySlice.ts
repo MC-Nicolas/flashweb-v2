@@ -27,11 +27,13 @@ export const userSlice = createSlice({
     setFlashcards: (state, action) => {
       state.flashcards = action.payload;
     },
-    addWrongAnswer: (state, action) => {
+    addWrongAnswer: (state, action: { payload: string }) => {
+      //@ts-ignore
       state.answers.wrong.push(action.payload);
       state.totalAnswers++;
     },
-    addRightAnswer: (state, action) => {
+    addRightAnswer: (state, action: { payload: string }) => {
+      //@ts-ignore
       state.answers.right.push(action.payload);
       state.totalAnswers++;
     },
