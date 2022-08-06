@@ -7,8 +7,8 @@ export interface FlashcardType {
 }
 
 export interface AnswersType {
-  wrong: string[];
-  right: string[];
+  wrong: string[] | [];
+  right: string[] | [];
 }
 export interface DeckReviewType {
   date: number;

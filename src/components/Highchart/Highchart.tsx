@@ -13,13 +13,13 @@ if (typeof Highcharts === 'object') {
 }
 
 const Highchart = () => {
-  const { config, series } = useAppSelector((state) => state.chart);
+  const { config, series, xAxis } = useAppSelector((state) => state.chart);
   const [highchartOptions, setHighchartOptions] = useState<any>(options);
   const { strokeColor } = config;
 
   useEffect(() => {
-    setHighchartOptions({ ...options, series });
-  }, [config, series]);
+    setHighchartOptions({ ...options, series, xAxis });
+  }, [config, series, xAxis]);
 
   if (series.length > 0) {
     return (

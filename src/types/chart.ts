@@ -9,5 +9,8 @@ export interface ChartConfigType {
 
 export interface ChartState {
   series: any[];
+  xAxis: {
+    categories: string[];
+  };
   config: ChartConfigType;
 }
