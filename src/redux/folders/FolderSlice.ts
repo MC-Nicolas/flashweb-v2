@@ -1,6 +1,8 @@
 import {
   AnswersType,
   DeckReviewType,
+  DeckType,
+  FlashcardType,
   FoldersOptionType,
   FolderType,
 } from '@/types/folders';
@@ -138,6 +140,29 @@ export const userSlice = createSlice({
       );
     },
 
+    removeFlashcard: (state, action) => {
+      const { folderId, deckId, flashcardId } = action.payload;
+      const folderIndex = state.folders.findIndex(
+        (folder: FolderType) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+      const deckIndex = state.folders[folderIndex].decks.findIndex(
+        (deck: DeckType) =>
+          removeSpecialChars(deck.id) === removeSpecialChars(deckId)
+      );
+      const flashcardIndex = state.folders[folderIndex].decks[
+        deckIndex
+      ].flashcards.findIndex(
+        (flashcard: FlashcardType) =>
+          removeSpecialChars(flashcard.flashcardData.front) ===
+          removeSpecialChars(flashcardId)
+      );
+      state.folders[folderIndex].decks[deckIndex].flashcards.splice(
+        flashcardIndex,
+        1
+      );
+    },
+
     addReview: (
       state,
       action: {
@@ -187,6 +212,7 @@ export const {
   addDeck,
   removeDeck,
   addFlashcard,
+  removeFlashcard,
   addReview,
   setAllReview,
 } = userSlice.actions;

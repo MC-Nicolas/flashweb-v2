@@ -1,8 +1,14 @@
-import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
+import { deleteFlashcardFromDB } from '@/database/deleteInDB';
+import {
+  removeFlashcard,
+  setActiveDeck,
+  setActiveFolder,
+} from '@/redux/folders/FolderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { FlashcardType } from '@/types/folders';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import ClassicFlashcard from '../Flashcard/Classic';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Select from '../Inputs/Select';
@@ -11,6 +17,7 @@ type Props = {};
 
 const Flashcards = (props: Props) => {
   const dispatch = useAppDispatch();
+  const { email } = useAppSelector((state) => state.user);
   const { folders, activeFolder, activeDeck, foldersOptions, decksOptions } =
     useAppSelector((state) => state.folders);
   const [flashcards, setFlashcards] = useState<any>([]);
@@ -33,6 +40,37 @@ const Flashcards = (props: Props) => {
       if (deck.flashcards.length > 0) setFlashcards(deck.flashcards);
     }
   }, [folders, activeFolder, activeDeck]);
+
+  const handleOnDeleteFlashcard = async (flashcardID: string) => {
+    let confirm = window.confirm(
+      'Are you sure you want to delete this flashcard?'
+    );
+
+    if (!confirm) return;
+    const { success, error } = await deleteFlashcardFromDB(
+      email,
+      removeSpecialChars(activeFolder),
+      removeSpecialChars(activeDeck),
+      flashcardID
+    );
+    if (success) {
+      dispatch(
+        removeFlashcard({
+          folderId: removeSpecialChars(activeFolder),
+          deckId: removeSpecialChars(activeDeck),
+          flashcardId: flashcardID,
+        })
+      );
+      const newFlashcards = flashcards.filter(
+        (flashcard: FlashcardType) =>
+          flashcard.flashcardData.front !== flashcardID
+      );
+      setFlashcards(newFlashcards);
+      toast.success('Flashcard deleted successfully');
+    } else {
+      toast.error('Oops something went wrong while deleting flashcard');
+    }
+  };
 
   return (
     <FlexContainer style={{ padding: '20px 0' }}>
@@ -63,6 +101,7 @@ const Flashcards = (props: Props) => {
             const { typeOfFlashcard } = flashcard;
             if (typeOfFlashcard === 'classic') {
               // ! TODO handle on click on icons in flashcards
+              // Use deleteField() from firestore to delete flashcard from db with updateDoc()
               return (
                 <ClassicFlashcard
                   key={front}
@@ -72,6 +111,10 @@ const Flashcards = (props: Props) => {
                   back={back}
                   showEditIcons
                   isFlipped={false}
+                  onDelete={() =>
+                    handleOnDeleteFlashcard(removeSpecialChars(front))
+                  }
+                  onEdit={() => {}}
                 />
               );
             }

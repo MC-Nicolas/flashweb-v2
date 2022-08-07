@@ -30,6 +30,7 @@ const Dashboard = () => {
     const folderIndex = folders.findIndex(
       (folder) => removeSpecialChars(folder.title) === activeFolder
     );
+    if (folderIndex === -1) return;
     const decks = folders[folderIndex].decks;
 
     const decksDataForTable = extractDataForDeckTable(decks);

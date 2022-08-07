@@ -58,6 +58,7 @@ export const extractDataForFolderTable = (folders: FolderType[]) => {
       folder.title,
       numberOfDecks,
       numberOfCards,
+      'Chart',
       'Edit folder',
     ]);
   });

@@ -23,7 +23,13 @@ const Folders = () => {
     <NeumorphicTable
       width='85%'
       height='80%'
-      headerElements={['Name', 'Total Decks', 'Total Flashcards', 'Actions']}
+      headerElements={[
+        'Name',
+        'Total Decks',
+        'Total Flashcards',
+        'Chart',
+        'Actions',
+      ]}
       data={foldersDataForTable}
     />
   );

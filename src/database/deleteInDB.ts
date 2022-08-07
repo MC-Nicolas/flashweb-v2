@@ -36,3 +36,35 @@ export const deleteDeckFromDB = async (
 
   return response;
 };
+
+export const deleteFlashcardFromDB = async (
+  email: string,
+  folderId: string,
+  deckId: string,
+  flashcardId: string
+) => {
+  let response: { success: boolean; error: any } = {
+    success: false,
+    error: null,
+  };
+  try {
+    await deleteDoc(
+      doc(
+        database,
+        'users',
+        email,
+        'folders',
+        folderId,
+        'decks',
+        deckId,
+        'flashcards',
+        flashcardId
+      )
+    );
+    response.success = true;
+  } catch (err) {
+    response.error = err;
+  }
+
+  return response;
+};

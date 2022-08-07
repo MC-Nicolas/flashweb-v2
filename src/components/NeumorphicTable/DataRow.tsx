@@ -86,7 +86,7 @@ const DataRow = ({ element }: DataRowProps) => {
           return (
             <div>
               <Link href='/'>
-                <EqualizerIcon />
+                <EqualizerIcon sx={{ cursor: 'pointer' }} />
               </Link>
             </div>
           );

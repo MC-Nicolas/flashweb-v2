@@ -18,6 +18,8 @@ type ClassicProps = {
   width?: string;
   style?: {};
   showEditIcons?: boolean;
+  onDelete?: any;
+  onEdit?: any;
 };
 
 const ClassicFlashcard = ({
@@ -31,6 +33,8 @@ const ClassicFlashcard = ({
   width = '50%',
   style = {},
   showEditIcons = false,
+  onDelete,
+  onEdit,
 }: ClassicProps) => {
   return (
     <FlexContainer
@@ -56,8 +60,14 @@ const ClassicFlashcard = ({
               zIndex: 10000,
             }}
           >
-            <EditIcon sx={{ color: 'white', cursor: 'pointer' }} />
-            <DeleteIcon sx={{ color: 'white', cursor: 'pointer' }} />
+            <EditIcon
+              sx={{ color: 'white', cursor: 'pointer' }}
+              onClick={onEdit}
+            />
+            <DeleteIcon
+              sx={{ color: 'white', cursor: 'pointer' }}
+              onClick={onDelete}
+            />
           </FlexContainer>
         )}
         {editable ? (
