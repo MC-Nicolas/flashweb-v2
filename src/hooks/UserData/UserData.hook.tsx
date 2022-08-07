@@ -46,6 +46,7 @@ const UserData = ({ children }: { children: any }) => {
           decksFromDB[i].flashcards = flashcards;
         }
         if (reviews.length > 0) {
+          allReviews = Object.assign([], allReviews);
           allReviews.push(...reviews);
           decksFromDB[i].reviews = reviews;
         }
