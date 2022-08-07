@@ -17,6 +17,7 @@ import foldersReducer from './folders/FolderSlice';
 import studyReducer from './study/StudySlice';
 import studiesReducer from './studies/StudiesSlice';
 import chartReducer from './chart/chartSlice';
+import editModalReducer from './editModal/editModalSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -24,13 +25,14 @@ const rootReducer = combineReducers({
   study: studyReducer,
   studies: studiesReducer,
   chart: chartReducer,
+  editModal: editModalReducer,
 });
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['folders', 'study', 'chart', 'studies'],
+  blacklist: ['folders', 'study', 'chart', 'studies', 'editModal'],
 };
 
 const persitedReducer = persistReducer(persistConfig, rootReducer);

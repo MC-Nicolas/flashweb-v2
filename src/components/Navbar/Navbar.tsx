@@ -16,9 +16,7 @@ import styles from './Navbar.module.scss';
 import { useRouter } from 'next/router';
 import CollapsableMenu from './CollapsableMenu/CollapsableMenu';
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
   const { pathname } = useRouter();
 
   return (
@@ -47,6 +45,12 @@ const Navbar = (props: Props) => {
           icon={<ViewCarouselIcon />}
           isLink
           pushTo='/studies'
+        />
+        <NeumorphicSquaredButton
+          active={pathname === '/performances'}
+          icon={<EqualizerIcon />}
+          isLink
+          pushTo='/performances'
         />
         <NeumorphicSquaredButton
           active={pathname === '/settings'}

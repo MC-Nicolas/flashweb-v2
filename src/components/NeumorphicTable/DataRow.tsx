@@ -14,6 +14,11 @@ import { deleteDeckFromDB, deleteFolderFromDB } from '@/database/deleteInDB';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 
 import styles from './NeumorphicTable.module.scss';
+import {
+  setModalIsOpen,
+  setNameOfElementToEdit,
+  setTypeOfElementToEdit,
+} from '@/redux/editModal/editModalSlice';
 
 type DataRowProps = {
   element: string[];
@@ -74,7 +79,11 @@ const DataRow = ({ element }: DataRowProps) => {
             <div key={Math.random() * 10000} className={styles.editIcons}>
               <EditIcon
                 sx={{ color: '#358004', cursor: 'pointer' }}
-                onClick={() => alert('Dev edit functionality')}
+                onClick={() => {
+                  dispatch(setModalIsOpen(true));
+                  dispatch(setTypeOfElementToEdit('folder'));
+                  dispatch(setNameOfElementToEdit(element[0]));
+                }}
               />
               <DeleteForeverIcon
                 sx={{ color: '#d11515', cursor: 'pointer' }}
@@ -84,7 +93,7 @@ const DataRow = ({ element }: DataRowProps) => {
           );
         } else if (el === 'Chart') {
           return (
-            <div>
+            <div key={Math.random() * 100000}>
               <Link href='/'>
                 <EqualizerIcon sx={{ cursor: 'pointer' }} />
               </Link>

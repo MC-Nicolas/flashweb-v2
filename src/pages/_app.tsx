@@ -1,3 +1,4 @@
+import EditModal from '@/components/EditModal/EditModal';
 import RouteGuard from '@/components/RouteGuard/RouteGuard';
 import UserData from '@/hooks/UserData/UserData.hook';
 import type { AppProps } from 'next/app';
@@ -14,6 +15,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       {/* <RouteGuard> */}
       <Toaster />
       <UserData>
+        <EditModal />
         <Component {...pageProps} />
       </UserData>
       {/* </RouteGuard> */}
