@@ -100,6 +100,19 @@ export const userSlice = createSlice({
         value: removeSpecialChars(formattedDeck.title),
       });
     },
+
+    updateDeckIsImportant: (state, action) => {
+      const { folderId, deckId, isImportant } = action.payload;
+      const folderIndex = state.folders.findIndex(
+        (folder: FolderType) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+      const deckIndex = state.folders[folderIndex].decks.findIndex(
+        (deck: DeckType) =>
+          removeSpecialChars(deck.title) === removeSpecialChars(deckId)
+      );
+      state.folders[folderIndex].decks[deckIndex].isImportant = isImportant;
+    },
     removeDeck: (state, action) => {
       const { folderId, deckId } = action.payload;
       const folderIndex = state.folders.findIndex(
@@ -210,6 +223,7 @@ export const {
   addFolder,
   removeFolder,
   addDeck,
+  updateDeckIsImportant,
   removeDeck,
   addFlashcard,
   removeFlashcard,

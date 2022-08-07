@@ -1,3 +1,4 @@
+import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { extractDataForFolderTable } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
@@ -14,6 +15,10 @@ const Folders = () => {
     const foldersDataForTable = extractDataForFolderTable(folders);
     setFoldersDataForTable(foldersDataForTable);
   }, [folders]);
+
+  useEffect(() => {
+    dispatch(setTypeOfElementToEdit('folder'));
+  }, []);
 
   if (folders.length === 0) {
     return <SectionTitle title='No folders' />;

@@ -1,4 +1,5 @@
 import { deleteFlashcardFromDB } from '@/database/deleteInDB';
+import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
 import {
   removeFlashcard,
   setActiveDeck,
@@ -40,6 +41,10 @@ const Flashcards = (props: Props) => {
       if (deck.flashcards.length > 0) setFlashcards(deck.flashcards);
     }
   }, [folders, activeFolder, activeDeck]);
+
+  useEffect(() => {
+    dispatch(setTypeOfElementToEdit('flashcard'));
+  }, []);
 
   const handleOnDeleteFlashcard = async (flashcardID: string) => {
     let confirm = window.confirm(

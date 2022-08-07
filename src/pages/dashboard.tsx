@@ -3,12 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PageContainerWithNav from '@/components/Containers/PageContainerWithNav/PageContainerWithNav';
 import SectionTitle from '@/components/Texts/SectionTitle';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
-import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
-import ImportantFolderTable from '@/components/ImportantFolderTable/ImportantFolderTable';
-import Rechart from '@/components/Highchart/Highchart';
 import Highchart from '@/components/Highchart/Highchart';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
-import { DeckReviewType } from '@/types/folders';
 import {
   addAnswersFromSameDay,
   extractDataForDeckTable,
@@ -31,8 +27,8 @@ const Dashboard = () => {
       (folder) => removeSpecialChars(folder.title) === activeFolder
     );
     if (folderIndex === -1) return;
-    const decks = folders[folderIndex].decks;
-
+    let decks = folders[folderIndex].decks;
+    decks = decks.filter((deck) => deck.isImportant);
     const decksDataForTable = extractDataForDeckTable(decks);
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);

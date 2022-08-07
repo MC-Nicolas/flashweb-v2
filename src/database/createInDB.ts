@@ -163,3 +163,23 @@ export const saveReviewInDB = async (
   }
   return response;
 };
+
+export const modifyFolderTitleInDB = async (
+  email: string,
+  folderId: string
+) => {
+  let response: { success: boolean; error: any } = {
+    success: false,
+    error: null,
+  };
+
+  try {
+    alert(
+      'This feature is not yet implemented, please try again in a few days'
+    );
+
+    response.success = true;
+  } catch (err) {
+    response.error = err;
+  }
+};

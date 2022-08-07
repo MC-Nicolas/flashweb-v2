@@ -8,17 +8,77 @@ import SectionTitle from '../Texts/SectionTitle';
 import BasicInput from '../Inputs/BasicInput';
 import ButtonWithIcon from '../Buttons/ButtonWithIcon';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import { modifyFolderTitleInDB } from '@/database/createInDB';
+import { removeSpecialChars } from '@/utils/dataFormatting';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { DeckType, FolderType } from '@/types/folders';
+import { updateDeckInDB } from '@/database/updateInDB';
+import toast from 'react-hot-toast';
+import { updateDeckIsImportant } from '@/redux/folders/FolderSlice';
 
 const EditModal = () => {
   const dispatch = useAppDispatch();
+
   const [title, setTitle] = useState('');
+  const [deckIsImportant, setDeckIsImportant] = useState(false);
+
+  const { email } = useAppSelector((state) => state.user);
   const { isOpen, typeOfElementToEdit, nameOfElementToEdit } = useAppSelector(
     (state) => state.editModal
   );
+  const { folders, activeFolder } = useAppSelector((state) => state.folders);
+
+  useEffect(() => {
+    const folderIndex = folders.findIndex(
+      (folder: FolderType) =>
+        removeSpecialChars(folder.title) === removeSpecialChars(activeFolder)
+    );
+
+    if (folderIndex === -1) return;
+    const deckIndex = folders[folderIndex].decks.findIndex(
+      (deck: DeckType) =>
+        removeSpecialChars(deck.id) === removeSpecialChars(nameOfElementToEdit)
+    );
+    if (deckIndex === -1) return;
+
+    const deck = folders[folderIndex].decks[deckIndex];
+
+    setTitle(deck.title);
+    setDeckIsImportant(deck.isImportant);
+  }, [activeFolder, nameOfElementToEdit, folders]);
 
   useEffect(() => {
     setTitle(nameOfElementToEdit);
   }, [nameOfElementToEdit]);
+
+  const handleSaveEdit = async () => {
+    if (typeOfElementToEdit === 'folder') {
+      await modifyFolderTitleInDB(
+        email,
+        removeSpecialChars(nameOfElementToEdit)
+      );
+    } else if (typeOfElementToEdit === 'deck') {
+      const { error, success } = await updateDeckInDB(
+        email,
+        removeSpecialChars(activeFolder),
+        removeSpecialChars(nameOfElementToEdit),
+        deckIsImportant
+      );
+      if (success) {
+        toast.success('Deck updated successfully');
+        dispatch(
+          updateDeckIsImportant({
+            folderId: activeFolder,
+            deckId: nameOfElementToEdit,
+            isImportant: deckIsImportant,
+          })
+        );
+      } else {
+        toast.error('Oops, something went wrong');
+      }
+    }
+    dispatch(setModalIsOpen(false));
+  };
 
   return (
     <FlexContainer
@@ -46,19 +106,46 @@ const EditModal = () => {
         </FlexContainer>
         <SectionTitle title={nameOfElementToEdit} />
         <FlexContainer height='80%'>
-          <BasicInput
-            label='Title'
-            placeholder='New Title'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          {typeOfElementToEdit === 'folder' && (
+            <BasicInput
+              label='Title'
+              placeholder='New Title'
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          )}
+
+          {typeOfElementToEdit === 'deck' && (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    sx={{ color: 'white' }}
+                    checked={deckIsImportant}
+                    onChange={(e: any) => setDeckIsImportant(e.target.checked)}
+                  />
+                }
+                label={
+                  <p
+                    style={{
+                      color: 'lightgrey',
+                      fontSize: '16px',
+                      letterSpacing: 1,
+                    }}
+                  >
+                    Want to make this deck part of you daily study ?
+                  </p>
+                }
+              />
+            </>
+          )}
           <ButtonWithIcon
             style={{ backgroundColor: 'green', width: '200px' }}
             title='Save'
             iconIsComponent
             iconPosition='right'
             icon={<ArrowRightAltIcon />}
-            onClick={() => console.log('test')}
+            onClick={handleSaveEdit}
           />
         </FlexContainer>
       </NeumorphicContainer>

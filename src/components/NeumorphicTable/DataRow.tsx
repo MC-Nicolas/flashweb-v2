@@ -81,7 +81,6 @@ const DataRow = ({ element }: DataRowProps) => {
                 sx={{ color: '#358004', cursor: 'pointer' }}
                 onClick={() => {
                   dispatch(setModalIsOpen(true));
-                  dispatch(setTypeOfElementToEdit('folder'));
                   dispatch(setNameOfElementToEdit(element[0]));
                 }}
               />

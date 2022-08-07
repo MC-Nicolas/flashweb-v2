@@ -10,6 +10,7 @@ import {
   extractDataForDeckTable,
   removeSpecialChars,
 } from '@/utils/dataFormatting';
+import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
 
 type Props = {};
 
@@ -29,6 +30,11 @@ const Decks = (props: Props) => {
     const decksDataForTable = extractDataForDeckTable(decks);
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);
+
+  useEffect(() => {
+    dispatch(setTypeOfElementToEdit('deck'));
+  }, []);
+
   return (
     <FlexContainer flexDirection='column'>
       <FlexContainer height='150px' width='300px'>
