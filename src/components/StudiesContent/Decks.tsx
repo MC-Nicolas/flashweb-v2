@@ -48,6 +48,7 @@ const Decks = (props: Props) => {
           'Total Flashcards',
           'Total Reviews',
           'AVG success',
+          'Chart',
           'Actions',
         ]}
         data={deckDataForTable}

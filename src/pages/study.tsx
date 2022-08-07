@@ -38,10 +38,12 @@ const Study = () => {
       const activeFolderIndex = folders.findIndex(
         (folder) => removeSpecialChars(folder.title) === activeFolder
       );
+      if (folders[activeFolderIndex] === undefined) return;
       const activeDeckIndex = folders[activeFolderIndex].decks.findIndex(
         (deck: DeckType) =>
           removeSpecialChars(deck.title) === removeSpecialChars(activeDeck)
       );
+
       const deckData: DeckType =
         folders[activeFolderIndex].decks[activeDeckIndex];
 

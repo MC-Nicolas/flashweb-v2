@@ -15,12 +15,14 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from './user/UserSlice';
 import foldersReducer from './folders/FolderSlice';
 import studyReducer from './study/StudySlice';
+import studiesReducer from './studies/StudiesSlice';
 import chartReducer from './chart/chartSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
   folders: foldersReducer,
   study: studyReducer,
+  studies: studiesReducer,
   chart: chartReducer,
 });
 
@@ -28,7 +30,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['folders', 'study', 'chart'],
+  blacklist: ['folders', 'study', 'chart', 'studies'],
 };
 
 const persitedReducer = persistReducer(persistConfig, rootReducer);

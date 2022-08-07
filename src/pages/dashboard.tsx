@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PageContainerWithNav from '@/components/Containers/PageContainerWithNav/PageContainerWithNav';
 import SectionTitle from '@/components/Texts/SectionTitle';
@@ -9,13 +9,32 @@ import Rechart from '@/components/Highchart/Highchart';
 import Highchart from '@/components/Highchart/Highchart';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { DeckReviewType } from '@/types/folders';
-import { addAnswersFromSameDay } from '@/utils/dataFormatting';
+import {
+  addAnswersFromSameDay,
+  extractDataForDeckTable,
+  removeSpecialChars,
+} from '@/utils/dataFormatting';
 import { calculatePercentageFromTwoNumber } from '@/utils/calculations';
 import { setSeries } from '@/redux/chart/chartSlice';
+import NeumorphicTable from '@/components/NeumorphicTable/NeumorphicTable';
+import InsetNeumorphicContainer from '@/components/Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const { allReviews } = useAppSelector((state) => state.folders);
+  const { allReviews, folders, foldersOptions, activeFolder } = useAppSelector(
+    (state) => state.folders
+  );
+  const [deckDataForTable, setDeckDataForTable] = useState<any>([]);
+
+  useEffect(() => {
+    const folderIndex = folders.findIndex(
+      (folder) => removeSpecialChars(folder.title) === activeFolder
+    );
+    const decks = folders[folderIndex].decks;
+
+    const decksDataForTable = extractDataForDeckTable(decks);
+    setDeckDataForTable(decksDataForTable);
+  }, [folders, activeFolder]);
 
   useEffect(() => {
     const seriesData: number[] = [];
@@ -36,6 +55,8 @@ const Dashboard = () => {
     dispatch(setSeries({ values: seriesData, categories }));
   }, [allReviews, dispatch]);
 
+  // ! TODO: change the data and headers for table to contain: Done today, time spent...
+
   return (
     <PageContainerWithNav pageTitle='Dashboard'>
       <FlexContainer
@@ -46,9 +67,9 @@ const Dashboard = () => {
         <FlexContainer height='100px'>
           <SectionTitle title='Dashboard' color='white' />
         </FlexContainer>
-        <NeumorphicContainer
+        <InsetNeumorphicContainer
           width='80%'
-          height='300px'
+          height='350px'
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -57,9 +78,21 @@ const Dashboard = () => {
           }}
         >
           <Highchart />
-        </NeumorphicContainer>
+        </InsetNeumorphicContainer>
         <FlexContainer width='80%' height='40%' style={{ marginTop: '50px' }}>
-          <ImportantFolderTable />
+          <NeumorphicTable
+            width='80%'
+            height='70%'
+            headerElements={[
+              'Name',
+              'Total Flashcards',
+              'Total Reviews',
+              'AVG success',
+              'Chart',
+              'Actions',
+            ]}
+            data={deckDataForTable}
+          />
         </FlexContainer>
       </FlexContainer>
     </PageContainerWithNav>

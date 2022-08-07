@@ -40,7 +40,7 @@ const Studies = (props: Props) => {
           }}
         >
           <Select
-            width='200px'
+            width='300px'
             label='Type'
             value={activeType}
             options={[

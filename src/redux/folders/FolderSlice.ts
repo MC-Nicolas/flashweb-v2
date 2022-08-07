@@ -110,7 +110,10 @@ export const userSlice = createSlice({
       );
       state.folders[folderIndex].decks.splice(deckIndex, 1);
       state.decksOptions.splice(deckIndex, 1);
-      // ! TODO modify all reviews as well
+      state.allReviews = state.allReviews.filter(
+        (review: any) =>
+          removeSpecialChars(review.deckId) !== removeSpecialChars(deckId)
+      );
     },
     addFlashcard: (state, action) => {
       const { typeOfFlashcard, deckId, front, back, folderId } = action.payload;

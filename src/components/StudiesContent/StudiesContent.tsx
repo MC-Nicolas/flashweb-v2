@@ -1,6 +1,7 @@
 import React from 'react';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Decks from './Decks';
+import Flashcards from './Flashcards';
 import Folders from './Folders';
 
 type StudiesContentProps = {
@@ -12,6 +13,7 @@ const StudiesContent = ({ contentType }: StudiesContentProps) => {
     <FlexContainer>
       {contentType === 'folders' && <Folders />}
       {contentType === 'decks' && <Decks />}
+      {contentType === 'flashcards' && <Flashcards />}
     </FlexContainer>
   );
 };

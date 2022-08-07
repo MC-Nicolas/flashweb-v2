@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import ButtonWithIcon from '../Buttons/ButtonWithIcon';
-import InsetNeumorphicContainer from '../Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
-import FlexContainer from '../FlexContainer/FlexContainer';
-import Select from '../Inputs/Select';
-import EastIcon from '@mui/icons-material/East';
+import { useRouter } from 'next/router';
+
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
 import { setStudyIsActive } from '@/redux/study/StudySlice';
 
+import EastIcon from '@mui/icons-material/East';
+
+import ButtonWithIcon from '../Buttons/ButtonWithIcon';
+import InsetNeumorphicContainer from '../Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
+import FlexContainer from '../FlexContainer/FlexContainer';
+import Select from '../Inputs/Select';
+
 const StudySelectors = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { flashcards } = useAppSelector((state) => state.study);
   const { activeFolder, foldersOptions, activeDeck, decksOptions } =
@@ -43,7 +48,24 @@ const StudySelectors = () => {
             iconPosition='right'
           />
         ) : (
-          <h2>{`No flashcard in this deck`}</h2>
+          <FlexContainer flexDirection='column'>
+            <h2
+              style={{ color: 'white' }}
+            >{`Looks like this deck is empty`}</h2>
+
+            <ButtonWithIcon
+              style={{
+                width: '300px',
+                backgroundColor: 'white',
+                color: 'black',
+              }}
+              title='Create a flashcard'
+              iconPosition='right'
+              iconIsComponent
+              icon={<EastIcon />}
+              onClick={() => router.push('/create/flashcard')}
+            />
+          </FlexContainer>
         )}
       </FlexContainer>
     </InsetNeumorphicContainer>

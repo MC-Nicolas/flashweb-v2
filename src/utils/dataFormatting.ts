@@ -78,6 +78,7 @@ export const extractDataForDeckTable = (decks: DeckType[]) => {
       numberOfCards,
       numberOfReviews,
       avgSuccess,
+      'Chart',
       'Edit deck',
     ]);
   });

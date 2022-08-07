@@ -2,6 +2,9 @@ import React from 'react';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import FlashcardTextarea from '../Texts/FlashcardTextarea';
 
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import styles from './Classic.module.scss';
 
 type ClassicProps = {
@@ -11,6 +14,10 @@ type ClassicProps = {
   setBack?: any;
   isFlipped: boolean;
   editable?: boolean;
+  height?: string;
+  width?: string;
+  style?: {};
+  showEditIcons?: boolean;
 };
 
 const ClassicFlashcard = ({
@@ -20,14 +27,40 @@ const ClassicFlashcard = ({
   setBack,
   isFlipped,
   editable = false,
+  height = '50%',
+  width = '50%',
+  style = {},
+  showEditIcons = false,
 }: ClassicProps) => {
   return (
-    <FlexContainer style={{ perspective: '1000px' }} height='50%' width='50%'>
+    <FlexContainer
+      style={{ perspective: '1000px', ...style, position: 'relative' }}
+      height={height}
+      width={width}
+    >
       <div
         className={`${styles['flippable-inner']} ${
           isFlipped ? styles.flipped : ''
         }`}
       >
+        {showEditIcons && (
+          <FlexContainer
+            flexDirection='row'
+            width='70px'
+            height='30px'
+            justifyContent='space-between'
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+
+              zIndex: 10000,
+            }}
+          >
+            <EditIcon sx={{ color: 'white', cursor: 'pointer' }} />
+            <DeleteIcon sx={{ color: 'white', cursor: 'pointer' }} />
+          </FlexContainer>
+        )}
         {editable ? (
           <>
             <div className={`${styles['flippable-front']}`}>

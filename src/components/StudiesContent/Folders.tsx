@@ -3,6 +3,7 @@ import { extractDataForFolderTable } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import NeumorphicTable from '../NeumorphicTable/NeumorphicTable';
+import SectionTitle from '../Texts/SectionTitle';
 
 const Folders = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +15,10 @@ const Folders = () => {
     setFoldersDataForTable(foldersDataForTable);
   }, [folders]);
 
+  if (folders.length === 0) {
+    return <SectionTitle title='No folders' />;
+    // ! TODO: add a button to create a folder, show an icon instead of no folders title
+  }
   return (
     <NeumorphicTable
       width='85%'

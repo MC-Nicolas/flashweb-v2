@@ -1,14 +1,19 @@
 import React from 'react';
+import Link from 'next/link';
 
+import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import { removeDeck, removeFolder } from '@/redux/folders/FolderSlice';
+
+import toast from 'react-hot-toast';
+
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
-import styles from './NeumorphicTable.module.scss';
-import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { deleteDeckFromDB, deleteFolderFromDB } from '@/database/deleteInDB';
-import toast from 'react-hot-toast';
-import { removeDeck, removeFolder } from '@/redux/folders/FolderSlice';
 import { removeSpecialChars } from '@/utils/dataFormatting';
+
+import styles from './NeumorphicTable.module.scss';
 
 type DataRowProps = {
   element: string[];
@@ -25,7 +30,10 @@ const DataRow = ({ element }: DataRowProps) => {
         'Are you sure you want to delete this folder and its data ?'
       );
       if (confirm) {
-        const { error, success } = await deleteFolderFromDB(email, element[0]);
+        const { error, success } = await deleteFolderFromDB(
+          email,
+          removeSpecialChars(element[0])
+        );
         if (success) {
           dispatch(removeFolder(element[0]));
           toast.success('Folder deleted successfully');
@@ -72,6 +80,14 @@ const DataRow = ({ element }: DataRowProps) => {
                 sx={{ color: '#d11515', cursor: 'pointer' }}
                 onClick={() => handleDeleteEl(el)}
               />
+            </div>
+          );
+        } else if (el === 'Chart') {
+          return (
+            <div>
+              <Link href='/'>
+                <EqualizerIcon />
+              </Link>
             </div>
           );
         } else {
