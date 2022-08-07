@@ -1,5 +1,11 @@
 import { deleteFlashcardFromDB } from '@/database/deleteInDB';
-import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
+import {
+  setClassicFlashcard,
+  setModalIsOpen,
+  setNameOfElementToEdit,
+  setTypeOfElementToEdit,
+  setTypeOfFlashcard,
+} from '@/redux/editModal/editModalSlice';
 import {
   removeFlashcard,
   setActiveDeck,
@@ -18,9 +24,11 @@ type Props = {};
 
 const Flashcards = (props: Props) => {
   const dispatch = useAppDispatch();
+
   const { email } = useAppSelector((state) => state.user);
   const { folders, activeFolder, activeDeck, foldersOptions, decksOptions } =
     useAppSelector((state) => state.folders);
+
   const [flashcards, setFlashcards] = useState<any>([]);
 
   useEffect(() => {
@@ -45,6 +53,17 @@ const Flashcards = (props: Props) => {
   useEffect(() => {
     dispatch(setTypeOfElementToEdit('flashcard'));
   }, []);
+
+  const handleOnEditFlashcard = (
+    typeOfFlashcard: string,
+    front: string,
+    back: string
+  ) => {
+    dispatch(setTypeOfFlashcard(typeOfFlashcard));
+    dispatch(setModalIsOpen(true));
+    dispatch(setNameOfElementToEdit('My Flashcard'));
+    dispatch(setClassicFlashcard({ front, back }));
+  };
 
   const handleOnDeleteFlashcard = async (flashcardID: string) => {
     let confirm = window.confirm(
@@ -119,7 +138,7 @@ const Flashcards = (props: Props) => {
                   onDelete={() =>
                     handleOnDeleteFlashcard(removeSpecialChars(front))
                   }
-                  onEdit={() => {}}
+                  onEdit={() => handleOnEditFlashcard('classic', front, back)}
                 />
               );
             }

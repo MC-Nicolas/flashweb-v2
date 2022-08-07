@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import CloseIcon from '@mui/icons-material/Close';
-import { setModalIsOpen } from '@/redux/editModal/editModalSlice';
+import {
+  setClassicFlashcard,
+  setFlashcardIsFlipped,
+  setModalIsOpen,
+} from '@/redux/editModal/editModalSlice';
 import SectionTitle from '../Texts/SectionTitle';
 import BasicInput from '../Inputs/BasicInput';
 import ButtonWithIcon from '../Buttons/ButtonWithIcon';
@@ -12,21 +16,40 @@ import { modifyFolderTitleInDB } from '@/database/createInDB';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { DeckType, FolderType } from '@/types/folders';
-import { updateDeckInDB } from '@/database/updateInDB';
+import {
+  updateDeckInDB,
+  updateClassicFlashcardInDB,
+} from '@/database/updateInDB';
 import toast from 'react-hot-toast';
-import { updateDeckIsImportant } from '@/redux/folders/FolderSlice';
+import {
+  addFlashcard,
+  removeFlashcard,
+  updateDeckIsImportant,
+} from '@/redux/folders/FolderSlice';
+import ClassicFlashcard from '../Flashcard/Classic';
+
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 const EditModal = () => {
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState('');
   const [deckIsImportant, setDeckIsImportant] = useState(false);
+  const [typeOfFlashcardToEdit, setTypeOfFlashcardToEdit] = useState('classic');
+  const [initialFlashcardFront, setInitialFlashcardFront] = useState('');
 
   const { email } = useAppSelector((state) => state.user);
-  const { isOpen, typeOfElementToEdit, nameOfElementToEdit } = useAppSelector(
-    (state) => state.editModal
+  const {
+    isOpen,
+    typeOfElementToEdit,
+    nameOfElementToEdit,
+    typeOfFlashcard,
+    classicFlashcard,
+    flashcardIsFlipped,
+  } = useAppSelector((state) => state.editModal);
+  const { folders, activeFolder, activeDeck } = useAppSelector(
+    (state) => state.folders
   );
-  const { folders, activeFolder } = useAppSelector((state) => state.folders);
 
   useEffect(() => {
     const folderIndex = folders.findIndex(
@@ -76,9 +99,46 @@ const EditModal = () => {
       } else {
         toast.error('Oops, something went wrong');
       }
+    } else if (typeOfElementToEdit === 'flashcard') {
+      if (typeOfFlashcardToEdit === 'classic') {
+        const { error, success } = await updateClassicFlashcardInDB(
+          email,
+          removeSpecialChars(activeFolder),
+          removeSpecialChars(activeDeck),
+          removeSpecialChars(classicFlashcard.front),
+          classicFlashcard,
+          removeSpecialChars(initialFlashcardFront)
+        );
+        if (success) {
+          dispatch(
+            removeFlashcard({
+              folderId: activeFolder,
+              deckId: activeDeck,
+              flashcardId: initialFlashcardFront,
+            })
+          );
+          dispatch(
+            addFlashcard({
+              typeOfFlashcard: 'classic',
+              deckId: activeDeck,
+              front: classicFlashcard.front,
+              back: classicFlashcard.back,
+              folderId: activeFolder,
+            })
+          );
+          toast.success('Flashcard updated successfully');
+        } else {
+          toast.error('Oops, something went wrong');
+        }
+      }
     }
     dispatch(setModalIsOpen(false));
   };
+
+  useEffect(() => {
+    console.log(classicFlashcard['front']);
+    setInitialFlashcardFront(classicFlashcard['front']);
+  }, [isOpen]);
 
   return (
     <FlexContainer
@@ -139,6 +199,47 @@ const EditModal = () => {
               />
             </>
           )}
+          {typeOfElementToEdit === 'flashcard' &&
+            typeOfFlashcard === 'classic' && (
+              <FlexContainer flexDirection='column'>
+                <ClassicFlashcard
+                  editable
+                  front={classicFlashcard.front}
+                  setFront={(e: any) =>
+                    dispatch(
+                      setClassicFlashcard({
+                        ...classicFlashcard,
+                        front: e.target.value,
+                      })
+                    )
+                  }
+                  setBack={(e: any) =>
+                    dispatch(
+                      setClassicFlashcard({
+                        ...classicFlashcard,
+                        back: e.target.value,
+                      })
+                    )
+                  }
+                  back={classicFlashcard.back}
+                  isFlipped={flashcardIsFlipped}
+                />
+                <ButtonWithIcon
+                  style={{
+                    backgroundColor: 'white',
+                    width: '150px',
+                    color: 'black',
+                  }}
+                  title='Flip'
+                  iconIsComponent
+                  iconPosition='right'
+                  icon={<SwapHorizIcon />}
+                  onClick={() =>
+                    dispatch(setFlashcardIsFlipped(!flashcardIsFlipped))
+                  }
+                />
+              </FlexContainer>
+            )}
           <ButtonWithIcon
             style={{ backgroundColor: 'green', width: '200px' }}
             title='Save'
