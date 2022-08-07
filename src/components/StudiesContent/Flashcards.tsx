@@ -1,5 +1,6 @@
 import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import { FlashcardType } from '@/types/folders';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
 import ClassicFlashcard from '../Flashcard/Classic';
@@ -57,14 +58,16 @@ const Flashcards = (props: Props) => {
         style={{ overflowY: 'scroll' }}
       >
         {flashcards.length > 0 ? (
-          flashcards.map((flashcard: any) => {
+          flashcards.map((flashcard: FlashcardType) => {
             const { front, back } = flashcard.flashcardData;
             const { typeOfFlashcard } = flashcard;
             if (typeOfFlashcard === 'classic') {
               // ! TODO handle on click on icons in flashcards
               return (
                 <ClassicFlashcard
-                  key={flashcard.id}
+                  key={front}
+                  height='300px'
+                  width='300px'
                   front={front}
                   back={back}
                   showEditIcons

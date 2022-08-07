@@ -53,7 +53,6 @@ const ClassicFlashcard = ({
               position: 'absolute',
               top: 10,
               right: 10,
-
               zIndex: 10000,
             }}
           >
