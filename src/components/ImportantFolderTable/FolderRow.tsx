@@ -6,7 +6,7 @@ import Image from 'next/image';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import ArrowRight from '@/assets/icons/arrowRight.png';
 
-import { FolderType, DeckType, DeckReviewType } from '@/types/folders';
+import { DeckType, DeckReviewType } from '@/types/folders';
 
 import styles from './FolderRow.module.scss';
 import { calculatePercentageFromTwoNumber } from '@/utils/calculations';

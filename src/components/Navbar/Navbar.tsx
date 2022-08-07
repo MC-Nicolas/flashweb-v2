@@ -43,10 +43,10 @@ const Navbar = (props: Props) => {
           pushTo='/study'
         />
         <NeumorphicSquaredButton
-          active={pathname === '/mycards'}
+          active={pathname === '/studies'}
           icon={<ViewCarouselIcon />}
           isLink
-          pushTo='/mycards'
+          pushTo='/studies'
         />
         <NeumorphicSquaredButton
           active={pathname === '/settings'}

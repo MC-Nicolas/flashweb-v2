@@ -1,4 +1,9 @@
-import { AnswersType, DeckReviewType } from '@/types/folders';
+import {
+  AnswersType,
+  DeckReviewType,
+  DeckType,
+  FolderType,
+} from '@/types/folders';
 
 export const removeSpecialChars = (str: string) => {
   return str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -37,4 +42,45 @@ export const addAnswersFromSameDay = (allAnswers: any[]) => {
   });
 
   return allAnswersByDate;
+};
+
+export const extractDataForFolderTable = (folders: FolderType[]) => {
+  const foldersData: any[] = [];
+
+  folders.forEach((folder: FolderType) => {
+    let numberOfDecks = 0;
+    let numberOfCards = 0;
+    numberOfDecks += folder.decks.length;
+    folder.decks.forEach((deck: DeckType) => {
+      numberOfCards += deck.flashcards.length;
+    });
+    foldersData.push([
+      folder.title,
+      numberOfDecks,
+      numberOfCards,
+      'Edit folder',
+    ]);
+  });
+
+  return foldersData;
+};
+
+export const extractDataForDeckTable = (decks: DeckType[]) => {
+  const decksData: any[] = [];
+
+  decks.forEach((deck: DeckType) => {
+    const numberOfCards = deck.flashcards.length;
+    const numberOfReviews = deck?.reviews?.length || 0;
+    const avgSuccess = 0;
+
+    decksData.push([
+      deck.title,
+      numberOfCards,
+      numberOfReviews,
+      avgSuccess,
+      'Edit deck',
+    ]);
+  });
+
+  return decksData;
 };

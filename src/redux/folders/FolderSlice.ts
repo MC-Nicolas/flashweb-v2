@@ -65,6 +65,20 @@ export const userSlice = createSlice({
         value: removeSpecialChars(formattedFolder.title),
       });
     },
+
+    removeFolder: (state, action) => {
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.id) === removeSpecialChars(action.payload)
+      );
+      state.folders.splice(folderIndex, 1);
+      state.foldersOptions.splice(folderIndex, 1);
+      if (state.folders.length > 0) {
+        state.activeFolder = state.folders[0].title;
+      } else {
+        state.activeFolder = '';
+      }
+    },
     addDeck: (state, action) => {
       const { isImportant, title, folderId } = action.payload;
       const formattedDeck = {
@@ -83,6 +97,20 @@ export const userSlice = createSlice({
         name: formattedDeck.title,
         value: removeSpecialChars(formattedDeck.title),
       });
+    },
+    removeDeck: (state, action) => {
+      const { folderId, deckId } = action.payload;
+      const folderIndex = state.folders.findIndex(
+        (folder: any) =>
+          removeSpecialChars(folder.title) === removeSpecialChars(folderId)
+      );
+      const deckIndex = state.folders[folderIndex].decks.findIndex(
+        (deck: any) =>
+          removeSpecialChars(deck.title) === removeSpecialChars(deckId)
+      );
+      state.folders[folderIndex].decks.splice(deckIndex, 1);
+      state.decksOptions.splice(deckIndex, 1);
+      // ! TODO modify all reviews as well
     },
     addFlashcard: (state, action) => {
       const { typeOfFlashcard, deckId, front, back, folderId } = action.payload;
@@ -152,7 +180,9 @@ export const {
   setActiveFolder,
   setActiveDeck,
   addFolder,
+  removeFolder,
   addDeck,
+  removeDeck,
   addFlashcard,
   addReview,
   setAllReview,
