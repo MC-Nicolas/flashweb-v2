@@ -32,5 +32,9 @@ export const addAnswersFromSameDay = (allAnswers: any[]) => {
     }
   });
 
+  allAnswersByDate.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
   return allAnswersByDate;
 };

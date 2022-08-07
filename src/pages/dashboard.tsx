@@ -19,18 +19,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     const seriesData: number[] = [];
+    let categories: string[] = [];
 
-    const groupedReviewsByDay = addAnswersFromSameDay(allReviews);
+    let groupedReviewsByDay = addAnswersFromSameDay(allReviews);
 
     groupedReviewsByDay.map((review) => {
       const avgSuccess = calculatePercentageFromTwoNumber(
         review.rightAnswerCount + review.wrongAnswerCount,
         review.rightAnswerCount
       );
+
       seriesData.push(avgSuccess);
+      categories.push(review.date);
     });
 
-    dispatch(setSeries({ values: seriesData, categories: ['08/05/0220'] }));
+    dispatch(setSeries({ values: seriesData, categories }));
   }, [allReviews, dispatch]);
 
   return (

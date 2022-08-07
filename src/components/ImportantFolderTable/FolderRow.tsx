@@ -43,7 +43,6 @@ const FolderRow = ({ deck }: { deck: DeckType }) => {
         new Date().toLocaleDateString('fr-fr')
       );
     });
-    console.log(totalAnswers, totalSuccess);
     if (todayReviews) setDoneToday(todayReviews?.length * 100);
     setAvgSuccess(calculatePercentageFromTwoNumber(totalAnswers, totalSuccess));
     setTotalTimeSpent(totalTime);
