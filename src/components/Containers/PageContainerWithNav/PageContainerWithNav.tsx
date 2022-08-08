@@ -9,11 +9,13 @@ import styles from './PageContainerWithNav.module.scss';
 type PageContainerWithNavProps = {
   pageTitle: string;
   children: any;
+  style?: {};
 };
 
 const PageContainerWithNav = ({
   pageTitle,
   children,
+  style = {},
 }: PageContainerWithNavProps) => {
   return (
     <PageContainer>

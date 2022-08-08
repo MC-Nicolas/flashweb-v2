@@ -10,7 +10,10 @@ import {
   extractDataForDeckTable,
   removeSpecialChars,
 } from '@/utils/dataFormatting';
-import { calculatePercentageFromTwoNumber } from '@/utils/calculations';
+import {
+  calculatePercentageFromTwoNumber,
+  calculateSeriesForChartFromAllReviews,
+} from '@/utils/calculations';
 import { setSeries } from '@/redux/chart/chartSlice';
 import NeumorphicTable from '@/components/NeumorphicTable/NeumorphicTable';
 import InsetNeumorphicContainer from '@/components/Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
@@ -34,20 +37,8 @@ const Dashboard = () => {
   }, [folders, activeFolder]);
 
   useEffect(() => {
-    const seriesData: number[] = [];
-    let categories: string[] = [];
-
-    let groupedReviewsByDay = addAnswersFromSameDay(allReviews);
-
-    groupedReviewsByDay.map((review) => {
-      const avgSuccess = calculatePercentageFromTwoNumber(
-        review.rightAnswerCount + review.wrongAnswerCount,
-        review.rightAnswerCount
-      );
-
-      seriesData.push(avgSuccess);
-      categories.push(review.date);
-    });
+    const { seriesData, categories } =
+      calculateSeriesForChartFromAllReviews(allReviews);
 
     dispatch(setSeries({ values: seriesData, categories }));
   }, [allReviews, dispatch]);

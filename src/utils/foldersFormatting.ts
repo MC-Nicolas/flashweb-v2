@@ -1,4 +1,10 @@
-import { DeckReviewType, DeckType, FoldersOptionType } from '@/types/folders';
+import {
+  DeckReviewType,
+  DeckType,
+  FoldersOptionType,
+  FolderType,
+} from '@/types/folders';
+import { removeSpecialChars } from './dataFormatting';
 
 // check if a key exists in object
 export const keyExists = (obj: any, key: string) => {
@@ -70,4 +76,19 @@ export const sortOptionsByName = (options: FoldersOptionType[]) => {
     }
     return 0;
   });
+};
+
+export const extractAllDecksForFolder = (
+  activeFolder: string,
+  folders: FolderType[]
+) => {
+  const decks: DeckType[] = [];
+  for (const folder of folders) {
+    if (removeSpecialChars(folder.title) === removeSpecialChars(activeFolder)) {
+      for (const deck of folder.decks) {
+        decks.push(deck);
+      }
+    }
+  }
+  return decks;
 };

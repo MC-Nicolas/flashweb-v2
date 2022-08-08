@@ -21,7 +21,7 @@ export const chartSlice = createSlice({
   reducers: {
     setSeries: (
       state,
-      action: { payload: { values: number[]; categories: string[] } }
+      action: { payload: { values: any; categories: string[] } }
     ) => {
       state.series = [{ data: action.payload.values }];
       state.xAxis = { ...state.xAxis, categories: action.payload.categories };

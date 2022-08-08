@@ -116,12 +116,12 @@ export const userSlice = createSlice({
     removeDeck: (state, action) => {
       const { folderId, deckId } = action.payload;
       const folderIndex = state.folders.findIndex(
-        (folder: any) =>
+        (folder: FolderType) =>
           removeSpecialChars(folder.title) === removeSpecialChars(folderId)
       );
       const deckIndex = state.folders[folderIndex].decks.findIndex(
-        (deck: any) =>
-          removeSpecialChars(deck.title) === removeSpecialChars(deckId)
+        (deck: DeckType) =>
+          removeSpecialChars(deck.id) === removeSpecialChars(deckId)
       );
       state.folders[folderIndex].decks.splice(deckIndex, 1);
       state.decksOptions.splice(deckIndex, 1);

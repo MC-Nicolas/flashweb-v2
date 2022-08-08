@@ -11,6 +11,7 @@ import {
   removeSpecialChars,
 } from '@/utils/dataFormatting';
 import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
+import { headerElements } from '../NeumorphicTable/data';
 
 type Props = {};
 
@@ -25,9 +26,11 @@ const Decks = (props: Props) => {
     const folderIndex = folders.findIndex(
       (folder) => removeSpecialChars(folder.title) === activeFolder
     );
+    if (folderIndex === -1) return;
     const decks = folders[folderIndex].decks;
 
     const decksDataForTable = extractDataForDeckTable(decks);
+    console.log(deckDataForTable);
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);
 
@@ -49,14 +52,7 @@ const Decks = (props: Props) => {
       <NeumorphicTable
         width='80%'
         height='70%'
-        headerElements={[
-          'Name',
-          'Total Flashcards',
-          'Total Reviews',
-          'AVG success',
-          'Chart',
-          'Actions',
-        ]}
+        headerElements={headerElements.deck}
         data={deckDataForTable}
       />
     </FlexContainer>

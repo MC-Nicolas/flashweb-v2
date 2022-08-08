@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { extractDataForFolderTable } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
 import FlexContainer from '../FlexContainer/FlexContainer';
+import { headerElements } from '../NeumorphicTable/data';
 import NeumorphicTable from '../NeumorphicTable/NeumorphicTable';
 import SectionTitle from '../Texts/SectionTitle';
 
@@ -28,13 +29,7 @@ const Folders = () => {
     <NeumorphicTable
       width='85%'
       height='80%'
-      headerElements={[
-        'Name',
-        'Total Decks',
-        'Total Flashcards',
-        'Chart',
-        'Actions',
-      ]}
+      headerElements={headerElements.folder}
       data={foldersDataForTable}
     />
   );

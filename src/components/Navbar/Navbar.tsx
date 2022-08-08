@@ -20,7 +20,10 @@ const Navbar = () => {
   const { pathname } = useRouter();
 
   return (
-    <div className={styles.navbar}>
+    <div
+      className={styles.navbar}
+      style={{ position: 'fixed', width: '100px' }}
+    >
       <FlexContainer height='10%'>
         <CollapsableMenu
           icon={<NeumorphicButtonWithIcon icon={<AddIcon />} />}

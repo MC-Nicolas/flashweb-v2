@@ -16,7 +16,17 @@ const PageContainer = ({
   style,
 }: PageContainerProps) => {
   return (
-    <div className={styles.pageContainer} style={{ width, height, ...style }}>
+    <div
+      className={styles.pageContainer}
+      style={{
+        width,
+        height,
+        ...style,
+        display: 'block',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
+      }}
+    >
       {children}
     </div>
   );
