@@ -16,6 +16,7 @@ import { headerElements } from '@/components/NeumorphicTable/data';
 import {
   extractAllReviewsFromActiveFolder,
   extractDataForFolderTable,
+  sortByDate,
 } from '@/utils/dataFormatting';
 
 import { calculateSeriesForChartForEachDay } from '@/utils/calculations';
@@ -32,30 +33,27 @@ const Performances = () => {
   const [dataForTable, setDataForTable] = useState<any>([]);
 
   useEffect(() => {
-    const totalReviews: any = [];
+    let totalReviews: any = [];
     let foldersDataForTable = extractDataForFolderTable(folders, activeFolder);
-
     let activeFolderReviews = extractAllReviewsFromActiveFolder(
       folders,
       activeFolder
     );
+
     activeFolderReviews.map((reviewArr: DeckReviewType[]) => {
       reviewArr.map((review: DeckReviewType) => {
         totalReviews.push(review);
       });
     });
 
-    totalReviews.sort((a: DeckReviewType, b: DeckReviewType) => {
-      return a.date - b.date;
-    });
+    totalReviews = sortByDate(totalReviews);
 
     const { series, categories } =
       calculateSeriesForChartForEachDay(totalReviews);
 
     dispatch(setSeries({ values: series, categories: categories }));
-
     setDataForTable(foldersDataForTable);
-  }, [folders, activeFolder]);
+  }, [folders, activeFolder, dispatch]);
 
   return (
     <PageContainerWithNav pageTitle='Performances'>

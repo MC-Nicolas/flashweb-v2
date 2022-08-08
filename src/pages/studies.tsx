@@ -13,10 +13,8 @@ import StudiesContent from '@/components/StudiesContent/StudiesContent';
 type Props = {};
 
 const Studies = (props: Props) => {
-  const dispatch = useAppDispatch();
   const [activeType, setActiveType] = useState('folders');
-  const { activeFolder, activeDeck, foldersOptions, decksOptions } =
-    useAppSelector((state) => state.folders);
+
   return (
     <PageContainerWithNav pageTitle='My Studies'>
       <FlexContainer

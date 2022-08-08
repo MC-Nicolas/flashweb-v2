@@ -6,19 +6,8 @@ import {
 } from '@/types/folders';
 import { calculatePercentageFromTwoNumber } from './calculations';
 
-export const removeSpecialChars = (str: string) => {
-  return str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-};
-
-export const formatFromDateInSecondsToDate = (seconds: number) => {
-  const date = new Date(seconds * 1000);
-  return date.toLocaleDateString('fr-fr');
-};
-
-export const addAnswersFromSameDay = (allAnswers: any[]) => {
+export const addAnswersFromSameDay = (allAnswers: DeckReviewType[]) => {
   let allAnswersByDate: any[] = [];
-
-  // for each answer, add the answers from the same day
 
   allAnswers.forEach((answer: any) => {
     const date = formatFromDateInSecondsToDate(answer.date);
@@ -38,10 +27,7 @@ export const addAnswersFromSameDay = (allAnswers: any[]) => {
     }
   });
 
-  allAnswersByDate.sort((a, b) => {
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
-  });
-
+  allAnswersByDate = sortByDate(allAnswersByDate);
   return allAnswersByDate;
 };
 
@@ -65,11 +51,8 @@ export const extractDataForFolderTable = (
         numberOfReviews += deck.reviews.length;
         deck.reviews.forEach((review: DeckReviewType) => {
           timeSpent += review.timeSpent;
-          //@ts-ignore
           totalAnswers +=
-            //@ts-ignore
             review.answers.right.length + review.answers.wrong.length;
-          //@ts-ignore
           rightAnswers += review.answers.right.length;
         });
       }
@@ -85,7 +68,7 @@ export const extractDataForFolderTable = (
       numberOfCards,
       numberOfReviews,
       avgSuccess,
-      calculateMinutesAndSecondsFromSeconds(timeSpent),
+      calculateTimeFromSeconds(timeSpent),
       'Chart',
       'Edit folder',
     ]);
@@ -126,10 +109,7 @@ export const extractAllReviewsFromActiveFolder = (
   activeFolder: string
 ) => {
   let allReviews: any = [];
-  const activeFolderIndex = folders.findIndex(
-    (folder: FolderType) =>
-      removeSpecialChars(folder.title) === removeSpecialChars(activeFolder)
-  );
+  const activeFolderIndex = findIndexOfFolder(folders, activeFolder);
   if (activeFolderIndex === -1) return [];
   const decks = folders[activeFolderIndex].decks;
   decks.forEach((deck: DeckType) => {
@@ -140,8 +120,56 @@ export const extractAllReviewsFromActiveFolder = (
   return allReviews;
 };
 
-export const calculateMinutesAndSecondsFromSeconds = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
+export const removeSpecialChars = (str: string) => {
+  return str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+};
+
+export const formatFromDateInSecondsToDate = (seconds: number) => {
+  const date = new Date(seconds * 1000);
+  return date.toLocaleDateString('fr-fr');
+};
+
+export const calculateTimeFromSeconds = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
   const secondsLeft = seconds % 60;
-  return `${minutes}:${secondsLeft}`;
+  if (hours > 0) {
+    return `${manageSingleNumber(hours, 'left')}:${manageSingleNumber(
+      minutes,
+      'left'
+    )}:${manageSingleNumber(secondsLeft, 'right')}`;
+  } else {
+    return `${manageSingleNumber(minutes, 'left')}:${manageSingleNumber(
+      secondsLeft,
+      'right'
+    )}`;
+  }
+};
+
+export const sortByDate = (elementsToFormat: any[]) => {
+  elementsToFormat.sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+  return elementsToFormat;
+};
+
+export const manageSingleNumber = (
+  number: number,
+  zeroPosition?: 'right' | 'left'
+): string => {
+  if (number > 9) return number.toString();
+  if (zeroPosition === 'right') {
+    return `${number}0`;
+  }
+  return `0${number}`;
+};
+
+export const findIndexOfFolder = (
+  folders: FolderType[],
+  folderIDorTitle: string
+) => {
+  return folders.findIndex(
+    (folder: FolderType) =>
+      removeSpecialChars(folder.title) === removeSpecialChars(folderIDorTitle)
+  );
 };

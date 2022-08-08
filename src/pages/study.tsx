@@ -11,9 +11,10 @@ import StudySection from '@/components/StudySection/StudySection';
 import StudySelectors from '@/components/StudySelectors/StudySelectors';
 import SectionTitle from '@/components/Texts/SectionTitle';
 import { DeckType } from '@/types/folders';
-import { removeSpecialChars } from '@/utils/dataFormatting';
+import { findIndexOfFolder, removeSpecialChars } from '@/utils/dataFormatting';
 import { studySections } from '@/redux/study/StudySections';
 import ReviewSection from '@/components/ReviewSection/ReviewSection';
+import { getDeckData } from '@/utils/getData';
 
 const Study = () => {
   const { query } = useRouter();
@@ -31,28 +32,17 @@ const Study = () => {
     if (query.deck && query.deck !== activeDeck) {
       dispatch(setActiveDeck(query.deck));
     }
-  }, [query]);
+  });
 
   useEffect(() => {
     if (activeFolder && activeDeck) {
-      const activeFolderIndex = folders.findIndex(
-        (folder) => removeSpecialChars(folder.title) === activeFolder
-      );
-      if (folders[activeFolderIndex] === undefined) return;
-      const activeDeckIndex = folders[activeFolderIndex].decks.findIndex(
-        (deck: DeckType) =>
-          removeSpecialChars(deck.title) === removeSpecialChars(activeDeck)
-      );
-
-      const deckData: DeckType =
-        folders[activeFolderIndex].decks[activeDeckIndex];
-
+      const deckData = getDeckData(folders, activeFolder, activeDeck);
       if (deckData) {
         dispatch(setDeck(deckData));
         dispatch(setFlashcards(deckData.flashcards));
       }
     }
-  }, [activeFolder, activeDeck]);
+  }, [folders, activeFolder, activeDeck, dispatch]);
 
   return (
     <PageContainerWithNav pageTitle='GLP - Study'>

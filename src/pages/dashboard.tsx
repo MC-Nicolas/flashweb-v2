@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addAnswersFromSameDay,
   extractDataForDeckTable,
+  findIndexOfFolder,
   removeSpecialChars,
 } from '@/utils/dataFormatting';
 import {
@@ -17,21 +18,18 @@ import {
 import { setSeries } from '@/redux/chart/chartSlice';
 import NeumorphicTable from '@/components/NeumorphicTable/NeumorphicTable';
 import InsetNeumorphicContainer from '@/components/Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
+import { extractAllDecksForFolder } from '@/utils/foldersFormatting';
+import { headerElements } from '@/components/NeumorphicTable/data';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const { allReviews, folders, foldersOptions, activeFolder } = useAppSelector(
+  const { allReviews, folders, activeFolder } = useAppSelector(
     (state) => state.folders
   );
   const [deckDataForTable, setDeckDataForTable] = useState<any>([]);
 
   useEffect(() => {
-    const folderIndex = folders.findIndex(
-      (folder) => removeSpecialChars(folder.title) === activeFolder
-    );
-    if (folderIndex === -1) return;
-    let decks = folders[folderIndex].decks;
-    decks = decks.filter((deck) => deck.isImportant);
+    const decks = extractAllDecksForFolder(activeFolder, folders, true);
     const decksDataForTable = extractDataForDeckTable(decks);
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);
@@ -71,14 +69,7 @@ const Dashboard = () => {
           <NeumorphicTable
             width='80%'
             height='70%'
-            headerElements={[
-              'Name',
-              'Total Flashcards',
-              'Total Reviews',
-              'AVG success',
-              'Chart',
-              'Actions',
-            ]}
+            headerElements={headerElements.deck}
             data={deckDataForTable}
           />
         </FlexContainer>

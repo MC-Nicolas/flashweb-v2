@@ -27,8 +27,10 @@ export const options = {
   tooltip: {
     //@ts-ignore
     formatter: function () {
-      //@ts-ignore
-      return '<br /><b>Date : ' + this.x + '<br/>Result :</b> ' + this.y + ' %';
+      return (
+        //@ts-ignore
+        '<br /><b>Date : ' + this.x + '<br/>Success :</b> ' + this.y + ' %'
+      );
     },
   },
 };

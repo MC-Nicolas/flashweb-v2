@@ -9,8 +9,8 @@ import InsetNeumorphicContainer from '../Containers/InsetNeumorphicContainer/Ins
 import ReviewInfo from './components/ReviewInfo';
 import { saveReviewInDB } from '@/database/createInDB';
 import { removeSpecialChars } from '@/utils/dataFormatting';
-import toast from 'react-hot-toast';
 import { addReview } from '@/redux/folders/FolderSlice';
+import { funcWithError } from '@/utils/funcWithError';
 
 const ReviewSection = () => {
   const dispatch = useAppDispatch();
@@ -23,13 +23,17 @@ const ReviewSection = () => {
   };
 
   const handleSaveInDB = async () => {
-    const date = new Date().toLocaleDateString('fr-fr');
-    const { success, error } = await saveReviewInDB(
-      email,
-      removeSpecialChars(activeFolder),
-      removeSpecialChars(activeDeck),
-      answers,
-      timeSpent
+    await funcWithError(
+      [saveReviewInDB],
+      [
+        [
+          email,
+          removeSpecialChars(activeFolder),
+          removeSpecialChars(activeDeck),
+          answers,
+          timeSpent,
+        ],
+      ]
     );
 
     dispatch(
@@ -40,14 +44,6 @@ const ReviewSection = () => {
         timeSpent,
       })
     );
-
-    if (success) {
-      return toast.success('Results saved successfully !');
-    } else {
-      return toast.error(
-        'Oops, something happened while saving your results... '
-      );
-    }
   };
 
   useEffect(() => {
