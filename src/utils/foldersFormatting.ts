@@ -80,15 +80,19 @@ export const sortOptionsByName = (options: FoldersOptionType[]) => {
 
 export const extractAllDecksForFolder = (
   activeFolder: string,
-  folders: FolderType[]
+  folders: FolderType[],
+  importantFolders?: boolean
 ) => {
-  const decks: DeckType[] = [];
+  let decks: DeckType[] = [];
   for (const folder of folders) {
     if (removeSpecialChars(folder.title) === removeSpecialChars(activeFolder)) {
       for (const deck of folder.decks) {
         decks.push(deck);
       }
     }
+  }
+  if (importantFolders) {
+    decks = decks.filter((deck) => deck.isImportant);
   }
   return decks;
 };

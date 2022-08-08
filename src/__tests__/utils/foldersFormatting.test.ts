@@ -1,14 +1,14 @@
 import {
   sortOptionsByName,
-  transformFoldersToOptions,
+  transformFoldersFromDBToOptions,
 } from '@/utils/foldersFormatting';
 
 test('Should transform Folders from DB to select options', () => {
-  let folders = {
-    ppl: { title: 'PPL' },
-    math: { title: 'Math' },
-    java: { title: 'Java' },
-  };
+  let folders = [
+    { title: 'PPL', id: 'ppl' },
+    { title: 'Math', id: 'math' },
+    { title: 'Java', id: 'java' },
+  ];
 
   let expected = [
     { value: 'ppl', name: 'PPL' },
@@ -16,7 +16,7 @@ test('Should transform Folders from DB to select options', () => {
     { value: 'java', name: 'Java' },
   ];
 
-  expect(transformFoldersToOptions(folders)).toEqual(expected);
+  expect(transformFoldersFromDBToOptions(folders)).toEqual(expected);
 });
 
 test('Should sort Folders options by name', () => {

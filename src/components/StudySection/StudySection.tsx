@@ -37,6 +37,14 @@ const StudySection = ({ deck }: StudySectionProps) => {
     }
   }, [flashcards]);
 
+  const handleOnAnswerClick = (flashcardFront: string, isRight: boolean) => {
+    if (isRight) dispatch(addRightAnswer(flashcardFront));
+    if (!isRight) dispatch(addWrongAnswer(flashcardFront));
+    dispatch(setFlashcardIsFlipped(false));
+    setUsedOrders([...usedOrders, order]);
+    setOrder(order + 1);
+  };
+
   return (
     <InsetNeumorphicContainer width='80%' height='80vh'>
       <StudyDeckInfo />
@@ -52,24 +60,21 @@ const StudySection = ({ deck }: StudySectionProps) => {
             <Button
               variant='contained'
               color='error'
-              onClick={() => {
-                dispatch(setFlashcardIsFlipped(false));
-                dispatch(addWrongAnswer(flashcards[order].flashcardData.front));
-                setUsedOrders([...usedOrders, order]);
-                setOrder(order + 1);
-              }}
+              onClick={() =>
+                handleOnAnswerClick(
+                  flashcards[order].flashcardData.front,
+                  false
+                )
+              }
             >
               Mistake
             </Button>
             <Button
               variant='contained'
               color='success'
-              onClick={() => {
-                dispatch(setFlashcardIsFlipped(false));
-                dispatch(addRightAnswer(flashcards[order].flashcardData.front));
-                setUsedOrders([...usedOrders, order]);
-                setOrder(order + 1);
-              }}
+              onClick={() =>
+                handleOnAnswerClick(flashcards[order].flashcardData.front, true)
+              }
             >
               Success
             </Button>

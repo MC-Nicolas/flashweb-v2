@@ -8,9 +8,7 @@ import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-type Props = {};
-
-const SettingsPage = (props: Props) => {
+const SettingsPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user);

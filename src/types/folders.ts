@@ -13,7 +13,7 @@ export interface AnswersType {
 export interface DeckReviewType {
   date: number;
   timeSpent: number;
-  answers: AnswersType[];
+  answers: AnswersType;
 }
 export interface DeckType {
   isImportant: boolean;

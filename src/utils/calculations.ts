@@ -1,5 +1,9 @@
 import { DeckReviewType } from '@/types/folders';
-import { addAnswersFromSameDay } from './dataFormatting';
+import {
+  addAnswersFromSameDay,
+  formatFromDateInSecondsToDate,
+  manageSingleNumber,
+} from './dataFormatting';
 
 export const calculatePercentageFromTwoNumber = (
   total: number,
@@ -38,19 +42,21 @@ export const calculateSeriesForChartForEachDay = (
   reviews.map((review) => {
     const { answers, date, timeSpent } = review;
     const avgSuccess = calculatePercentageFromTwoNumber(
-      //@ts-ignore
       answers.right.length + answers.wrong.length,
-      //@ts-ignore
       answers.right.length
     );
-    // Format date with minutes and seconds
-    const rawDate = new Date(date * 1000);
-    const d = rawDate.toLocaleDateString('fr-fr');
-    const minutesAndHours = `${rawDate.getHours()}:${rawDate.getMinutes()}`;
-    const formattedDate = `${d} ${minutesAndHours}`;
+    const formattedDate = createDateWithTimeFromSeconds(date);
 
     categories.push(formattedDate);
     series.push(avgSuccess);
   });
   return { series, categories };
+};
+
+export const createDateWithTimeFromSeconds = (seconds: number) => {
+  const d = new Date(seconds * 1000);
+  return `${formatFromDateInSecondsToDate(seconds)} ${manageSingleNumber(
+    d.getHours(),
+    'left'
+  )}:${manageSingleNumber(d.getMinutes(), 'right')}`;
 };
