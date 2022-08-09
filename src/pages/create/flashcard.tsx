@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { addFlashcard } from '@/redux/folders/FolderSlice';
 import { removeSpecialChars } from '@/utils/dataFormatting';
+import Smart from '@/components/Flashcard/Smart';
 
 type Props = {};
 
@@ -126,6 +127,31 @@ const Flashcard = (props: Props) => {
                   isFlipped={!isFrontActive}
                   editable
                 />
+
+                <SubmitForm title='Save' />
+              </FlexContainer>
+            )}
+            {typeOfFlashcard === 'smart' && (
+              <FlexContainer width='100%' height='100%' flexDirection='column'>
+                <FlexContainer width='50%' height='50px'>
+                  <NeumorphicBasicButton
+                    text='Front'
+                    active={isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(true);
+                    }}
+                  />
+                  <NeumorphicBasicButton
+                    text='Back'
+                    active={!isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(false);
+                    }}
+                  />
+                </FlexContainer>
+                <Smart />
 
                 <SubmitForm title='Save' />
               </FlexContainer>

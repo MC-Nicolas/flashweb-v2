@@ -69,7 +69,8 @@ const NewFlashcardSelectors = ({
             label='Type of flashcard'
             options={[
               { name: 'Classic', value: 'classic' },
-              { name: 'QCM', value: 'qcm' },
+              { name: 'MCQ', value: 'mcq' },
+              { name: 'Smart', value: 'smart' },
             ]}
           />
         </>
