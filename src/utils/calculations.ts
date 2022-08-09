@@ -41,14 +41,16 @@ export const calculateSeriesForChartForEachDay = (
 
   reviews.map((review) => {
     const { answers, date, timeSpent } = review;
-    const avgSuccess = calculatePercentageFromTwoNumber(
-      answers.right.length + answers.wrong.length,
-      answers.right.length
-    );
-    const formattedDate = createDateWithTimeFromSeconds(date);
+    if (answers) {
+      const avgSuccess = calculatePercentageFromTwoNumber(
+        answers.right.length + answers.wrong.length,
+        answers.right.length
+      );
+      const formattedDate = createDateWithTimeFromSeconds(date);
 
-    categories.push(formattedDate);
-    series.push(avgSuccess);
+      categories.push(formattedDate);
+      series.push(avgSuccess);
+    }
   });
   return { series, categories };
 };

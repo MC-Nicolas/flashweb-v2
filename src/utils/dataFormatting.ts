@@ -89,13 +89,18 @@ export const extractDataForDeckTable = (decks: DeckType[]) => {
   decks.forEach((deck: DeckType) => {
     const numberOfCards = deck.flashcards.length;
     const numberOfReviews = deck?.reviews?.length || 0;
-    let avgSuccess = '0%';
+    let totalAnswers = 0;
+    let rightAnswers = 0;
+    deck.reviews?.forEach((review: DeckReviewType) => {
+      totalAnswers += review.answers.right.length + review.answers.wrong.length;
+      rightAnswers += review.answers.right.length;
+    });
 
     decksData.push([
       deck.title,
       numberOfCards,
       numberOfReviews,
-      avgSuccess,
+      `${calculatePercentageFromTwoNumber(totalAnswers, rightAnswers)}%`,
       'Chart',
       'Edit deck',
     ]);
@@ -106,7 +111,8 @@ export const extractDataForDeckTable = (decks: DeckType[]) => {
 
 export const extractAllReviewsFromActiveFolder = (
   folders: FolderType[],
-  activeFolder: string
+  activeFolder: string,
+  activeDeck?: string
 ) => {
   let allReviews: any = [];
   const activeFolderIndex = findIndexOfFolder(folders, activeFolder);
@@ -114,7 +120,13 @@ export const extractAllReviewsFromActiveFolder = (
   const decks = folders[activeFolderIndex].decks;
   decks.forEach((deck: DeckType) => {
     if (deck.reviews) {
-      allReviews.push(deck.reviews);
+      if (activeDeck) {
+        if (removeSpecialChars(deck.title) === removeSpecialChars(activeDeck)) {
+          allReviews.push(deck.reviews);
+        }
+      } else {
+        allReviews.push(deck.reviews);
+      }
     }
   });
   return allReviews;
@@ -171,5 +183,19 @@ export const findIndexOfFolder = (
   return folders.findIndex(
     (folder: FolderType) =>
       removeSpecialChars(folder.title) === removeSpecialChars(folderIDorTitle)
+  );
+};
+
+export const findIndexOfDeck = (
+  folders: FolderType[],
+  folderIDorTitle: string,
+  deckIDorTitle: string
+) => {
+  const folderIndex = findIndexOfFolder(folders, folderIDorTitle);
+  if (folderIndex === -1) return -1;
+  const allDecks = folders[folderIndex].decks;
+  return allDecks.findIndex(
+    (deck: DeckType) =>
+      removeSpecialChars(deck.title) === removeSpecialChars(deckIDorTitle)
   );
 };

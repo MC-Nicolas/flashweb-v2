@@ -15,7 +15,10 @@ import { headerElements } from '@/components/NeumorphicTable/data';
 
 import {
   extractAllReviewsFromActiveFolder,
+  extractDataForDeckTable,
   extractDataForFolderTable,
+  findIndexOfDeck,
+  findIndexOfFolder,
   sortByDate,
 } from '@/utils/dataFormatting';
 
@@ -31,29 +34,58 @@ const Performances = () => {
 
   const [typeOfData, setTypeOfData] = useState('folder');
   const [dataForTable, setDataForTable] = useState<any>([]);
+  // ! TODO -> Create separate functions for fetching folders and deck
 
   useEffect(() => {
-    let totalReviews: any = [];
-    let foldersDataForTable = extractDataForFolderTable(folders, activeFolder);
-    let activeFolderReviews = extractAllReviewsFromActiveFolder(
-      folders,
-      activeFolder
-    );
+    if (typeOfData === 'folder') {
+      let totalReviews: any = [];
+      let foldersDataForTable = extractDataForFolderTable(
+        folders,
+        activeFolder
+      );
+      let activeFolderReviews = extractAllReviewsFromActiveFolder(
+        folders,
+        activeFolder
+      );
 
-    activeFolderReviews.map((reviewArr: DeckReviewType[]) => {
-      reviewArr.map((review: DeckReviewType) => {
-        totalReviews.push(review);
+      activeFolderReviews.map((reviewArr: DeckReviewType[]) => {
+        reviewArr.map((review: DeckReviewType) => {
+          totalReviews.push(review);
+        });
       });
-    });
 
-    totalReviews = sortByDate(totalReviews);
+      totalReviews = sortByDate(totalReviews);
 
-    const { series, categories } =
-      calculateSeriesForChartForEachDay(totalReviews);
+      const { series, categories } =
+        calculateSeriesForChartForEachDay(totalReviews);
 
-    dispatch(setSeries({ values: series, categories: categories }));
-    setDataForTable(foldersDataForTable);
-  }, [folders, activeFolder, dispatch]);
+      dispatch(setSeries({ values: series, categories: categories }));
+      setDataForTable(foldersDataForTable);
+    } else {
+      let activeFolderIndex = findIndexOfFolder(folders, activeFolder);
+      let activeDeckIndex = findIndexOfDeck(folders, activeFolder, activeDeck);
+
+      if (activeDeckIndex === -1 || activeDeckIndex === -1) return;
+
+      let deck = folders[activeFolderIndex].decks[activeDeckIndex];
+      let deckDataForTable = extractDataForDeckTable([deck]);
+
+      let activeDeckReviews = extractAllReviewsFromActiveFolder(
+        folders,
+        activeFolder,
+        activeDeck
+      );
+      if (activeDeckReviews.length === 0) return;
+      activeDeckReviews = sortByDate(activeDeckReviews);
+
+      const { series, categories } = calculateSeriesForChartForEachDay(
+        activeDeckReviews[0]
+      );
+
+      dispatch(setSeries({ values: series, categories: categories }));
+      setDataForTable(deckDataForTable);
+    }
+  }, [folders, activeFolder, activeDeck, dispatch, typeOfData]);
 
   return (
     <PageContainerWithNav pageTitle='Performances'>

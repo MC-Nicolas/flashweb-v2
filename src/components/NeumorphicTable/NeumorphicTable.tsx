@@ -20,7 +20,7 @@ const NeumorphicTable = ({
     <FlexContainer width={width} height={height}>
       <HeaderRow headerElements={headerElements} />
       {data.map((el, index) => (
-        <DataRow key={Math.random() * 10000} element={el} />
+        <DataRow key={index} element={el} />
       ))}
     </FlexContainer>
   );

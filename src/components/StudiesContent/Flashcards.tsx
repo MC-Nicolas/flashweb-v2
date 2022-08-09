@@ -124,8 +124,6 @@ const Flashcards = (props: Props) => {
             const { front, back } = flashcard.flashcardData;
             const { typeOfFlashcard } = flashcard;
             if (typeOfFlashcard === 'classic') {
-              // ! TODO handle on click on icons in flashcards
-              // Use deleteField() from firestore to delete flashcard from db with updateDoc()
               return (
                 <ClassicFlashcard
                   key={front}
