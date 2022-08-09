@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { addFlashcard } from '@/redux/folders/FolderSlice';
 import { removeSpecialChars } from '@/utils/dataFormatting';
+import MCQ from '@/components/Flashcard/MCQ';
 
 type Props = {};
 
@@ -125,6 +126,40 @@ const Flashcard = (props: Props) => {
                   }
                   isFlipped={!isFrontActive}
                   editable
+                />
+
+                <SubmitForm title='Save' />
+              </FlexContainer>
+            )}
+            {typeOfFlashcard === 'mcq' && (
+              <FlexContainer width='100%' height='100%' flexDirection='column'>
+                <FlexContainer width='50%' height='50px'>
+                  <NeumorphicBasicButton
+                    text='Front'
+                    active={isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(true);
+                    }}
+                  />
+                  <NeumorphicBasicButton
+                    text='Back'
+                    active={!isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(false);
+                    }}
+                  />
+                </FlexContainer>
+                <MCQ
+                  front={flashcardData.front}
+                  setFront={(e: { target: { value: string } }) =>
+                    setFlashcardData({
+                      ...flashcardData,
+                      front: e.target.value,
+                    })
+                  }
+                  isFlipped={!isFrontActive}
                 />
 
                 <SubmitForm title='Save' />
