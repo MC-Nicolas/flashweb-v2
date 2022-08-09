@@ -30,7 +30,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const decks = extractAllDecksForFolder(activeFolder, folders, true);
-    const decksDataForTable = extractDataForDeckTable(decks);
+    const decksDataForTable = extractDataForDeckTable(decks, 'study');
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);
 
@@ -69,7 +69,7 @@ const Dashboard = () => {
           <NeumorphicTable
             width='80%'
             height='70%'
-            headerElements={headerElements.deck}
+            headerElements={headerElements.dashboardDeck}
             data={deckDataForTable}
           />
         </FlexContainer>

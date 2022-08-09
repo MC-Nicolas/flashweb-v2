@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { removeDeck, removeFolder } from '@/redux/folders/FolderSlice';
@@ -9,6 +10,9 @@ import toast from 'react-hot-toast';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowRight from '@/assets/icons/arrowRight.png';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import { deleteDeckFromDB, deleteFolderFromDB } from '@/database/deleteInDB';
 import { removeSpecialChars } from '@/utils/dataFormatting';
@@ -27,7 +31,7 @@ type DataRowProps = {
 const DataRow = ({ element }: DataRowProps) => {
   const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user);
-  const { activeFolder } = useAppSelector((state) => state.folders);
+  const { activeFolder, folders } = useAppSelector((state) => state.folders);
 
   const handleDeleteEl = async (el: string) => {
     if (el === 'Edit folder') {
@@ -71,6 +75,13 @@ const DataRow = ({ element }: DataRowProps) => {
     }
   };
 
+  const findFolderFromDeck = (deckId: string) => {
+    const folder = folders.find((folder) => {
+      return folder.decks.find((deck) => deck.id === deckId);
+    });
+    return removeSpecialChars(folder?.title ?? '');
+  };
+
   return (
     <div className={styles.folderRow}>
       {element.map((el) => {
@@ -96,6 +107,37 @@ const DataRow = ({ element }: DataRowProps) => {
               <Link href='/'>
                 <EqualizerIcon sx={{ cursor: 'pointer' }} />
               </Link>
+            </div>
+          );
+        } else if (el === 'Study') {
+          return (
+            <div style={{ color: 'white' }}>
+              <Link
+                href={`/study?folder=${findFolderFromDeck(
+                  element[0]
+                )}&deck=${removeSpecialChars(element[0])}`}
+              >
+                <button
+                  style={{
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Image src={ArrowRight} alt='Study' width={20} height={20} />
+                </button>
+              </Link>
+            </div>
+          );
+        } else if (el === 'true' || el === 'false') {
+          console.log(el);
+          return (
+            <div key={Math.random() * 100000}>
+              {el === 'true' ? (
+                <DoneAllIcon sx={{ color: 'green' }} />
+              ) : (
+                <ClearIcon sx={{ color: 'red' }} />
+              )}
             </div>
           );
         } else {

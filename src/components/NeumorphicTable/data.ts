@@ -17,4 +17,12 @@ export const headerElements: { [key: string]: string[] } = {
     'Chart',
     'Actions',
   ],
+  dashboardDeck: [
+    'Name',
+    'Total Reviews',
+    'AVG success',
+    'Time spent',
+    'Done today',
+    'Study',
+  ],
 };

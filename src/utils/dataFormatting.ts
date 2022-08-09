@@ -83,27 +83,51 @@ export const extractDataForFolderTable = (
   return foldersData;
 };
 
-export const extractDataForDeckTable = (decks: DeckType[]) => {
+export const extractDataForDeckTable = (
+  decks: DeckType[],
+  actions?: string
+) => {
   const decksData: any[] = [];
 
   decks.forEach((deck: DeckType) => {
+    console.log(deck);
     const numberOfCards = deck.flashcards.length;
     const numberOfReviews = deck?.reviews?.length || 0;
     let totalAnswers = 0;
     let rightAnswers = 0;
+    let timeSpent = 0;
+    let todaysAnswers = 0;
+    let todaysDate = new Date().toLocaleDateString('fr-fr');
     deck.reviews?.forEach((review: DeckReviewType) => {
+      const dateOfReview = formatFromDateInSecondsToDate(review.date);
+      if (dateOfReview === todaysDate) {
+        todaysAnswers +=
+          review.answers.right.length + review.answers.wrong.length;
+      }
       totalAnswers += review.answers.right.length + review.answers.wrong.length;
       rightAnswers += review.answers.right.length;
+      timeSpent += review.timeSpent;
     });
-
-    decksData.push([
-      deck.title,
-      numberOfCards,
-      numberOfReviews,
-      `${calculatePercentageFromTwoNumber(totalAnswers, rightAnswers)}%`,
-      'Chart',
-      'Edit deck',
-    ]);
+    console.log(todaysAnswers, numberOfCards);
+    if (!actions) {
+      decksData.push([
+        deck.title,
+        numberOfCards,
+        numberOfReviews,
+        `${calculatePercentageFromTwoNumber(totalAnswers, rightAnswers)}%`,
+        'Chart',
+        'Edit deck',
+      ]);
+    } else {
+      decksData.push([
+        deck.title,
+        numberOfReviews,
+        `${calculatePercentageFromTwoNumber(totalAnswers, rightAnswers)}%`,
+        calculateTimeFromSeconds(timeSpent),
+        `${todaysAnswers === 0 ? false : true}`,
+        'Study',
+      ]);
+    }
   });
 
   return decksData;
