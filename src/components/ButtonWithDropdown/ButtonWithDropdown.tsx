@@ -45,14 +45,6 @@ const ButtonWithDropdown = ({ onChange }: { onChange: any }) => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            onChange('text');
-            handleClose();
-          }}
-        >
-          Text
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
             onChange('result');
             handleClose();
           }}

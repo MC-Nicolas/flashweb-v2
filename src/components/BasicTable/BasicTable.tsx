@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,33 +9,52 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { variablesWithIdType } from '@/types/smartCard';
+import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import {
+  removeVariable,
+  setAddVariableIsOpened,
+  setIsEdit,
+  setTableIsCollapsed,
+  setVariableToEdit,
+} from '@/redux/smartCard/smartCardSlice';
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+const normalizedData = (variables: variablesWithIdType[]) => {
+  return variables.map((variable) => {
+    if (typeof variable.value === 'object') {
+      return {
+        ...variable,
+        value: `${variable.value.min} - ${variable.value.max}`,
+      };
+    } else {
+      return {
+        ...variable,
+      };
+    }
+  });
+};
 
 const BasicTable = () => {
+  const dispatch = useAppDispatch();
+  const { variables } = useAppSelector((state) => state.smartcard);
+  const [normalizedRow, setNormalizedRow] = useState<any>([]);
+
+  useEffect(() => {
+    setNormalizedRow(normalizedData(variables));
+  }, [variables]);
+
+  const handleEditVariable = (row: variablesWithIdType) => {
+    dispatch(setVariableToEdit(row));
+    dispatch(setIsEdit(true));
+    dispatch(setTableIsCollapsed(false));
+    dispatch(setAddVariableIsOpened(true));
+  };
   return (
     <TableContainer
       component={Paper}
       sx={{
         width: '100%',
         height: '100%',
-
         backgroundColor: 'transparent',
       }}
     >
@@ -60,7 +79,7 @@ const BasicTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {normalizedRow.map((row: any) => (
             <StyledTableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -73,16 +92,22 @@ const BasicTable = () => {
                 {row.name}
               </StyledTableCell>
               <StyledTableCell style={{ color: 'white' }} align='right'>
-                {row.calories}
+                {row.type}
               </StyledTableCell>
               <StyledTableCell style={{ color: 'white' }} align='right'>
-                {row.fat}
+                {row.value}
               </StyledTableCell>
               <StyledTableCell style={{ color: 'white' }} align='right'>
-                <EditIcon style={{ cursor: 'pointer', color: 'green' }} />
+                <EditIcon
+                  style={{ cursor: 'pointer', color: 'green' }}
+                  onClick={() => handleEditVariable(row)}
+                />
               </StyledTableCell>
               <StyledTableCell style={{ color: 'white' }} align='right'>
-                <DeleteIcon style={{ cursor: 'pointer', color: 'red' }} />
+                <DeleteIcon
+                  style={{ cursor: 'pointer', color: 'red' }}
+                  onClick={() => dispatch(removeVariable(row.id))}
+                />
               </StyledTableCell>
             </StyledTableRow>
           ))}

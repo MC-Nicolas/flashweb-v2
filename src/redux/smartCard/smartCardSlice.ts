@@ -1,7 +1,7 @@
-import { smartCardState } from '@/types/smartCard';
+import { SmartCardState } from '@/types/smartCard';
 import { createSlice } from '@reduxjs/toolkit';
 
-export const initialState: smartCardState = {
+export const initialState: SmartCardState = {
   modalIsOpened: false,
   elementOptions: [
     { name: 'Number', value: 'number' },
@@ -9,12 +9,18 @@ export const initialState: smartCardState = {
   ],
   typeOfElement: 'number',
   numberOptions: [
-    { name: 'Simple', value: 'simple' },
-    { name: 'Random', value: 'random' },
+    { name: 'Number', value: 'number' },
+    { name: 'Random number', value: 'randomnumber' },
+    { name: 'Text', value: 'text' },
     { name: 'Result', value: 'result' },
   ],
-  typeOfNumber: 'simple',
+  typeOfNumber: 'number',
   addVariableIsOpened: false,
+  tableIsCollapsed: false,
+  typeOfElementToAdd: '',
+  variableToAdd: { name: '', value: '', symbol: '', type: '' },
+  variables: [],
+  isEdit: false,
 };
 
 export const smartCardSlice = createSlice({
@@ -33,6 +39,65 @@ export const smartCardSlice = createSlice({
     setAddVariableIsOpened: (state, action) => {
       state.addVariableIsOpened = action.payload;
     },
+    setTableIsCollapsed: (state, action) => {
+      state.tableIsCollapsed = action.payload;
+    },
+    setTypeOfElementToAdd: (state, action) => {
+      state.typeOfElementToAdd = action.payload;
+    },
+    setVariableToAdd: (
+      state: any,
+      action: { payload: { key: string; value: string | number | {} } }
+    ) => {
+      state.variableToAdd[action.payload.key] = action.payload.value;
+    },
+    setVariableToEdit: (state, action) => {
+      state.variableToAdd = action.payload;
+    },
+    setIsEdit: (state, action) => {
+      state.isEdit = action.payload;
+    },
+    updateVariable: (
+      state,
+      action: { payload: { id: number | string; data: any } }
+    ) => {
+      const findIndex = state.variables.findIndex((item) => {
+        if (item.id) {
+          return item.id === action.payload.id;
+        }
+      });
+      // @ts-ignore
+      state.variables[findIndex] = action.payload.data;
+      state.variableToAdd = {
+        name: '',
+        value: '',
+        symbol: '',
+        type: action.payload.data.type,
+      };
+    },
+    addVariable: (state, action) => {
+      state.variables.push({
+        ...action.payload,
+        id: (Math.random() * 100000).toString(),
+      });
+      state.variableToAdd = {
+        name: '',
+        value: '',
+        symbol: '',
+        type: action.payload.type,
+      };
+    },
+    removeVariable: (state, action: { payload: string }) => {
+      state.variables = state.variables.filter(
+        (variable) => variable.id !== action.payload
+      );
+    },
+    setMinMaxOnVariableToAdd: (
+      state: any,
+      action: { payload: { key: string; value: number } }
+    ) => {
+      state.variableToAdd.value[action.payload.key] = action.payload.value;
+    },
   },
 });
 
@@ -41,5 +106,14 @@ export const {
   setTypeOfElement,
   setTypeOfNumber,
   setAddVariableIsOpened,
+  setTableIsCollapsed,
+  setTypeOfElementToAdd,
+  setVariableToAdd,
+  addVariable,
+  removeVariable,
+  updateVariable,
+  setMinMaxOnVariableToAdd,
+  setVariableToEdit,
+  setIsEdit,
 } = smartCardSlice.actions;
 export default smartCardSlice.reducer;
