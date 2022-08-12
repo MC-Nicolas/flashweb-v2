@@ -9,13 +9,16 @@ import ButtonWithDropdown from '@/components/ButtonWithDropdown/ButtonWithDropdo
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   setAddVariableIsOpened,
+  setDraggableVariablesIsOpened,
   setTableIsCollapsed,
   setTypeOfElementToAdd,
 } from '@/redux/smartCard/smartCardSlice';
 
 const ModalSelectors = () => {
   const dispatch = useAppDispatch();
-  const { tableIsCollapsed } = useAppSelector((state) => state.smartcard);
+  const { tableIsCollapsed, draggableVariablesIsOpened } = useAppSelector(
+    (state) => state.smartcard
+  );
 
   return (
     <FlexContainer
@@ -25,7 +28,14 @@ const ModalSelectors = () => {
       alignItems='center'
       justifyContent='flex-end'
     >
-      <Button variant='contained'>
+      <Button
+        variant='contained'
+        onClick={() => {
+          dispatch(setTableIsCollapsed(false));
+          dispatch(setAddVariableIsOpened(false));
+          dispatch(setDraggableVariablesIsOpened(!draggableVariablesIsOpened));
+        }}
+      >
         <TocIcon />
       </Button>
       <FlexContainer
@@ -47,6 +57,7 @@ const ModalSelectors = () => {
           onClick={() => {
             dispatch(setTableIsCollapsed(!tableIsCollapsed));
             dispatch(setAddVariableIsOpened(false));
+            dispatch(setDraggableVariablesIsOpened(false));
           }}
         />
       </FlexContainer>
@@ -55,6 +66,7 @@ const ModalSelectors = () => {
           dispatch(setTableIsCollapsed(false));
           dispatch(setTypeOfElementToAdd(v));
           dispatch(setAddVariableIsOpened(true));
+          dispatch(setDraggableVariablesIsOpened(false));
         }}
       />
     </FlexContainer>

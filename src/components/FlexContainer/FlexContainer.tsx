@@ -19,6 +19,10 @@ export interface FlexContainerProps {
   theme?: any;
   style?: any;
   className?: any;
+  draggable?: boolean;
+  onDragStart?: any;
+  onDragEnter?: any;
+  onDrop?: any;
 }
 
 const FlexContainer = ({
@@ -33,6 +37,7 @@ const FlexContainer = ({
   isTest,
   style = {},
   className,
+  ...rest
 }: FlexContainerProps) => {
   return (
     <div
@@ -49,6 +54,7 @@ const FlexContainer = ({
         ...style,
       }}
       className={className}
+      {...rest}
     >
       {children}
     </div>

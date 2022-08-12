@@ -90,7 +90,6 @@ export const extractDataForDeckTable = (
   const decksData: any[] = [];
 
   decks.forEach((deck: DeckType) => {
-    console.log(deck);
     const numberOfCards = deck.flashcards.length;
     const numberOfReviews = deck?.reviews?.length || 0;
     let totalAnswers = 0;
@@ -108,7 +107,7 @@ export const extractDataForDeckTable = (
       rightAnswers += review.answers.right.length;
       timeSpent += review.timeSpent;
     });
-    console.log(todaysAnswers, numberOfCards);
+
     if (!actions) {
       decksData.push([
         deck.title,
@@ -222,4 +221,8 @@ export const findIndexOfDeck = (
     (deck: DeckType) =>
       removeSpecialChars(deck.title) === removeSpecialChars(deckIDorTitle)
   );
+};
+
+export const deepCopy = (obj: any) => {
+  return JSON.parse(JSON.stringify(obj));
 };

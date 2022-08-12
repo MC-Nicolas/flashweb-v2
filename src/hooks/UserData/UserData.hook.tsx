@@ -21,6 +21,7 @@ import {
   transformFromDatabaseToReduxFolders,
 } from '@/utils/foldersFormatting';
 import { DeckReviewType, DeckType } from '@/types/folders';
+import { deepCopy } from '@/utils/dataFormatting';
 
 const UserData = ({ children }: { children: any }) => {
   const dispatch = useAppDispatch();
@@ -43,11 +44,11 @@ const UserData = ({ children }: { children: any }) => {
         let reviews = await getReviewsForDeck(email, deck.folderId, deck.id);
 
         if (flashcards.length > 0) {
-          decksFromDB = Object.assign([], decksFromDB);
+          decksFromDB = Object.assign([], deepCopy(decksFromDB));
           decksFromDB[i].flashcards = flashcards;
         }
         if (reviews.length > 0) {
-          allReviews = Object.assign([], allReviews);
+          allReviews = Object.assign([], deepCopy(allReviews));
           allReviews.push(...reviews);
           decksFromDB[i].reviews = reviews;
         }

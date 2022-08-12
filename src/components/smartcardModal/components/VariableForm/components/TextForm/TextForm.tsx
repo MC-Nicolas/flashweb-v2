@@ -13,6 +13,7 @@ const TextForm = (props: Props) => {
   } = useAppSelector((state) => state.smartcard);
 
   useEffect(() => {
+    dispatch(setVariableToAdd({ key: 'type', value: 'text' }));
     if (typeof value === 'string') return;
     dispatch(setVariableToAdd({ key: 'value', value: '' }));
   }, []);

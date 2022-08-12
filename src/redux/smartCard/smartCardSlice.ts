@@ -17,6 +17,7 @@ export const initialState: SmartCardState = {
   typeOfNumber: 'number',
   addVariableIsOpened: false,
   tableIsCollapsed: false,
+  draggableVariablesIsOpened: false,
   typeOfElementToAdd: '',
   variableToAdd: { name: '', value: '', symbol: '', type: '' },
   variables: [],
@@ -42,8 +43,14 @@ export const smartCardSlice = createSlice({
     setTableIsCollapsed: (state, action) => {
       state.tableIsCollapsed = action.payload;
     },
+    setDraggableVariablesIsOpened: (state, action) => {
+      state.draggableVariablesIsOpened = action.payload;
+    },
     setTypeOfElementToAdd: (state, action) => {
       state.typeOfElementToAdd = action.payload;
+    },
+    setAllVariables: (state, action) => {
+      state.variables = action.payload;
     },
     setVariableToAdd: (
       state: any,
@@ -107,7 +114,9 @@ export const {
   setTypeOfNumber,
   setAddVariableIsOpened,
   setTableIsCollapsed,
+  setDraggableVariablesIsOpened,
   setTypeOfElementToAdd,
+  setAllVariables,
   setVariableToAdd,
   addVariable,
   removeVariable,

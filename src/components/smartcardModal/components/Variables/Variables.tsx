@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import ModalSelectors from '../ModalSelectors/ModalSelectors';
 import VariablesTable from '../VariablesTable/VariablesTable';
 import VariableForm from '../VariableForm/VariableForm';
+import DraggableVariabes from '../VariableForm/components/DraggableVariabes/DraggableVariabes';
 
 type Props = {};
 
@@ -18,6 +19,7 @@ const Variables = (props: Props) => {
     numberOptions,
     addVariableIsOpened,
     typeOfElementToAdd,
+    draggableVariablesIsOpened,
     tableIsCollapsed,
   } = useAppSelector((state) => state.smartcard);
   return (
@@ -29,6 +31,7 @@ const Variables = (props: Props) => {
       <ModalSelectors />
       {tableIsCollapsed && <VariablesTable />}
       {addVariableIsOpened && <VariableForm />}
+      {draggableVariablesIsOpened && <DraggableVariabes />}
     </FlexContainer>
   );
 };

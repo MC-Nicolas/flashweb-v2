@@ -130,7 +130,6 @@ const DataRow = ({ element }: DataRowProps) => {
             </div>
           );
         } else if (el === 'true' || el === 'false') {
-          console.log(el);
           return (
             <div key={Math.random() * 100000}>
               {el === 'true' ? (

@@ -27,6 +27,7 @@ const VariableForm = (props: Props) => {
 
   const handleSaveVariable = () => {
     if (isEdit) {
+      console.log(isEdit);
       //@ts-ignore
       dispatch(updateVariable({ id: variableToAdd.id, data: variableToAdd }));
     } else {

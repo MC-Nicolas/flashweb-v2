@@ -136,7 +136,6 @@ const EditModal = () => {
   };
 
   useEffect(() => {
-    console.log(classicFlashcard['front']);
     setInitialFlashcardFront(classicFlashcard['front']);
   }, [isOpen]);
 
