@@ -7,9 +7,9 @@ import ModalSelectors from '../ModalSelectors/ModalSelectors';
 import VariablesTable from '../VariablesTable/VariablesTable';
 import VariableForm from '../VariableForm/VariableForm';
 import DraggableVariabes from '../VariableForm/components/DraggableVariabes/DraggableVariabes';
-import Preview from '../Preview/Preview';
-import Example from '../Example/Example';
+
 import PreviewContainer from '../PreviewContainer/PreviewContainer';
+import ResultForm from '../VariableForm/components/ResultForm/ResultForm';
 
 type Props = {};
 
@@ -22,6 +22,7 @@ const Variables = (props: Props) => {
     numberOptions,
     addVariableIsOpened,
     typeOfElementToAdd,
+    resultFormIsOpened,
     draggableVariablesIsOpened,
     tableIsCollapsed,
   } = useAppSelector((state) => state.smartcard);
@@ -33,11 +34,14 @@ const Variables = (props: Props) => {
     >
       <ModalSelectors />
       {tableIsCollapsed && <VariablesTable />}
-      {addVariableIsOpened && <VariableForm />}
+      {addVariableIsOpened && typeOfElementToAdd === 'variable' && (
+        <VariableForm />
+      )}
+      {addVariableIsOpened && typeOfElementToAdd === 'result' && <ResultForm />}
       {draggableVariablesIsOpened && <DraggableVariabes />}
-      {!tableIsCollapsed &&
+      {/* {!tableIsCollapsed &&
         !addVariableIsOpened &&
-        !draggableVariablesIsOpened && <PreviewContainer />}
+        !draggableVariablesIsOpened && <PreviewContainer />} */}
     </FlexContainer>
   );
 };

@@ -58,7 +58,6 @@ const VariableForm = (props: Props) => {
       {typeOfVar === 'number' && <BasicNumberForm />}
       {typeOfVar === 'randomnumber' && <RandomNumberForm />}
       {typeOfVar === 'text' && <TextForm />}
-      {typeOfVar === 'result' && <ResultForm />}
 
       <Button variant='contained' onClick={handleSaveVariable}>
         {isEdit ? 'Update' : 'Add'}

@@ -1,13 +1,21 @@
+import React, { useEffect, useState } from 'react';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import Select from '@/components/Inputs/Select';
 import WhiteBasicInput from '@/components/Inputs/WhiteBasicInput';
 import { formatVariablesForOptions } from '@/components/SmartcardModal/utils/formatting';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
+  addVariable,
+  setAddVariableIsOpened,
   setVariableResult,
   setVariableToAdd,
 } from '@/redux/smartCard/smartCardSlice';
-import React, { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { getVariableById } from '@/utils/getData';
+
+// ! ToDO check if it works
+// ! TODO: Handle multiple variables
 
 const operators = [
   { value: '+', name: '+' },
@@ -26,10 +34,15 @@ const ResultForm = (props: Props) => {
     variableToAdd: { name, value, symbol },
   } = useAppSelector((state) => state.smartcard);
   const [variablesOptions, setVariablesOptions] = useState<any>([]);
+  const [temporaryVariables, setTemporaryVariables] = useState(variables);
+
+  useEffect(() => {
+    setTemporaryVariables(variables);
+  }, [variables]);
 
   useEffect(() => {
     dispatch(setVariableToAdd({ key: 'type', value: 'result' }));
-    if (typeof value === 'object') return;
+    if (typeof value === 'object' || variables.length === 0) return;
     dispatch(
       setVariableToAdd({
         key: 'value',
@@ -46,22 +59,39 @@ const ResultForm = (props: Props) => {
     setVariablesOptions(formatVariablesForOptions(variables));
   }, [variables]);
 
+  const handleAddVarResult = () => {
+    if (!name) {
+      //@ts-ignore
+      const firstOp = getVariableById(temporaryVariables, value.firstOp);
+      //@ts-ignore
+      const secondOp = getVariableById(temporaryVariables, value.secondOp);
+      dispatch(
+        setVariableToAdd({
+          key: 'name',
+          //@ts-ignore
+          value: `${firstOp.name} ${value.operator} ${secondOp.name}`,
+        })
+      );
+    }
+    dispatch(addVariable({ type: 'result', name, value }));
+  };
   return (
     <FlexContainer
-      height='250px'
       flexDirection='column'
       justifyContent='space-evenly'
       flexWrap='nowrap'
+      style={{ position: 'relative' }}
     >
-      <WhiteBasicInput
-        style={{ margin: '10px 0' }}
-        label='Name'
-        value={name}
-        onChange={(e: { target: { value: string } }) =>
-          dispatch(setVariableToAdd({ key: 'name', value: e.target.value }))
-        }
-        required
-      />
+      <FlexContainer
+        width='50px'
+        height='50px'
+        style={{ position: 'absolute', top: 0, right: 0 }}
+      >
+        <CloseIcon
+          sx={{ color: 'white', cursor: 'pointer' }}
+          onClick={() => dispatch(setAddVariableIsOpened(false))}
+        />
+      </FlexContainer>
       <FlexContainer height='80px'>
         <Select
           label=''
@@ -100,6 +130,12 @@ const ResultForm = (props: Props) => {
           }
         />
       </FlexContainer>
+      <Button variant='contained' onClick={handleAddVarResult}>
+        Then
+      </Button>
+      <Button variant='contained' sx={{ backgroundColor: 'green' }}>
+        Save
+      </Button>
     </FlexContainer>
   );
 };

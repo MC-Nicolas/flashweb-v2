@@ -21,6 +21,7 @@ export interface SmartCardState {
   addVariableIsOpened: boolean;
   tableIsCollapsed: boolean;
   draggableVariablesIsOpened: boolean;
+  resultFormIsOpened: boolean;
   typeOfElementToAdd: string;
   variableToAdd: variableToAddType;
   variables: variablesWithIdType[];

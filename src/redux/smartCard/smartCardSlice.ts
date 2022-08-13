@@ -12,12 +12,12 @@ export const initialState: SmartCardState = {
     { name: 'Number', value: 'number' },
     { name: 'Random number', value: 'randomnumber' },
     { name: 'Text', value: 'text' },
-    { name: 'Result', value: 'result' },
   ],
   typeOfNumber: 'number',
   addVariableIsOpened: false,
   tableIsCollapsed: false,
   draggableVariablesIsOpened: false,
+  resultFormIsOpened: false,
   typeOfElementToAdd: '',
   variableToAdd: { name: '', value: '', symbol: '', type: '' },
   variables: [],
@@ -45,6 +45,9 @@ export const smartCardSlice = createSlice({
     },
     setDraggableVariablesIsOpened: (state, action) => {
       state.draggableVariablesIsOpened = action.payload;
+    },
+    setResultFormIsOpened: (state, action) => {
+      state.resultFormIsOpened = action.payload;
     },
     setTypeOfElementToAdd: (state, action) => {
       state.typeOfElementToAdd = action.payload;
@@ -141,6 +144,7 @@ export const {
   setMinMaxOnVariableToAdd,
   setVariableToEdit,
   setIsEdit,
+  setResultFormIsOpened,
   reset,
 } = smartCardSlice.actions;
 export default smartCardSlice.reducer;
