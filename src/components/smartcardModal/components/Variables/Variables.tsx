@@ -7,6 +7,9 @@ import ModalSelectors from '../ModalSelectors/ModalSelectors';
 import VariablesTable from '../VariablesTable/VariablesTable';
 import VariableForm from '../VariableForm/VariableForm';
 import DraggableVariabes from '../VariableForm/components/DraggableVariabes/DraggableVariabes';
+import Preview from '../Preview/Preview';
+import Example from '../Example/Example';
+import PreviewContainer from '../PreviewContainer/PreviewContainer';
 
 type Props = {};
 
@@ -32,6 +35,9 @@ const Variables = (props: Props) => {
       {tableIsCollapsed && <VariablesTable />}
       {addVariableIsOpened && <VariableForm />}
       {draggableVariablesIsOpened && <DraggableVariabes />}
+      {!tableIsCollapsed &&
+        !addVariableIsOpened &&
+        !draggableVariablesIsOpened && <PreviewContainer />}
     </FlexContainer>
   );
 };

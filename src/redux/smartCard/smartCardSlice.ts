@@ -61,6 +61,13 @@ export const smartCardSlice = createSlice({
     setVariableToEdit: (state, action) => {
       state.variableToAdd = action.payload;
     },
+    setVariableResult: (
+      state,
+      action: { payload: { key: string; value: string } }
+    ) => {
+      //@ts-ignore
+      state.variableToAdd.value[action.payload.key] = action.payload.value;
+    },
     setIsEdit: (state, action) => {
       state.isEdit = action.payload;
     },
@@ -105,6 +112,15 @@ export const smartCardSlice = createSlice({
     ) => {
       state.variableToAdd.value[action.payload.key] = action.payload.value;
     },
+    reset: (state) => {
+      state.variables = [];
+      state.variableToAdd = {
+        name: '',
+        value: '',
+        symbol: '',
+        type: '',
+      };
+    },
   },
 });
 
@@ -117,6 +133,7 @@ export const {
   setDraggableVariablesIsOpened,
   setTypeOfElementToAdd,
   setAllVariables,
+  setVariableResult,
   setVariableToAdd,
   addVariable,
   removeVariable,
@@ -124,5 +141,6 @@ export const {
   setMinMaxOnVariableToAdd,
   setVariableToEdit,
   setIsEdit,
+  reset,
 } = smartCardSlice.actions;
 export default smartCardSlice.reducer;

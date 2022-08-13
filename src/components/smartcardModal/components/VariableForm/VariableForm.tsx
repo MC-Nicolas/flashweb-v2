@@ -11,9 +11,11 @@ import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addVariable,
   setAddVariableIsOpened,
+  setIsEdit,
   updateVariable,
 } from '@/redux/smartCard/smartCardSlice';
 import TextForm from './components/TextForm/TextForm';
+import ResultForm from './components/ResultForm/ResultForm';
 
 type Props = {};
 
@@ -27,9 +29,9 @@ const VariableForm = (props: Props) => {
 
   const handleSaveVariable = () => {
     if (isEdit) {
-      console.log(isEdit);
       //@ts-ignore
       dispatch(updateVariable({ id: variableToAdd.id, data: variableToAdd }));
+      dispatch(setIsEdit(false));
     } else {
       dispatch(addVariable({ ...variableToAdd, type: typeOfVar }));
     }
@@ -56,6 +58,7 @@ const VariableForm = (props: Props) => {
       {typeOfVar === 'number' && <BasicNumberForm />}
       {typeOfVar === 'randomnumber' && <RandomNumberForm />}
       {typeOfVar === 'text' && <TextForm />}
+      {typeOfVar === 'result' && <ResultForm />}
 
       <Button variant='contained' onClick={handleSaveVariable}>
         {isEdit ? 'Update' : 'Add'}

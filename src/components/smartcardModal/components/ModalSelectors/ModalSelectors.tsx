@@ -7,7 +7,9 @@ import TocIcon from '@mui/icons-material/Toc';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import ButtonWithDropdown from '@/components/ButtonWithDropdown/ButtonWithDropdown';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
+  reset,
   setAddVariableIsOpened,
   setDraggableVariablesIsOpened,
   setTableIsCollapsed,
@@ -26,8 +28,19 @@ const ModalSelectors = () => {
       width='100%'
       style={{ color: 'white' }}
       alignItems='center'
-      justifyContent='flex-end'
+      justifyContent='space-between'
     >
+      <Button
+        variant='contained'
+        sx={{ backgroundColor: 'red' }}
+        onClick={() => {
+          confirm('Are you sure you want to reset the variables ?') &&
+            dispatch(reset());
+        }}
+      >
+        <RestartAltIcon />
+      </Button>
+
       <Button
         variant='contained'
         onClick={() => {
@@ -44,7 +57,6 @@ const ModalSelectors = () => {
         style={{
           borderRadius: '3px',
           backgroundColor: 'white',
-          margin: '0 10px',
         }}
       >
         <KeyboardArrowDown

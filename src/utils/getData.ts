@@ -17,3 +17,8 @@ export const getDeckData = (
 
   return deckData;
 };
+
+export const getVariableById = (variables: any, id: string) => {
+  const variable = variables.find((variable: any) => variable.id === id);
+  return variable;
+};

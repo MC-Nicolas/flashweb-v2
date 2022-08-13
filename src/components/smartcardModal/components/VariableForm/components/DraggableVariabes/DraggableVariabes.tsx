@@ -1,5 +1,5 @@
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
@@ -8,6 +8,8 @@ import {
 } from '@/redux/smartCard/smartCardSlice';
 import DraggableElement from './components/DraggableElement/DraggableElement';
 import { variablesWithIdType } from '@/types/smartCard';
+import { deepCopy } from '@firebase/util';
+import { Button } from '@mui/material';
 
 type Props = {};
 
@@ -16,46 +18,33 @@ const DraggableVariabes = (props: Props) => {
   const { variables } = useAppSelector((state) => state.smartcard);
   const [draggedElement, setDraggedElement] = useState<any>(null);
   const [orderedVariables, setOrderedVariables] = useState<any>([]);
-  const dragItem = useRef();
 
   useEffect(() => {
     setOrderedVariables(variables);
   }, [variables]);
 
-  const handleDragStart = (e: React.SyntheticEvent, index: number) => {
-    // const indexOfVariable = variables.findIndex((v) => v.id === variable.id);
-    // setDraggedElement(indexOfVariable);
-    //@ts-ignore
-    dragItem.current = index;
+  const handleDragStart = (e: React.SyntheticEvent, variable: any) => {
+    const indexOfVariable = variables.find((v) => v.id === variable.id);
+    setDraggedElement(indexOfVariable);
   };
 
-  const handleDragEnter = (e: React.SyntheticEvent, index: number) => {
-    //@ts-ignore
-    dragItem.current = index;
-    // let newVariables = [...orderedVariables];
-    // const indexOfVariable = variables.findIndex((v) => v.id === variable.id);
-    // const indexOfDraggedElement = variables.findIndex(
-    //   (v) => v.id === draggedElement
-    // );
-    // newVariables[indexOfVariable] = variables[indexOfDraggedElement];
-    // newVariables[indexOfDraggedElement] = variables[indexOfVariable];
-    // setOrderedVariables(newVariables);
+  const drop = (e: any, variable: any) => {
+    let newVariables = deepCopy(orderedVariables);
+    const indexOfVariable = orderedVariables.findIndex(
+      (v: any) => v.id === variable.id
+    );
+    const indexOfDraggedElement = orderedVariables.findIndex(
+      (v: any) => v.id === draggedElement.id
+    );
+
+    newVariables[indexOfVariable] = orderedVariables[indexOfDraggedElement];
+    newVariables[indexOfDraggedElement] = orderedVariables[indexOfVariable];
+    setOrderedVariables(newVariables);
   };
 
-  const drop = (e: any) => {
-    console.log('dropped');
-    const copyListItems = [...orderedVariables];
-    //@ts-ignore
-    const dragItemContent = copyListItems[dragItem.current];
-    //@ts-ignore
-    copyListItems.splice(dragItem.current, 1);
-    //@ts-ignore
-    copyListItems.splice(dragOverItem.current, 0, dragItemContent);
-    //@ts-ignore
-    dragItem.current = null;
-    //@ts-ignore
-    dragOverItem.current = null;
-    setOrderedVariables(copyListItems);
+  const handleSave = () => {
+    dispatch(setAllVariables(orderedVariables));
+    dispatch(setDraggableVariablesIsOpened(false));
   };
 
   return (
@@ -70,22 +59,26 @@ const DraggableVariabes = (props: Props) => {
           onClick={() => dispatch(setDraggableVariablesIsOpened(false))}
         />
       </FlexContainer>
-      <FlexContainer>
+      <FlexContainer height='70%'>
         {orderedVariables.length > 0 &&
           orderedVariables.map((variable: any, index: number) => (
             <DraggableElement
               key={variable.id}
               variable={variable}
               onDragStart={(e: React.SyntheticEvent) =>
-                handleDragStart(e, index)
+                handleDragStart(e, variable)
               }
-              onDragEnter={(e: React.SyntheticEvent) =>
-                handleDragEnter(e, index)
-              }
-              onDrop={drop}
+              onDrop={(e) => drop(e, variable)}
             />
           ))}
       </FlexContainer>
+      <Button
+        variant='contained'
+        sx={{ backgroundColor: 'green' }}
+        onClick={handleSave}
+      >
+        Save
+      </Button>
     </FlexContainer>
   );
 };

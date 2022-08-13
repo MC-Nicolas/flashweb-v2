@@ -55,6 +55,9 @@ const FlexContainer = ({
       }}
       className={className}
       {...rest}
+      onDragOver={(e) => {
+        e.preventDefault();
+      }}
     >
       {children}
     </div>

@@ -18,14 +18,31 @@ import {
   setTableIsCollapsed,
   setVariableToEdit,
 } from '@/redux/smartCard/smartCardSlice';
+import { getVariableById } from '@/utils/getData';
 
 const normalizedData = (variables: variablesWithIdType[]) => {
   return variables.map((variable) => {
     if (typeof variable.value === 'object') {
-      return {
-        ...variable,
-        value: `${variable.value.min} - ${variable.value.max}`,
-      };
+      //@ts-ignore
+      if (variable.value['operator']) {
+        return {
+          ...variable,
+          value: `${
+            //@ts-ignore
+            getVariableById(variables, variable.value['firstOp']).name
+          } ${
+            //@ts-ignore
+            variable.value['operator']
+            //@ts-ignore
+          } ${getVariableById(variables, variable.value['secondOp']).name}`,
+        };
+      } else {
+        return {
+          ...variable,
+          //@ts-ignore
+          value: `${variable.value.min} - ${variable.value.max}`,
+        };
+      }
     } else {
       return {
         ...variable,
@@ -49,6 +66,7 @@ const BasicTable = () => {
     dispatch(setTableIsCollapsed(false));
     dispatch(setAddVariableIsOpened(true));
   };
+
   return (
     <TableContainer
       component={Paper}

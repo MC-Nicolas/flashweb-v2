@@ -1,6 +1,10 @@
 export interface variableToAddType {
   name: string;
-  value: string | number | { min: number; max: number };
+  value:
+    | string
+    | number
+    | { min: number; max: number }
+    | { firstOp: string; secondOp: string; operator: string };
   symbol: string;
   type: string;
 }
