@@ -5,7 +5,7 @@ import FlexContainer from '../FlexContainer/FlexContainer';
 import EditIcon from '@mui/icons-material/Edit';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { setModalIsOpened } from '@/redux/smartCard/smartCardSlice';
-import SmartcardModal from '../SmartcardModal/SmartcardModal';
+import SmartcardModal from '@/components/SmartcardModal/SmartcardModal';
 
 const Smart = () => {
   const dispatch = useAppDispatch();
