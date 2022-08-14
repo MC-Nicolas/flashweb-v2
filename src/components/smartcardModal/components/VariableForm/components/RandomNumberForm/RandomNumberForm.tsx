@@ -5,7 +5,7 @@ import {
   setMinMaxOnVariableToAdd,
   setVariableToAdd,
 } from '@/redux/smartCard/smartCardSlice';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {};
 
@@ -18,6 +18,7 @@ const RandomNumberForm = (props: Props) => {
   useEffect(() => {
     if (typeof value === 'object') return;
     dispatch(setVariableToAdd({ key: 'value', value: { min: 0, max: 0 } }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

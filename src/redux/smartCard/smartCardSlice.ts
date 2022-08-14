@@ -2,12 +2,12 @@ import { SmartCardState } from '@/types/smartCard';
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState: SmartCardState = {
-  modalIsOpened: false,
+  editModalIsOpen: false,
   elementOptions: [
     { name: 'Number', value: 'number' },
     { name: 'Text', value: 'text' },
   ],
-  typeOfElement: 'number',
+
   numberOptions: [
     { name: 'Number', value: 'number' },
     { name: 'Random number', value: 'randomnumber' },
@@ -29,32 +29,24 @@ export const smartCardSlice = createSlice({
   name: 'smartCard',
   initialState,
   reducers: {
-    setModalIsOpened: (state, action) => {
-      state.modalIsOpened = action.payload;
+    setEditModalIsOpen: (state, action) => {
+      state.editModalIsOpen = action.payload;
     },
-    setTypeOfElement: (state, action) => {
-      state.typeOfElement = action.payload;
-    },
+
     setTypeOfNumber: (state, action) => {
       state.typeOfNumber = action.payload;
     },
-    setAddVariableIsOpened: (state, action) => {
-      state.addVariableIsOpened = action.payload;
-    },
-    setTableIsCollapsed: (state, action) => {
-      state.tableIsCollapsed = action.payload;
-    },
-    setPreviewIsOpened: (state, action) => {
-      state.previewIsOpened = action.payload;
-    },
-    setDraggableVariablesIsOpened: (state, action) => {
-      state.draggableVariablesIsOpened = action.payload;
-    },
-    setResultFormIsOpened: (state, action) => {
-      state.resultFormIsOpened = action.payload;
-    },
     setTypeOfElementToAdd: (state, action) => {
       state.typeOfElementToAdd = action.payload;
+    },
+    setOpenedModal: (state, action) => {
+      state.tableIsCollapsed = false;
+      state.previewIsOpened = false;
+      state.draggableVariablesIsOpened = false;
+      state.resultFormIsOpened = false;
+      state.addVariableIsOpened = false;
+      //@ts-ignore
+      state[action.payload] = true;
     },
     setAllVariables: (state, action) => {
       state.variables = action.payload;
@@ -132,25 +124,20 @@ export const smartCardSlice = createSlice({
 });
 
 export const {
-  setModalIsOpened,
-  setTypeOfElement,
+  setEditModalIsOpen,
   setTypeOfNumber,
-  setAddVariableIsOpened,
-  setTableIsCollapsed,
-  setDraggableVariablesIsOpened,
   setTypeOfElementToAdd,
   setAllVariables,
   setVariableResult,
-  setPreviewIsOpened,
   setVariableToAdd,
   addVariable,
   removeVariable,
   resetVariableToAdd,
   updateVariable,
+  setOpenedModal,
   setMinMaxOnVariableToAdd,
   setVariableToEdit,
   setIsEdit,
-  setResultFormIsOpened,
   reset,
 } = smartCardSlice.actions;
 export default smartCardSlice.reducer;

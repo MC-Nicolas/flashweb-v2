@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { addFlashcard } from '@/redux/folders/FolderSlice';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import Smart from '@/components/Flashcard/Smart';
+import { variablesWithIdType } from '@/types/smartCard';
 
 type Props = {};
 
@@ -23,16 +24,28 @@ const Flashcard = (props: Props) => {
   const dispatch = useAppDispatch();
   const { email } = useAppSelector((state) => state.user);
   const { activeDeck, activeFolder } = useAppSelector((state) => state.folders);
+
+  const { variables } = useAppSelector((state) => state.smartcard);
   const [isFrontActive, setIsFrontActive] = useState(true);
   const [typeOfFlashcard, setTypeOfFlashcard] = useState('classic');
   const [paramsAreCollapsed, setParamsAreCollapsed] = useState(true);
-  const [flashcardData, setFlashcardData] = useState({
+  const [flashcardData, setFlashcardData] = useState<
+    | { front: string; back: string }
+    | {
+        front: { variables: variablesWithIdType[] };
+        back: { variables: variablesWithIdType[] };
+      }
+  >({
     front: '',
     back: '',
   });
 
-  const handleCreateNewFlashcard = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleCreateNewFlashcard = async (
+    e?: React.SyntheticEvent,
+    variables?: variablesWithIdType[]
+  ) => {
+    if (e) e.preventDefault();
+
     if (!email || !activeDeck || !activeFolder) {
       return toast.error(
         'Oops There was a problem with the folders, can you reload and try again please ? '
@@ -44,27 +57,34 @@ const Flashcard = (props: Props) => {
       activeFolder,
       activeDeck,
       typeOfFlashcard,
-      flashcardData
+      variables ? { front: { variables }, back: { variables } } : flashcardData
     );
 
     if (success) {
       const { front, back } = flashcardData;
       toast.success('Flashcard created successfully');
       setFlashcardData({ front: '', back: '' });
-      dispatch(
-        addFlashcard({
-          title: removeSpecialChars(front),
-          deckId: removeSpecialChars(activeDeck),
-          front: front,
-          typeOfFlashcard,
-          back: back,
-          folderId: removeSpecialChars(activeFolder),
-        })
-      );
+      if (typeof front === 'string') {
+        dispatch(
+          addFlashcard({
+            title: removeSpecialChars(front),
+            deckId: removeSpecialChars(activeDeck),
+            front: front,
+            typeOfFlashcard,
+            back: back,
+            folderId: removeSpecialChars(activeFolder),
+          })
+        );
+      }
     } else {
       toast.error(error);
     }
   };
+
+  const handleSaveSmartcard = () => {
+    handleCreateNewFlashcard(undefined, variables);
+  };
+
   return (
     <PageContainerWithNav pageTitle='GLP - New Flashcard'>
       <FlexContainer
@@ -113,15 +133,19 @@ const Flashcard = (props: Props) => {
                   />
                 </FlexContainer>
                 <ClassicFlashcard
+                  //@ts-ignore
                   front={flashcardData.front}
                   setFront={(e: { target: { value: string } }) =>
                     setFlashcardData({
                       ...flashcardData,
+                      //@ts-ignore
                       front: e.target.value,
                     })
                   }
+                  //@ts-ignore
                   back={flashcardData.back}
                   setBack={(e: { target: { value: string } }) =>
+                    //@ts-ignore
                     setFlashcardData({ ...flashcardData, back: e.target.value })
                   }
                   isFlipped={!isFrontActive}
@@ -151,9 +175,9 @@ const Flashcard = (props: Props) => {
                     }}
                   />
                 </FlexContainer>
-                <Smart />
+                <Smart isFrontActive={isFrontActive} />
 
-                <SubmitForm title='Save' />
+                <SubmitForm title='Save' onClick={handleSaveSmartcard} />
               </FlexContainer>
             )}
           </form>

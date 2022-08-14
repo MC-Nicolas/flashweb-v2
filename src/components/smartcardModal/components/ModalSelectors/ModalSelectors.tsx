@@ -7,22 +7,17 @@ import TocIcon from '@mui/icons-material/Toc';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ButtonWithDropdown from '@/components/ButtonWithDropdown/ButtonWithDropdown';
 import ArticleIcon from '@mui/icons-material/Article';
-import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import { useAppDispatch } from '@/redux/redux.hooks';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
   reset,
-  setAddVariableIsOpened,
-  setDraggableVariablesIsOpened,
-  setPreviewIsOpened,
-  setTableIsCollapsed,
+  setOpenedModal,
   setTypeOfElementToAdd,
 } from '@/redux/smartCard/smartCardSlice';
+import { modals } from '@/redux/smartCard/modals';
 
 const ModalSelectors = () => {
   const dispatch = useAppDispatch();
-  const { tableIsCollapsed, draggableVariablesIsOpened } = useAppSelector(
-    (state) => state.smartcard
-  );
 
   return (
     <FlexContainer
@@ -35,10 +30,7 @@ const ModalSelectors = () => {
       <Button
         variant='contained'
         onClick={() => {
-          dispatch(setTableIsCollapsed(false));
-          dispatch(setAddVariableIsOpened(false));
-          dispatch(setDraggableVariablesIsOpened(false));
-          dispatch(setPreviewIsOpened(true));
+          dispatch(setOpenedModal(modals.PREVIEW));
         }}
       >
         <ArticleIcon />
@@ -47,10 +39,7 @@ const ModalSelectors = () => {
       <Button
         variant='contained'
         onClick={() => {
-          dispatch(setTableIsCollapsed(false));
-          dispatch(setAddVariableIsOpened(false));
-          dispatch(setDraggableVariablesIsOpened(true));
-          dispatch(setPreviewIsOpened(false));
+          dispatch(setOpenedModal(modals.DRAGGABLE_VARIABLES));
         }}
       >
         <ViewModuleIcon />
@@ -59,10 +48,7 @@ const ModalSelectors = () => {
       <Button
         variant='contained'
         onClick={() => {
-          dispatch(setTableIsCollapsed(true));
-          dispatch(setAddVariableIsOpened(false));
-          dispatch(setDraggableVariablesIsOpened(false));
-          dispatch(setPreviewIsOpened(false));
+          dispatch(setOpenedModal(modals.TABLE));
         }}
       >
         <TocIcon />
@@ -81,11 +67,8 @@ const ModalSelectors = () => {
 
       <ButtonWithDropdown
         onChange={(v: string) => {
-          dispatch(setTableIsCollapsed(false));
           dispatch(setTypeOfElementToAdd(v));
-          dispatch(setAddVariableIsOpened(true));
-          dispatch(setDraggableVariablesIsOpened(false));
-          dispatch(setPreviewIsOpened(false));
+          dispatch(setOpenedModal(modals.ADD_VARIABLE));
         }}
       />
     </FlexContainer>

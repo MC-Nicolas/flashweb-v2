@@ -10,12 +10,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addVariable,
-  setAddVariableIsOpened,
   setIsEdit,
+  setEditModalIsOpen,
   updateVariable,
 } from '@/redux/smartCard/smartCardSlice';
 import TextForm from './components/TextForm/TextForm';
-import ResultForm from './components/ResultForm/ResultForm';
+import { modals } from '@/redux/smartCard/modals';
 
 type Props = {};
 
@@ -46,7 +46,7 @@ const VariableForm = (props: Props) => {
       >
         <CloseIcon
           sx={{ color: 'white', cursor: 'pointer' }}
-          onClick={() => dispatch(setAddVariableIsOpened(false))}
+          onClick={() => dispatch(setEditModalIsOpen(modals.ADD_VARIABLE))}
         />
       </FlexContainer>
       <Select

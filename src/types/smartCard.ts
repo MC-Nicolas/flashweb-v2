@@ -13,18 +13,17 @@ export interface variablesWithIdType extends variableToAddType {
 }
 
 export interface SmartCardState {
-  modalIsOpened: boolean;
+  editModalIsOpen: boolean;
   elementOptions: { name: string; value: string }[];
   numberOptions: { name: string; value: string }[];
   typeOfNumber: string;
-  typeOfElement: string;
   addVariableIsOpened: boolean;
   tableIsCollapsed: boolean;
   draggableVariablesIsOpened: boolean;
   resultFormIsOpened: boolean;
   previewIsOpened: boolean;
   typeOfElementToAdd: string;
-  variableToAdd: variableToAddType;
+  variableToAdd: variableToAddType | variablesWithIdType;
   variables: variablesWithIdType[];
   isEdit: boolean;
 }

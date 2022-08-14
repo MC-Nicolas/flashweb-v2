@@ -16,6 +16,8 @@ const TextForm = (props: Props) => {
     dispatch(setVariableToAdd({ key: 'type', value: 'text' }));
     if (typeof value === 'string') return;
     dispatch(setVariableToAdd({ key: 'value', value: '' }));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

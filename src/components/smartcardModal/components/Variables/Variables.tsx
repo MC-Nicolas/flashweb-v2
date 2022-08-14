@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
-import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
+import { useAppSelector } from '@/redux/redux.hooks';
 
 import ModalSelectors from '../ModalSelectors/ModalSelectors';
 import VariablesTable from '../VariablesTable/VariablesTable';
@@ -14,15 +14,9 @@ import Preview from '../Preview/Preview';
 type Props = {};
 
 const Variables = (props: Props) => {
-  const dispatch = useAppDispatch();
   const {
-    elementOptions,
-    typeOfElement,
-    typeOfNumber,
-    numberOptions,
     addVariableIsOpened,
     typeOfElementToAdd,
-    resultFormIsOpened,
     previewIsOpened,
     draggableVariablesIsOpened,
     tableIsCollapsed,

@@ -13,14 +13,15 @@ import { variablesWithIdType } from '@/types/smartCard';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   removeVariable,
-  setAddVariableIsOpened,
   setIsEdit,
-  setTableIsCollapsed,
+  setEditModalIsOpen,
   setVariableToEdit,
 } from '@/redux/smartCard/smartCardSlice';
 import { getVariableById } from '@/utils/getData';
+import { modals } from '@/redux/smartCard/modals';
+import { tableRow } from '@/types/Table';
 
-const normalizedData = (variables: variablesWithIdType[]) => {
+const normalizedData = (variables: variablesWithIdType[]): tableRow[] => {
   return variables.map((variable) => {
     if (typeof variable.value === 'object') {
       //@ts-ignore
@@ -54,7 +55,7 @@ const normalizedData = (variables: variablesWithIdType[]) => {
 const BasicTable = () => {
   const dispatch = useAppDispatch();
   const { variables } = useAppSelector((state) => state.smartcard);
-  const [normalizedRow, setNormalizedRow] = useState<any>([]);
+  const [normalizedRow, setNormalizedRow] = useState<tableRow[] | []>([]);
 
   useEffect(() => {
     setNormalizedRow(normalizedData(variables));
@@ -63,8 +64,7 @@ const BasicTable = () => {
   const handleEditVariable = (row: variablesWithIdType) => {
     dispatch(setVariableToEdit(row));
     dispatch(setIsEdit(true));
-    dispatch(setTableIsCollapsed(false));
-    dispatch(setAddVariableIsOpened(true));
+    dispatch(setEditModalIsOpen(modals.ADD_VARIABLE));
   };
 
   return (

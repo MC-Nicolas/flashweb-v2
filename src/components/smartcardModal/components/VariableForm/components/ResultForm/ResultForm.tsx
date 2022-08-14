@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import Select from '@/components/Inputs/Select';
 import WhiteBasicInput from '@/components/Inputs/WhiteBasicInput';
-import { formatVariablesForOptions } from '@/components/SmartcardModal/utils/formatting';
+import {
+  formatVariablesForOptions,
+  handleVariablesCalculationsAndValues,
+} from '@/components/SmartcardModal/utils/formatting';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addVariable,
-  resetVariableToAdd,
-  setAddVariableIsOpened,
+  setOpenedModal,
   setVariableResult,
   setVariableToAdd,
 } from '@/redux/smartCard/smartCardSlice';
@@ -15,10 +17,12 @@ import { Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   calculateResultByRecursion,
-  getValueByRecursive,
   getVariableById,
   getVariableOfType,
 } from '@/utils/getData';
+import { deepCopy } from '@/utils/dataFormatting';
+import { createRandomNumberWithMinMax } from '@/utils/data';
+import { modals } from '@/redux/smartCard/modals';
 
 const operators = [
   { value: '+', name: '+' },
@@ -35,8 +39,11 @@ const ResultForm = () => {
     variableToAdd: { name, value, symbol },
   } = useAppSelector((state) => state.smartcard);
   const [variablesOptions, setVariablesOptions] = useState<any>([]);
+  const [randomNumberVars, setRandomNumberVars] = useState<any>([]);
   const [finalResult, setFinalResult] = useState(0);
+
   useEffect(() => {
+    if (variables.length === 0) return;
     dispatch(
       setVariableToAdd({
         key: 'value',
@@ -51,15 +58,13 @@ const ResultForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log(variables);
-    setVariablesOptions(formatVariablesForOptions(variables));
-    const variableOfTypeResults = getVariableOfType(variables, 'result');
-    if (variableOfTypeResults.length === 0) return;
-    const finalResultVariable =
-      variableOfTypeResults[variableOfTypeResults.length - 1];
+    const { result, variablesOptions, randomNumberValues } =
+      handleVariablesCalculationsAndValues(variables);
+    setVariablesOptions(variablesOptions);
+    setRandomNumberVars(randomNumberValues);
+    setFinalResult(result);
 
-    const res = calculateResultByRecursion(finalResultVariable, variables);
-    setFinalResult(res);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variables]);
 
   const handleAddVarResult = () => {
@@ -91,7 +96,7 @@ const ResultForm = () => {
       >
         <CloseIcon
           sx={{ color: 'white', cursor: 'pointer' }}
-          onClick={() => dispatch(setAddVariableIsOpened(false))}
+          onClick={() => dispatch(setOpenedModal(modals.ADD_VARIABLE))}
         />
       </FlexContainer>
       <FlexContainer height='80px'>
@@ -138,9 +143,9 @@ const ResultForm = () => {
       <Button variant='contained' onClick={handleAddVarResult}>
         Then
       </Button>
-      <Button variant='contained' sx={{ backgroundColor: 'green' }}>
+      {/* <Button variant='contained' sx={{ backgroundColor: 'green' }}>
         Save
-      </Button>
+      </Button> */}
     </FlexContainer>
   );
 };

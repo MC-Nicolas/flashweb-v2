@@ -4,12 +4,10 @@ import FlexContainer from '../FlexContainer/FlexContainer';
 
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch } from '@/redux/redux.hooks';
-import { setModalIsOpened } from '@/redux/smartCard/smartCardSlice';
+import { setEditModalIsOpen } from '@/redux/smartCard/smartCardSlice';
 import Variables from './components/Variables/Variables';
 
-type Props = {};
-
-const SmartcardModal = (props: Props) => {
+const SmartcardModal = () => {
   const dispatch = useAppDispatch();
   return (
     <FlexContainer
@@ -31,7 +29,7 @@ const SmartcardModal = (props: Props) => {
         <FlexContainer height='50px' justifyContent='flex-end'>
           <CloseIcon
             sx={{ color: 'white', cursor: 'pointer' }}
-            onClick={() => dispatch(setModalIsOpened(false))}
+            onClick={() => dispatch(setEditModalIsOpen(false))}
           />
         </FlexContainer>
         <FlexContainer justifyContent='flex-start' alignItems='flex-start'>
