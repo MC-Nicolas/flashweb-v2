@@ -6,16 +6,19 @@ import { formatVariablesForOptions } from '@/components/SmartcardModal/utils/for
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addVariable,
+  resetVariableToAdd,
   setAddVariableIsOpened,
   setVariableResult,
   setVariableToAdd,
 } from '@/redux/smartCard/smartCardSlice';
 import { Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { getVariableById } from '@/utils/getData';
-
-// ! ToDO check if it works
-// ! TODO: Handle multiple variables
+import {
+  calculateResultByRecursion,
+  getValueByRecursive,
+  getVariableById,
+  getVariableOfType,
+} from '@/utils/getData';
 
 const operators = [
   { value: '+', name: '+' },
@@ -25,55 +28,53 @@ const operators = [
   { value: '%', name: '%' },
 ];
 
-type Props = {};
-
-const ResultForm = (props: Props) => {
+const ResultForm = () => {
   const dispatch = useAppDispatch();
   const {
     variables,
     variableToAdd: { name, value, symbol },
   } = useAppSelector((state) => state.smartcard);
   const [variablesOptions, setVariablesOptions] = useState<any>([]);
-  const [temporaryVariables, setTemporaryVariables] = useState(variables);
-
+  const [finalResult, setFinalResult] = useState(0);
   useEffect(() => {
-    setTemporaryVariables(variables);
-  }, [variables]);
-
-  useEffect(() => {
-    dispatch(setVariableToAdd({ key: 'type', value: 'result' }));
-    if (typeof value === 'object' || variables.length === 0) return;
     dispatch(
       setVariableToAdd({
         key: 'value',
         value: {
           firstOp: formatVariablesForOptions(variables)[0].value,
           secondOp: formatVariablesForOptions(variables)[0].value,
-          operator: operators[0].name,
+          operator: operators[0].value,
         },
       })
     );
   }, []);
 
   useEffect(() => {
+    console.log(variables);
     setVariablesOptions(formatVariablesForOptions(variables));
+    const variableOfTypeResults = getVariableOfType(variables, 'result');
+    if (variableOfTypeResults.length === 0) return;
+    const finalResultVariable =
+      variableOfTypeResults[variableOfTypeResults.length - 1];
+
+    const res = calculateResultByRecursion(finalResultVariable, variables);
+    setFinalResult(res);
   }, [variables]);
 
   const handleAddVarResult = () => {
-    if (!name) {
-      //@ts-ignore
-      const firstOp = getVariableById(temporaryVariables, value.firstOp);
-      //@ts-ignore
-      const secondOp = getVariableById(temporaryVariables, value.secondOp);
-      dispatch(
-        setVariableToAdd({
-          key: 'name',
-          //@ts-ignore
-          value: `${firstOp.name} ${value.operator} ${secondOp.name}`,
-        })
-      );
-    }
-    dispatch(addVariable({ type: 'result', name, value }));
+    //@ts-ignore
+    const firstOp = getVariableById(variables, value.firstOp);
+    //@ts-ignore
+    const secondOp = getVariableById(variables, value.secondOp);
+
+    dispatch(
+      addVariable({
+        type: 'result',
+        //@ts-ignore
+        name: `(${firstOp.name} ${value.operator} ${secondOp.name})`,
+        value,
+      })
+    );
   };
   return (
     <FlexContainer
@@ -91,6 +92,9 @@ const ResultForm = (props: Props) => {
           sx={{ color: 'white', cursor: 'pointer' }}
           onClick={() => dispatch(setAddVariableIsOpened(false))}
         />
+      </FlexContainer>
+      <FlexContainer height='80px'>
+        <p style={{ color: 'white', fontSize: '20px' }}>{finalResult}</p>
       </FlexContainer>
       <FlexContainer height='80px'>
         <Select

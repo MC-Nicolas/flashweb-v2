@@ -18,6 +18,7 @@ export const initialState: SmartCardState = {
   tableIsCollapsed: false,
   draggableVariablesIsOpened: false,
   resultFormIsOpened: false,
+  previewIsOpened: false,
   typeOfElementToAdd: '',
   variableToAdd: { name: '', value: '', symbol: '', type: '' },
   variables: [],
@@ -43,6 +44,9 @@ export const smartCardSlice = createSlice({
     setTableIsCollapsed: (state, action) => {
       state.tableIsCollapsed = action.payload;
     },
+    setPreviewIsOpened: (state, action) => {
+      state.previewIsOpened = action.payload;
+    },
     setDraggableVariablesIsOpened: (state, action) => {
       state.draggableVariablesIsOpened = action.payload;
     },
@@ -60,6 +64,9 @@ export const smartCardSlice = createSlice({
       action: { payload: { key: string; value: string | number | {} } }
     ) => {
       state.variableToAdd[action.payload.key] = action.payload.value;
+    },
+    resetVariableToAdd: (state) => {
+      state.variableToAdd = { name: '', value: '', symbol: '', type: '' };
     },
     setVariableToEdit: (state, action) => {
       state.variableToAdd = action.payload;
@@ -97,12 +104,9 @@ export const smartCardSlice = createSlice({
         ...action.payload,
         id: (Math.random() * 100000).toString(),
       });
-      state.variableToAdd = {
-        name: '',
-        value: '',
-        symbol: '',
-        type: action.payload.type,
-      };
+
+      state.variableToAdd.symbol = '';
+      state.variableToAdd.name = '';
     },
     removeVariable: (state, action: { payload: string }) => {
       state.variables = state.variables.filter(
@@ -137,9 +141,11 @@ export const {
   setTypeOfElementToAdd,
   setAllVariables,
   setVariableResult,
+  setPreviewIsOpened,
   setVariableToAdd,
   addVariable,
   removeVariable,
+  resetVariableToAdd,
   updateVariable,
   setMinMaxOnVariableToAdd,
   setVariableToEdit,

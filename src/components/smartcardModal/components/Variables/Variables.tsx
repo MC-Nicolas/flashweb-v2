@@ -8,8 +8,8 @@ import VariablesTable from '../VariablesTable/VariablesTable';
 import VariableForm from '../VariableForm/VariableForm';
 import DraggableVariabes from '../VariableForm/components/DraggableVariabes/DraggableVariabes';
 
-import PreviewContainer from '../PreviewContainer/PreviewContainer';
 import ResultForm from '../VariableForm/components/ResultForm/ResultForm';
+import Preview from '../Preview/Preview';
 
 type Props = {};
 
@@ -23,6 +23,7 @@ const Variables = (props: Props) => {
     addVariableIsOpened,
     typeOfElementToAdd,
     resultFormIsOpened,
+    previewIsOpened,
     draggableVariablesIsOpened,
     tableIsCollapsed,
   } = useAppSelector((state) => state.smartcard);
@@ -39,9 +40,7 @@ const Variables = (props: Props) => {
       )}
       {addVariableIsOpened && typeOfElementToAdd === 'result' && <ResultForm />}
       {draggableVariablesIsOpened && <DraggableVariabes />}
-      {/* {!tableIsCollapsed &&
-        !addVariableIsOpened &&
-        !draggableVariablesIsOpened && <PreviewContainer />} */}
+      {previewIsOpened && <Preview />}
     </FlexContainer>
   );
 };
