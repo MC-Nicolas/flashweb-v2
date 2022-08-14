@@ -52,6 +52,7 @@ const Flashcards = (props: Props) => {
 
   useEffect(() => {
     dispatch(setTypeOfElementToEdit('flashcard'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnEditFlashcard = (
