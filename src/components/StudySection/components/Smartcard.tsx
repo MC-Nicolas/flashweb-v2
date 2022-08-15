@@ -21,7 +21,7 @@ const Smartcard = ({ front, back, isFlipped }: SmartcardProps) => {
     variablesWithIdType[]
   >([]);
   const [result, setResult] = useState(0);
-  const [userResult, setUserResult] = useState<undefined | number>(undefined);
+  const [userResult, setUserResult] = useState<string | number>('');
 
   useEffect(() => {
     const { result, newVariables } = handleVariablesCalculationsAndValues(
@@ -29,6 +29,7 @@ const Smartcard = ({ front, back, isFlipped }: SmartcardProps) => {
     );
     setFormattedVariables(newVariables);
     setResult(result);
+    setUserResult('');
   }, [front, back]);
 
   useEffect(() => {
@@ -77,9 +78,11 @@ const Smartcard = ({ front, back, isFlipped }: SmartcardProps) => {
             label=''
             placeholder='Enter your answer'
             value={userResult}
-            onChange={(e: { target: { value: string } }) =>
-              setUserResult(parseInt(e.target.value))
-            }
+            onChange={(e: { target: { value: string } }) => {
+              e.target.value
+                ? setUserResult(parseInt(e.target.value))
+                : setUserResult('');
+            }}
             width='40%'
           />
         </FlexContainer>

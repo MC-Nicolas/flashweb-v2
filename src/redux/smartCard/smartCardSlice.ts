@@ -20,6 +20,7 @@ export const initialState: SmartCardState = {
   resultFormIsOpened: false,
   previewIsOpened: false,
   typeOfElementToAdd: '',
+  typeOfVariable: 'number',
   variableToAdd: { name: '', value: '', symbol: '', type: '' },
   variables: [],
   isEdit: false,
@@ -56,6 +57,9 @@ export const smartCardSlice = createSlice({
       action: { payload: { key: string; value: string | number | {} } }
     ) => {
       state.variableToAdd[action.payload.key] = action.payload.value;
+    },
+    setTypeOfVariable: (state, action) => {
+      state.typeOfVariable = action.payload;
     },
     resetVariableToAdd: (state) => {
       state.variableToAdd = { name: '', value: '', symbol: '', type: '' };
@@ -134,6 +138,7 @@ export const {
   removeVariable,
   resetVariableToAdd,
   updateVariable,
+  setTypeOfVariable,
   setOpenedModal,
   setMinMaxOnVariableToAdd,
   setVariableToEdit,

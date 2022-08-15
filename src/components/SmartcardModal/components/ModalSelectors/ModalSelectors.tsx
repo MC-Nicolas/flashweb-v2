@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/redux/redux.hooks';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import {
   reset,
+  setIsEdit,
   setOpenedModal,
   setTypeOfElementToAdd,
 } from '@/redux/smartCard/smartCardSlice';
@@ -68,6 +69,7 @@ const ModalSelectors = () => {
       <ButtonWithDropdown
         onChange={(v: string) => {
           dispatch(setTypeOfElementToAdd(v));
+          dispatch(setIsEdit(false));
           dispatch(setOpenedModal(modals.ADD_VARIABLE));
         }}
       />

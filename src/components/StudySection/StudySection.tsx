@@ -49,7 +49,7 @@ const StudySection = ({ deck }: StudySectionProps) => {
     setTimeout(() => {
       setUsedOrders([...usedOrders, order]);
       setOrder(order + 1);
-    }, 500);
+    }, 225);
   };
 
   return (

@@ -23,6 +23,7 @@ export interface SmartCardState {
   resultFormIsOpened: boolean;
   previewIsOpened: boolean;
   typeOfElementToAdd: string;
+  typeOfVariable: string;
   variableToAdd: variableToAddType | variablesWithIdType;
   variables: variablesWithIdType[];
   isEdit: boolean;

@@ -16,6 +16,10 @@ import {
   setIsEdit,
   setEditModalIsOpen,
   setVariableToEdit,
+  setOpenedModal,
+  setVariableToAdd,
+  setTypeOfElementToAdd,
+  setTypeOfVariable,
 } from '@/redux/smartCard/smartCardSlice';
 import { getVariableById } from '@/utils/getData';
 import { modals } from '@/redux/smartCard/modals';
@@ -64,7 +68,13 @@ const BasicTable = () => {
   const handleEditVariable = (row: variablesWithIdType) => {
     dispatch(setVariableToEdit(row));
     dispatch(setIsEdit(true));
-    dispatch(setEditModalIsOpen(modals.ADD_VARIABLE));
+    dispatch(
+      setTypeOfElementToAdd(row.type === 'result' ? 'result' : 'variable')
+    );
+    if (row.type !== 'result') {
+      dispatch(setTypeOfVariable(row.type));
+    }
+    dispatch(setOpenedModal(modals.ADD_VARIABLE));
   };
 
   return (

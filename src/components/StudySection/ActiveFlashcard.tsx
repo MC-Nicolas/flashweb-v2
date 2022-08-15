@@ -19,6 +19,7 @@ const ActiveFlashcard = ({
 
   useEffect(() => {
     dispatch(setTypeOfFlashcardBeingStudied(typeOfFlashcard));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeOfFlashcard]);
 
   if (typeOfFlashcard === 'classic') {

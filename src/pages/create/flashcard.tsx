@@ -16,6 +16,7 @@ import { addFlashcard } from '@/redux/folders/FolderSlice';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import Smart from '@/components/Flashcard/Smart';
 import { variablesWithIdType } from '@/types/smartCard';
+import { setAllVariables } from '@/redux/smartCard/smartCardSlice';
 
 type Props = {};
 
@@ -46,6 +47,26 @@ const Flashcard = (props: Props) => {
   ) => {
     if (e) e.preventDefault();
 
+    if (!variables) {
+      if (flashcardData.front === '') {
+        return toast.error(
+          'Looks like you forgot to write something on the front of the flashcard.'
+        );
+      }
+      if (flashcardData.back === '') {
+        return toast.error(
+          'Looks like you forgot to write something on the back of the flashcard.'
+        );
+      }
+    } else {
+      // find at leat one variable of type result
+      if (!variables.find((variable) => variable.type === 'result')) {
+        return toast.error(
+          'Looks like you forgot to give a result for your smartcard.'
+        );
+      }
+    }
+
     if (!email || !activeDeck || !activeFolder) {
       return toast.error(
         'Oops There was a problem with the folders, can you reload and try again please ? '
@@ -64,7 +85,9 @@ const Flashcard = (props: Props) => {
       const { front, back } = flashcardData;
       toast.success('Flashcard created successfully');
       setFlashcardData({ front: '', back: '' });
+      dispatch(setAllVariables([]));
       if (typeof front === 'string') {
+        // ! TODO generate title for smartcard
         dispatch(
           addFlashcard({
             title: removeSpecialChars(front),
