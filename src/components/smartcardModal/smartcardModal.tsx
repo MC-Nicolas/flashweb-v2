@@ -1,9 +1,10 @@
 import React from 'react';
+import { useAppDispatch } from '@/redux/redux.hooks';
+
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
+import CloseIcon from '@mui/icons-material/Close';
 import FlexContainer from '../FlexContainer/FlexContainer';
 
-import CloseIcon from '@mui/icons-material/Close';
-import { useAppDispatch } from '@/redux/redux.hooks';
 import { setEditModalIsOpen } from '@/redux/smartCard/smartCardSlice';
 import Variables from './components/Variables/Variables';
 
