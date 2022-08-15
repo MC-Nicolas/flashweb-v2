@@ -1,4 +1,5 @@
 import { AnswersType } from '@/types/folders';
+import { variablesWithIdType } from '@/types/smartCard';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import database from './firebase';
@@ -85,7 +86,12 @@ export const createNewFlashcardInDb = async (
   folderName: string,
   deckName: string,
   typeOfFlashcard: string,
-  flashcardData: { front: string; back: any }
+  flashcardData:
+    | { front: string; back: any }
+    | {
+        front: { variables: variablesWithIdType[] };
+        back: { variables: variablesWithIdType[] };
+      }
 ) => {
   let response: { success: boolean; error: any } = {
     success: false,
@@ -94,9 +100,17 @@ export const createNewFlashcardInDb = async (
   try {
     const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
     const formattedDeckName = removeSpecialChars(deckName).toLowerCase();
-    const formattedFlashcardFront = removeSpecialChars(
-      flashcardData.front
-    ).toLowerCase();
+    let flashcardTitle = '';
+    if (typeof flashcardData.front === 'string') {
+      flashcardTitle = removeSpecialChars(flashcardData.front).toLowerCase();
+    } else {
+      const results = flashcardData.front.variables.filter(
+        (variable: variablesWithIdType) => variable.type === 'result'
+      );
+      flashcardTitle = `${removeSpecialChars(
+        results[results.length - 1].name
+      ).toLowerCase()}`;
+    }
 
     const docRef = doc(
       database,
@@ -107,7 +121,7 @@ export const createNewFlashcardInDb = async (
       'decks',
       formattedDeckName,
       'flashcards',
-      formattedFlashcardFront
+      flashcardTitle
     );
     const docSnapshot = await getDoc(docRef);
 

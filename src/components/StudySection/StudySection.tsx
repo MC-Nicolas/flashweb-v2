@@ -17,6 +17,9 @@ import {
   addWrongAnswer,
   setFlashcardIsFlipped,
 } from '@/redux/study/StudySlice';
+import { DoneAll } from '@mui/icons-material';
+import { variablesWithIdType } from '@/types/smartCard';
+import { deepCopy, removeSpecialChars } from '@/utils/dataFormatting';
 
 type StudySectionProps = {
   deck: any;
@@ -24,7 +27,8 @@ type StudySectionProps = {
 
 const StudySection = ({ deck }: StudySectionProps) => {
   const dispatch = useAppDispatch();
-  const { flashcardIsFlipped } = useAppSelector((state) => state.study);
+  const { flashcardIsFlipped, typeOfFlashcardBeingStudied, answerIsSuccess } =
+    useAppSelector((state) => state.study);
   const [shuffledFlashcards, setShuffledFlashcards] = useState<any>(null);
   const [usedOrders, setUsedOrders] = useState<any>([]);
   const [order, setOrder] = useState(0);
@@ -33,7 +37,8 @@ const StudySection = ({ deck }: StudySectionProps) => {
 
   useEffect(() => {
     if (flashcards.length > 0) {
-      setShuffledFlashcards(shuffleFlashcards(flashcards));
+      const shuffled = shuffleFlashcards(flashcards);
+      setShuffledFlashcards(shuffled);
     }
   }, [flashcards]);
 
@@ -55,33 +60,63 @@ const StudySection = ({ deck }: StudySectionProps) => {
           )}
       </FlexContainer>
       <FlexContainer height='20%'>
-        {flashcardIsFlipped && shuffledFlashcards?.length > usedOrders.length && (
-          <>
-            <Button
-              variant='contained'
-              color='error'
-              onClick={() =>
-                handleOnAnswerClick(
-                  flashcards[order].flashcardData.front,
-                  false
-                )
-              }
-            >
-              Mistake
-            </Button>
-            <Button
-              variant='contained'
-              color='success'
-              onClick={() =>
-                handleOnAnswerClick(flashcards[order].flashcardData.front, true)
-              }
-            >
-              Success
-            </Button>
-          </>
-        )}
+        {flashcardIsFlipped &&
+          shuffledFlashcards?.length > usedOrders.length &&
+          typeOfFlashcardBeingStudied !== 'smart' && (
+            <>
+              <Button
+                variant='contained'
+                color='error'
+                onClick={() =>
+                  handleOnAnswerClick(
+                    shuffledFlashcards[order].flashcardData.front,
+                    false
+                  )
+                }
+              >
+                Mistake
+              </Button>
+              <Button
+                variant='contained'
+                color='success'
+                onClick={() =>
+                  handleOnAnswerClick(
+                    shuffledFlashcards[order].flashcardData.front,
+                    true
+                  )
+                }
+              >
+                Success
+              </Button>
+            </>
+          )}
+        {flashcardIsFlipped &&
+          shuffledFlashcards?.length > usedOrders.length &&
+          typeOfFlashcardBeingStudied === 'smart' && (
+            <>
+              <Button
+                variant='contained'
+                color='success'
+                onClick={() => {
+                  const results = shuffledFlashcards[
+                    order
+                  ].flashcardData.front.variables.filter(
+                    (variable: variablesWithIdType) =>
+                      variable.type === 'result'
+                  );
+                  const flashcardTitle = `${removeSpecialChars(
+                    results[results.length - 1].name
+                  ).toLowerCase()}`;
+                  handleOnAnswerClick(flashcardTitle, answerIsSuccess);
+                }}
+              >
+                Next
+              </Button>
+            </>
+          )}
         {!flashcardIsFlipped &&
           shuffledFlashcards &&
+          typeOfFlashcardBeingStudied !== 'smart' &&
           shuffledFlashcards.length > usedOrders.length && (
             <ButtonWithIcon
               style={{
@@ -96,8 +131,23 @@ const StudySection = ({ deck }: StudySectionProps) => {
               onClick={() => dispatch(setFlashcardIsFlipped(true))}
             />
           )}
-
-        {/* SHow Results */}
+        {!flashcardIsFlipped &&
+          shuffledFlashcards &&
+          typeOfFlashcardBeingStudied === 'smart' &&
+          shuffledFlashcards.length > usedOrders.length && (
+            <ButtonWithIcon
+              style={{
+                backgroundColor: 'white',
+                color: 'black',
+                width: '150px',
+              }}
+              title='Check'
+              iconPosition='right'
+              iconIsComponent
+              icon={<DoneAll />}
+              onClick={() => dispatch(setFlashcardIsFlipped(true))}
+            />
+          )}
       </FlexContainer>
     </InsetNeumorphicContainer>
   );

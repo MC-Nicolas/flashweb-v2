@@ -13,12 +13,15 @@ import {
 } from '@/redux/folders/FolderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { FlashcardType } from '@/types/folders';
+import { variablesWithIdType } from '@/types/smartCard';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ClassicFlashcard from '../Flashcard/Classic';
+import Smart from '../Flashcard/Smart';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Select from '../Inputs/Select';
+import Smartcard from './components/Smartcard';
 
 type Props = {};
 
@@ -52,6 +55,7 @@ const Flashcards = (props: Props) => {
 
   useEffect(() => {
     dispatch(setTypeOfElementToEdit('flashcard'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOnEditFlashcard = (
@@ -138,6 +142,28 @@ const Flashcards = (props: Props) => {
                   }
                   onEdit={() => handleOnEditFlashcard('classic', front, back)}
                 />
+              );
+            } else if (typeOfFlashcard === 'smart') {
+              // ! TODO HANdle smart flashcards with its own component
+              return (
+                <FlexContainer width='85%' key={Math.random() * 100000}>
+                  <Smartcard
+                    data={front}
+                    onDelete={() => {
+                      //@ts-ignore
+                      const results = front.variables.filter(
+                        (variable: variablesWithIdType) =>
+                          variable.type === 'result'
+                      );
+                      const flashcardTitle = `${removeSpecialChars(
+                        results[results.length - 1].name
+                      ).toLowerCase()}`;
+
+                      handleOnDeleteFlashcard(flashcardTitle);
+                    }}
+                    onEdit={() => handleOnEditFlashcard('smart', front, back)}
+                  />
+                </FlexContainer>
               );
             }
           })

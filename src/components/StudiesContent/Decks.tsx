@@ -30,7 +30,7 @@ const Decks = (props: Props) => {
     const decks = folders[folderIndex].decks;
 
     const decksDataForTable = extractDataForDeckTable(decks);
-    console.log(deckDataForTable);
+
     setDeckDataForTable(decksDataForTable);
   }, [folders, activeFolder]);
 
