@@ -19,7 +19,7 @@ import {
 } from '@/redux/smartCard/smartCardSlice';
 import { getVariableById } from '@/utils/getData';
 import { modals } from '@/redux/smartCard/modals';
-import { tableRow } from '@/types/Table';
+import { tableRow } from '@/types/table';
 
 const normalizedData = (variables: variablesWithIdType[]): tableRow[] => {
   return variables.map((variable) => {
