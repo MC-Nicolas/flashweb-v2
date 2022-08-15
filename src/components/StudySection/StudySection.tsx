@@ -46,8 +46,10 @@ const StudySection = ({ deck }: StudySectionProps) => {
     if (isRight) dispatch(addRightAnswer(flashcardFront));
     if (!isRight) dispatch(addWrongAnswer(flashcardFront));
     dispatch(setFlashcardIsFlipped(false));
-    setUsedOrders([...usedOrders, order]);
-    setOrder(order + 1);
+    setTimeout(() => {
+      setUsedOrders([...usedOrders, order]);
+      setOrder(order + 1);
+    }, 500);
   };
 
   return (

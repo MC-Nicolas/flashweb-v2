@@ -18,10 +18,12 @@ import { removeSpecialChars } from '@/utils/dataFormatting';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ClassicFlashcard from '../Flashcard/Classic';
-import Smart from '../Flashcard/Smart';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Select from '../Inputs/Select';
 import Smartcard from './components/Smartcard';
+import RadarIcon from '@mui/icons-material/Radar';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Link from 'next/link';
 
 type Props = {};
 
@@ -49,7 +51,11 @@ const Flashcards = (props: Props) => {
       if (deckIndex === -1) return;
 
       const deck = folders[folderIndex].decks[deckIndex];
-      if (deck.flashcards.length > 0) setFlashcards(deck.flashcards);
+      if (deck.flashcards.length > 0) {
+        setFlashcards(deck.flashcards);
+      } else {
+        setFlashcards([]);
+      }
     }
   }, [folders, activeFolder, activeDeck]);
 
@@ -168,7 +174,27 @@ const Flashcards = (props: Props) => {
             }
           })
         ) : (
-          <h2>No flashcards found</h2>
+          <FlexContainer
+            flexDirection='column'
+            justifyContent='center'
+            style={{ textAlign: 'center' }}
+          >
+            <h2
+              style={{
+                color: 'white',
+                letterSpacing: '2px',
+                marginBottom: '20px',
+              }}
+            >
+              Seems like you don&apos;t have any flashcard here, want to create
+              some ?{' '}
+            </h2>
+            <Link href='/create/flashcard'>
+              <AddCircleIcon
+                sx={{ color: 'green', fontSize: '50px', cursor: 'pointer' }}
+              />
+            </Link>
+          </FlexContainer>
         )}
       </FlexContainer>
     </FlexContainer>
