@@ -181,9 +181,18 @@ export const calculateTimeFromSeconds = (seconds: number) => {
   }
 };
 
+const formatFRDateToNewDate = (date: string | number) => {
+  if (typeof date === 'number') return date;
+  const dateArray = date.split('/');
+  return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
+};
+
 export const sortByDate = (elementsToFormat: any[]) => {
   elementsToFormat.sort((a, b) => {
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
+    return (
+      new Date(formatFRDateToNewDate(a.date)).getTime() -
+      new Date(formatFRDateToNewDate(b.date)).getTime()
+    );
   });
   return elementsToFormat;
 };

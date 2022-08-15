@@ -111,7 +111,7 @@ const DataRow = ({ element }: DataRowProps) => {
           );
         } else if (el === 'Study') {
           return (
-            <div style={{ color: 'white' }}>
+            <div key={Math.random() * 100000} style={{ color: 'white' }}>
               <Link
                 href={`/study?folder=${findFolderFromDeck(
                   element[0]

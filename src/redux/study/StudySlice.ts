@@ -9,9 +9,11 @@ const initialState: StudyState = {
   flashcards: [],
   answers: { right: [], wrong: [] },
   flashcardIsFlipped: false,
+  typeOfFlashcardBeingStudied: '',
   totalAnswers: 0,
   studySection: 'STUDY',
   timeSpent: 0,
+  answerIsSuccess: false,
 };
 
 export const userSlice = createSlice({
@@ -40,11 +42,17 @@ export const userSlice = createSlice({
     setFlashcardIsFlipped: (state, action) => {
       state.flashcardIsFlipped = action.payload;
     },
+    setTypeOfFlashcardBeingStudied: (state, action) => {
+      state.typeOfFlashcardBeingStudied = action.payload;
+    },
     setStudySection: (state, action) => {
       state.studySection = action.payload;
     },
     setTimeSpent: (state, action) => {
       state.timeSpent = action.payload;
+    },
+    setAnswerIsSuccess: (state, action) => {
+      state.answerIsSuccess = action.payload;
     },
 
     resetStudyState: (state) => {
@@ -65,9 +73,11 @@ export const {
   addWrongAnswer,
   addRightAnswer,
   setFlashcardIsFlipped,
+  setTypeOfFlashcardBeingStudied,
   resetStudyState,
   setStudySection,
   setTimeSpent,
+  setAnswerIsSuccess,
 } = userSlice.actions;
 
 export default userSlice.reducer;

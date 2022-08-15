@@ -101,7 +101,6 @@ export const createNewFlashcardInDb = async (
     const formattedFolderName = removeSpecialChars(folderName).toLowerCase();
     const formattedDeckName = removeSpecialChars(deckName).toLowerCase();
     let flashcardTitle = '';
-    console.log(flashcardData);
     if (typeof flashcardData.front === 'string') {
       flashcardTitle = removeSpecialChars(flashcardData.front).toLowerCase();
     } else {
@@ -110,7 +109,7 @@ export const createNewFlashcardInDb = async (
       );
       flashcardTitle = `${removeSpecialChars(
         results[results.length - 1].name
-      ).toLowerCase()}${Math.floor(Math.random() * 10000)}`;
+      ).toLowerCase()}`;
     }
 
     const docRef = doc(

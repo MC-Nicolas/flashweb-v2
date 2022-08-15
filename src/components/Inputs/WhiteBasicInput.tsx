@@ -5,12 +5,14 @@ import styles from './Inputs.module.scss';
 
 interface WhiteBasicInputProps {
   label: string;
-  value: string;
+  value: string | number | undefined;
   onChange: any;
   width?: string;
   style?: {};
+  inputStyle?: {};
   required?: boolean;
   type?: string;
+  placeholder?: string;
   isTextArea?: boolean;
 }
 
@@ -20,9 +22,11 @@ const WhiteBasicInput = ({
   onChange,
   width = '100%',
   style = {},
+  inputStyle = {},
   required,
   type = 'text',
   isTextArea = false,
+  placeholder = '',
 }: WhiteBasicInputProps) => {
   return (
     <FlexContainer
@@ -48,6 +52,8 @@ const WhiteBasicInput = ({
           className={styles.whiteBasicInput}
           onChange={onChange}
           value={value}
+          placeholder={placeholder}
+          style={{ ...inputStyle }}
         />
       )}
     </FlexContainer>
