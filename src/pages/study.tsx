@@ -32,7 +32,7 @@ const Study = () => {
     if (query.deck && query.deck !== activeDeck) {
       dispatch(setActiveDeck(query.deck));
     }
-  });
+  }, [query]);
 
   useEffect(() => {
     if (activeFolder && activeDeck) {
