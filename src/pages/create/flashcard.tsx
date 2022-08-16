@@ -148,6 +148,7 @@ const Flashcard = (props: Props) => {
         height='100vh'
         flexDirection='column'
         justifyContent='flex-start'
+        style={{ flexWrap: 'nowrap' }}
       >
         <FlexContainer height='100px'>
           <SectionTitle title='New Flashcard' color='white' />
@@ -163,7 +164,10 @@ const Flashcard = (props: Props) => {
         <InsetNeumorphicContainer
           width='80%'
           height={paramsAreCollapsed ? '50%' : '70%'}
-          style={{ marginTop: '40px', transition: 'all 0.2s ease-in-out' }}
+          style={{
+            marginTop: '40px',
+            transition: 'all 0.2s ease-in-out',
+          }}
         >
           <form
             style={{ width: '100%', height: '100%' }}

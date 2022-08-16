@@ -18,7 +18,7 @@ const PageContainerWithNav = ({
   style = {},
 }: PageContainerWithNavProps) => {
   return (
-    <PageContainer>
+    <PageContainer style={{ ...style }}>
       <Head>
         <title>{pageTitle}</title>
       </Head>
