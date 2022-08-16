@@ -39,7 +39,7 @@ const Decks = (props: Props) => {
   }, []);
 
   return (
-    <FlexContainer flexDirection='column'>
+    <FlexContainer flexDirection='row'>
       <FlexContainer height='150px' width='300px'>
         <Select
           label='Folder'
@@ -51,9 +51,9 @@ const Decks = (props: Props) => {
 
       <NeumorphicTable
         width='80%'
-        height='70%'
         headerElements={headerElements.deck}
         data={deckDataForTable}
+        style={{ maxHeight: '70%', overflowY: 'auto', paddingTop: '20px' }}
       />
     </FlexContainer>
   );

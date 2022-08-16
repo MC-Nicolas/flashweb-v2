@@ -23,6 +23,7 @@ export interface FlexContainerProps {
   onDragStart?: any;
   onDragEnter?: any;
   onDrop?: any;
+  [key: string]: any;
 }
 
 const FlexContainer = ({

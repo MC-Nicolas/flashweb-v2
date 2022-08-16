@@ -53,7 +53,7 @@ const WhiteBasicInput = ({
           onChange={onChange}
           value={value}
           placeholder={placeholder}
-          style={{ ...inputStyle }}
+          style={{ ...inputStyle, width: '100%' }}
         />
       )}
     </FlexContainer>

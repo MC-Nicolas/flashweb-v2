@@ -1,5 +1,5 @@
 import { KeyboardArrowDown } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import SectionDescription from '../Texts/SectionDescription';
@@ -16,6 +16,28 @@ const ExtensibleContainer = ({
   style,
 }: ExtensibleContainerProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const modalRef: any = useRef();
+
+  useEffect(() => {
+    const handleClick = (event: any) => {
+      console.log('clicked');
+      if (modalRef.current && !isCollapsed) {
+        setIsCollapsed(true);
+      }
+    };
+    const modal = modalRef.current;
+
+    if (modal) {
+      modal.addEventListener('click', handleClick);
+    }
+
+    return () => {
+      if (modal) {
+        modal.removeEventListener('click', handleClick);
+      }
+    };
+  }, [isCollapsed]);
+
   return (
     <NeumorphicContainer
       width='80%'
@@ -49,7 +71,19 @@ const ExtensibleContainer = ({
             transition: 'transform 0.2s ease-in-out',
           }}
         >
-          <SectionDescription description={closedText} color='white' />
+          <div
+            ref={modalRef}
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <SectionDescription description={closedText} color='white' />
+          </div>
         </FlexContainer>
       )}
     </NeumorphicContainer>
