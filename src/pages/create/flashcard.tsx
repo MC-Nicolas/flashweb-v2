@@ -17,6 +17,8 @@ import { removeSpecialChars } from '@/utils/dataFormatting';
 import Smart from '@/components/Flashcard/Smart';
 import { variablesWithIdType } from '@/types/smartCard';
 import { setAllVariables } from '@/redux/smartCard/smartCardSlice';
+import MCQ from '@/components/Flashcard/MCQ/MCQ';
+import { MQCAnswerType } from '@/types/mcq';
 
 type Props = {};
 
@@ -32,6 +34,7 @@ const Flashcard = (props: Props) => {
   const [paramsAreCollapsed, setParamsAreCollapsed] = useState(true);
   const [flashcardData, setFlashcardData] = useState<
     | { front: string; back: string }
+    | { front: string; back: { answers: MQCAnswerType[] } }
     | {
         front: { variables: variablesWithIdType[] };
         back: { variables: variablesWithIdType[] };
@@ -199,6 +202,32 @@ const Flashcard = (props: Props) => {
                   />
                 </FlexContainer>
                 <Smart isFrontActive={isFrontActive} />
+
+                <SubmitForm title='Save' onClick={handleSaveSmartcard} />
+              </FlexContainer>
+            )}
+            {typeOfFlashcard === 'mcq' && (
+              <FlexContainer width='100%' height='100%' flexDirection='column'>
+                <FlexContainer width='50%' height='50px'>
+                  <NeumorphicBasicButton
+                    text='Front'
+                    active={isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(true);
+                    }}
+                  />
+                  <NeumorphicBasicButton
+                    text='Back'
+                    active={!isFrontActive}
+                    onClick={(e: React.SyntheticEvent) => {
+                      e.preventDefault();
+                      setIsFrontActive(false);
+                    }}
+                  />
+                </FlexContainer>
+                <MCQ isFrontActive={isFrontActive} />
+                {/* // ! TODO HERE Must handle all the qcm answers, the data and save to DB */}
 
                 <SubmitForm title='Save' onClick={handleSaveSmartcard} />
               </FlexContainer>
