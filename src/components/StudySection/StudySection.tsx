@@ -64,7 +64,8 @@ const StudySection = ({ deck }: StudySectionProps) => {
       <FlexContainer height='20%'>
         {flashcardIsFlipped &&
           shuffledFlashcards?.length > usedOrders.length &&
-          typeOfFlashcardBeingStudied !== 'smart' && (
+          typeOfFlashcardBeingStudied !== 'smart' &&
+          typeOfFlashcardBeingStudied !== 'mcq' && (
             <>
               <Button
                 variant='contained'
@@ -94,22 +95,29 @@ const StudySection = ({ deck }: StudySectionProps) => {
           )}
         {flashcardIsFlipped &&
           shuffledFlashcards?.length > usedOrders.length &&
-          typeOfFlashcardBeingStudied === 'smart' && (
+          typeOfFlashcardBeingStudied !== 'classic' && (
             <>
               <Button
                 variant='contained'
                 color='success'
                 onClick={() => {
-                  const results = shuffledFlashcards[
-                    order
-                  ].flashcardData.front.variables.filter(
-                    (variable: variablesWithIdType) =>
-                      variable.type === 'result'
-                  );
-                  const flashcardTitle = `${removeSpecialChars(
-                    results[results.length - 1].name
-                  ).toLowerCase()}`;
-                  handleOnAnswerClick(flashcardTitle, answerIsSuccess);
+                  if (typeOfFlashcardBeingStudied === 'smart') {
+                    const results = shuffledFlashcards[
+                      order
+                    ].flashcardData.front.variables.filter(
+                      (variable: variablesWithIdType) =>
+                        variable.type === 'result'
+                    );
+                    const flashcardTitle = `${removeSpecialChars(
+                      results[results.length - 1].name
+                    ).toLowerCase()}`;
+                    handleOnAnswerClick(flashcardTitle, answerIsSuccess);
+                  } else if (typeOfFlashcardBeingStudied === 'mcq') {
+                    handleOnAnswerClick(
+                      shuffledFlashcards[order].flashcardData.front,
+                      answerIsSuccess
+                    );
+                  }
                 }}
               >
                 Next
@@ -118,7 +126,7 @@ const StudySection = ({ deck }: StudySectionProps) => {
           )}
         {!flashcardIsFlipped &&
           shuffledFlashcards &&
-          typeOfFlashcardBeingStudied !== 'smart' &&
+          typeOfFlashcardBeingStudied === 'classic' &&
           shuffledFlashcards.length > usedOrders.length && (
             <ButtonWithIcon
               style={{
@@ -135,7 +143,8 @@ const StudySection = ({ deck }: StudySectionProps) => {
           )}
         {!flashcardIsFlipped &&
           shuffledFlashcards &&
-          typeOfFlashcardBeingStudied === 'smart' &&
+          (typeOfFlashcardBeingStudied === 'smart' ||
+            typeOfFlashcardBeingStudied === 'mcq') &&
           shuffledFlashcards.length > usedOrders.length && (
             <ButtonWithIcon
               style={{

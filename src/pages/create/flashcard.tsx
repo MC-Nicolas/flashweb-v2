@@ -18,7 +18,8 @@ import Smart from '@/components/Flashcard/Smart';
 import { variablesWithIdType } from '@/types/smartCard';
 import { setAllVariables } from '@/redux/smartCard/smartCardSlice';
 import MCQ from '@/components/Flashcard/MCQ/MCQ';
-import { MQCAnswerType } from '@/types/mcq';
+import { MCQAnswerType } from '@/types/mcq';
+import { resetMCQFlashcard } from '@/redux/mcqFlashcard/mcqFlashcardSlice';
 
 type Props = {};
 
@@ -28,13 +29,14 @@ const Flashcard = (props: Props) => {
   const { email } = useAppSelector((state) => state.user);
   const { activeDeck, activeFolder } = useAppSelector((state) => state.folders);
 
+  const { front, back } = useAppSelector((state) => state.mcqcard);
   const { variables } = useAppSelector((state) => state.smartcard);
   const [isFrontActive, setIsFrontActive] = useState(true);
   const [typeOfFlashcard, setTypeOfFlashcard] = useState('classic');
   const [paramsAreCollapsed, setParamsAreCollapsed] = useState(true);
   const [flashcardData, setFlashcardData] = useState<
     | { front: string; back: string }
-    | { front: string; back: { answers: MQCAnswerType[] } }
+    | { front: string; back: { answers: MCQAnswerType[] } }
     | {
         front: { variables: variablesWithIdType[] };
         back: { variables: variablesWithIdType[] };
@@ -46,11 +48,12 @@ const Flashcard = (props: Props) => {
 
   const handleCreateNewFlashcard = async (
     e?: React.SyntheticEvent,
-    variables?: variablesWithIdType[]
+    variables?: variablesWithIdType[],
+    qcmFlashcard?: { front: string; back: MCQAnswerType[] }
   ) => {
     if (e) e.preventDefault();
 
-    if (!variables) {
+    if (!variables && !qcmFlashcard) {
       if (flashcardData.front === '') {
         return toast.error(
           'Looks like you forgot to write something on the front of the flashcard.'
@@ -61,11 +64,24 @@ const Flashcard = (props: Props) => {
           'Looks like you forgot to write something on the back of the flashcard.'
         );
       }
-    } else {
+      //@ts-ignore
+    } else if (variables?.length > 0 && !qcmFlashcard) {
       // find at leat one variable of type result
-      if (!variables.find((variable) => variable.type === 'result')) {
+      if (!variables?.find((variable) => variable.type === 'result')) {
         return toast.error(
           'Looks like you forgot to give a result for your smartcard.'
+        );
+      }
+    } else {
+      if (qcmFlashcard?.front === '') {
+        return toast.error(
+          'Looks like you forgot to write something on the front of the flashcard.'
+        );
+      }
+      // @ts-ignore
+      if (qcmFlashcard?.back?.length < 2) {
+        return toast.error(
+          'Looks like you forgot to write something on the back of the flashcard.'
         );
       }
     }
@@ -76,12 +92,22 @@ const Flashcard = (props: Props) => {
       );
     }
 
+    let flashcardDataForDB: any = undefined;
+    if (variables)
+      flashcardDataForDB = { front: { variables }, back: { variables } };
+    if (qcmFlashcard)
+      flashcardDataForDB = {
+        front: qcmFlashcard.front,
+        back: qcmFlashcard.back,
+      };
+    if (!variables && !qcmFlashcard) flashcardDataForDB = flashcardData;
+
     const { success, error } = await createNewFlashcardInDb(
       email,
       activeFolder,
       activeDeck,
       typeOfFlashcard,
-      variables ? { front: { variables }, back: { variables } } : flashcardData
+      flashcardDataForDB
     );
 
     if (success) {
@@ -89,8 +115,9 @@ const Flashcard = (props: Props) => {
       toast.success('Flashcard created successfully');
       setFlashcardData({ front: '', back: '' });
       dispatch(setAllVariables([]));
+      dispatch(resetMCQFlashcard());
       if (typeof front === 'string') {
-        // ! TODO generate title for smartcard
+        // ! TODO generate title for smartcard and mcq
         dispatch(
           addFlashcard({
             title: removeSpecialChars(front),
@@ -107,8 +134,12 @@ const Flashcard = (props: Props) => {
     }
   };
 
-  const handleSaveSmartcard = () => {
-    handleCreateNewFlashcard(undefined, variables);
+  const handleSaveSmartcard = (type: string) => {
+    if (type === 'smart') {
+      handleCreateNewFlashcard(undefined, variables);
+    } else if (type === 'mcq') {
+      handleCreateNewFlashcard(undefined, undefined, { front, back });
+    }
   };
 
   return (
@@ -203,7 +234,10 @@ const Flashcard = (props: Props) => {
                 </FlexContainer>
                 <Smart isFrontActive={isFrontActive} />
 
-                <SubmitForm title='Save' onClick={handleSaveSmartcard} />
+                <SubmitForm
+                  title='Save'
+                  onClick={() => handleSaveSmartcard('smart')}
+                />
               </FlexContainer>
             )}
             {typeOfFlashcard === 'mcq' && (
@@ -227,9 +261,11 @@ const Flashcard = (props: Props) => {
                   />
                 </FlexContainer>
                 <MCQ isFrontActive={isFrontActive} />
-                {/* // ! TODO HERE Must handle all the qcm answers, the data and save to DB */}
 
-                <SubmitForm title='Save' onClick={handleSaveSmartcard} />
+                <SubmitForm
+                  title='Save'
+                  onClick={() => handleSaveSmartcard('mcq')}
+                />
               </FlexContainer>
             )}
           </form>

@@ -19,6 +19,7 @@ import studiesReducer from './studies/StudiesSlice';
 import chartReducer from './chart/chartSlice';
 import editModalReducer from './editModal/editModalSlice';
 import smartcardReducer from './smartCard/smartCardSlice';
+import mcqReducer from './mcqFlashcard/mcqFlashcardSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   chart: chartReducer,
   editModal: editModalReducer,
   smartcard: smartcardReducer,
+  mcqcard: mcqReducer,
 });
 
 const persistConfig = {
@@ -42,6 +44,7 @@ const persistConfig = {
     'editModal',
     'chart',
     'smartcard',
+    'mcqcard',
   ],
 };
 

@@ -3,6 +3,7 @@ import { setTypeOfFlashcardBeingStudied } from '@/redux/study/StudySlice';
 import { FlashcardType } from '@/types/folders';
 import { useEffect } from 'react';
 import ClassicFlashcard from '../Flashcard/Classic';
+import MCQFlashcard from './components/MCQFlashcard';
 import Smartcard from './components/Smartcard';
 
 const ActiveFlashcard = ({
@@ -34,6 +35,11 @@ const ActiveFlashcard = ({
     return (
       //@ts-ignore
       <Smartcard front={front} back={back} isFlipped={flashcardIsFlipped} />
+    );
+  } else if (typeOfFlashcard === 'mcq') {
+    return (
+      //@ts-ignore
+      <MCQFlashcard front={front} back={back} isFlipped={flashcardIsFlipped} />
     );
   } else {
     return <></>;
