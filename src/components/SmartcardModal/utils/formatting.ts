@@ -18,7 +18,7 @@ export const handleVariablesCalculationsAndValues = (
   let newVariables = deepCopy(variables);
   const randomNumberValues: variablesWithIdType[] = [];
   let result: any = undefined;
-  newVariables.forEach((variable: any) => {
+  newVariables?.forEach((variable: any) => {
     if (typeof variable.value === 'object' && variable.value['min']) {
       const min = variable.value['min'];
       const max = variable.value['max'];
