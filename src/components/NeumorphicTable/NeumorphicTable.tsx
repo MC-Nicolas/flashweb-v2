@@ -17,7 +17,13 @@ const NeumorphicTable = ({
   data,
 }: NeumorphicTableProps) => {
   return (
-    <FlexContainer width={width} height={height}>
+    <FlexContainer
+      width={width}
+      height='auto'
+      flexDirection='column'
+      flexWrap='nowrap'
+      justifyContent='flex-start'
+    >
       <HeaderRow headerElements={headerElements} />
       {data.map((el, index) => (
         <DataRow key={index} element={el} />

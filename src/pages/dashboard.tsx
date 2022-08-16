@@ -49,6 +49,7 @@ const Dashboard = () => {
         height='100vh'
         flexDirection='column'
         justifyContent='flex-start'
+        flexWrap='nowrap'
       >
         <FlexContainer height='100px'>
           <SectionTitle title='Dashboard' color='white' />
@@ -65,9 +66,13 @@ const Dashboard = () => {
         >
           <Highchart />
         </InsetNeumorphicContainer>
-        <FlexContainer width='80%' height='40%' style={{ marginTop: '50px' }}>
+        <FlexContainer
+          width='80%'
+          height='50%'
+          style={{ marginTop: '50px', overFlowY: 'scroll' }}
+        >
           <NeumorphicTable
-            width='80%'
+            width='100%'
             height='70%'
             headerElements={headerElements.dashboardDeck}
             data={deckDataForTable}
