@@ -4,7 +4,7 @@ import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicCon
 import FlexContainer from '../FlexContainer/FlexContainer';
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  setClassicFlashcard,
+  setFlashcardToEdit,
   setFlashcardIsFlipped,
   setModalIsOpen,
 } from '@/redux/editModal/editModalSlice';
@@ -29,6 +29,7 @@ import {
 import ClassicFlashcard from '../Flashcard/Classic';
 
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import MCQForm from './components/MCQForm';
 
 const EditModal = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ const EditModal = () => {
     typeOfElementToEdit,
     nameOfElementToEdit,
     typeOfFlashcard,
-    classicFlashcard,
+    flashcardToEdit,
     flashcardIsFlipped,
   } = useAppSelector((state) => state.editModal);
   const { folders, activeFolder, activeDeck } = useAppSelector(
@@ -100,16 +101,21 @@ const EditModal = () => {
         toast.error('Oops, something went wrong');
       }
     } else if (typeOfElementToEdit === 'flashcard') {
-      if (typeOfFlashcardToEdit === 'classic') {
+      if (
+        typeOfFlashcardToEdit === 'classic' ||
+        typeOfFlashcardToEdit === 'mcq'
+      ) {
         const { error, success } = await updateClassicFlashcardInDB(
           email,
           removeSpecialChars(activeFolder),
           removeSpecialChars(activeDeck),
-          removeSpecialChars(classicFlashcard.front),
-          classicFlashcard,
-          removeSpecialChars(initialFlashcardFront)
+          removeSpecialChars(flashcardToEdit.front),
+          flashcardToEdit,
+          removeSpecialChars(initialFlashcardFront),
+          typeOfFlashcardToEdit
         );
         if (success) {
+          console.log(activeFolder, activeDeck, initialFlashcardFront);
           dispatch(
             removeFlashcard({
               folderId: activeFolder,
@@ -121,8 +127,8 @@ const EditModal = () => {
             addFlashcard({
               typeOfFlashcard: 'classic',
               deckId: activeDeck,
-              front: classicFlashcard.front,
-              back: classicFlashcard.back,
+              front: flashcardToEdit.front,
+              back: flashcardToEdit.back,
               folderId: activeFolder,
             })
           );
@@ -136,7 +142,7 @@ const EditModal = () => {
   };
 
   useEffect(() => {
-    setInitialFlashcardFront(classicFlashcard['front']);
+    setInitialFlashcardFront(flashcardToEdit['front']);
   }, [isOpen]);
 
   return (
@@ -203,24 +209,24 @@ const EditModal = () => {
               <FlexContainer flexDirection='column'>
                 <ClassicFlashcard
                   editable
-                  front={classicFlashcard.front}
+                  front={flashcardToEdit.front}
                   setFront={(e: any) =>
                     dispatch(
-                      setClassicFlashcard({
-                        ...classicFlashcard,
+                      setFlashcardToEdit({
+                        ...flashcardToEdit,
                         front: e.target.value,
                       })
                     )
                   }
                   setBack={(e: any) =>
                     dispatch(
-                      setClassicFlashcard({
-                        ...classicFlashcard,
+                      setFlashcardToEdit({
+                        ...flashcardToEdit,
                         back: e.target.value,
                       })
                     )
                   }
-                  back={classicFlashcard.back}
+                  back={flashcardToEdit.back}
                   isFlipped={flashcardIsFlipped}
                 />
                 <ButtonWithIcon
@@ -239,13 +245,13 @@ const EditModal = () => {
                 />
               </FlexContainer>
             )}
-          {typeOfFlashcard === 'mcq' && (
-            <p style={{ width: '50%' }}>
-              This feature is not available just yet, pleas try again in a few
-              days...{' '}
-            </p>
+          {typeOfElementToEdit === 'flashcard' && typeOfFlashcard === 'mcq' && (
+            <MCQForm
+              front={flashcardToEdit.front}
+              back={flashcardToEdit.back}
+            />
           )}
-          {typeOfFlashcard !== 'mcq' && typeOfFlashcard !== 'smart' && (
+          {typeOfFlashcard !== 'smart' && (
             <ButtonWithIcon
               style={{ backgroundColor: 'green', width: '200px' }}
               title='Save'

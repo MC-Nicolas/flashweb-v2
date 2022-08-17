@@ -43,7 +43,6 @@ const MCQAnswer = ({
         value={text}
         style={{
           resize: 'none',
-          overflowY: 'scroll',
           width: '80%',
           height: '80%',
           backgroundColor: 'transparent',

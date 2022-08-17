@@ -3,6 +3,6 @@ export interface EditModalState {
   typeOfElementToEdit: string;
   nameOfElementToEdit: string;
   typeOfFlashcard: string;
-  classicFlashcard: { front: string; back: string };
+  flashcardToEdit: { front: any; back: any };
   flashcardIsFlipped: boolean;
 }

@@ -40,7 +40,8 @@ export const updateClassicFlashcardInDB = async (
   deckId: string,
   flashcardId: string,
   flashcardData: { front: string; back: string },
-  initialFlashcardFront: string
+  initialFlashcardFront: string,
+  type: string
 ) => {
   let response: { success: boolean; error: any } = {
     success: false,

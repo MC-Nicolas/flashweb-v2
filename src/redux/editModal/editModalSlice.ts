@@ -6,7 +6,7 @@ const initialState: EditModalState = {
   typeOfElementToEdit: '',
   nameOfElementToEdit: '',
   typeOfFlashcard: 'classic',
-  classicFlashcard: { front: '', back: '' },
+  flashcardToEdit: { front: '', back: '' },
   flashcardIsFlipped: false,
 };
 
@@ -30,11 +30,18 @@ export const editModal = createSlice({
     setFlashcardIsFlipped: (state, action: { payload: boolean }) => {
       state.flashcardIsFlipped = action.payload;
     },
-    setClassicFlashcard: (
+    setFlashcardToEdit: (
       state,
       action: { payload: { front: string; back: string } }
     ) => {
-      state.classicFlashcard = action.payload;
+      state.flashcardToEdit = action.payload;
+    },
+    setTextForFlashcard: (
+      state,
+      action: { payload: { index: number; text: string } }
+    ) => {
+      state.flashcardToEdit.back[action.payload.index].text =
+        action.payload.text;
     },
   },
 });
@@ -45,7 +52,8 @@ export const {
   setNameOfElementToEdit,
   setTypeOfFlashcard,
   setFlashcardIsFlipped,
-  setClassicFlashcard,
+  setFlashcardToEdit,
+  setTextForFlashcard,
 } = editModal.actions;
 
 export default editModal.reducer;

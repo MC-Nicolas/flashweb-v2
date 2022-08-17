@@ -155,6 +155,7 @@ export const userSlice = createSlice({
 
     removeFlashcard: (state, action) => {
       const { folderId, deckId, flashcardId } = action.payload;
+
       const folderIndex = state.folders.findIndex(
         (folder: FolderType) =>
           removeSpecialChars(folder.title) === removeSpecialChars(folderId)
@@ -163,6 +164,7 @@ export const userSlice = createSlice({
         (deck: DeckType) =>
           removeSpecialChars(deck.id) === removeSpecialChars(deckId)
       );
+
       const flashcardIndex = state.folders[folderIndex].decks[
         deckIndex
       ].flashcards.findIndex(

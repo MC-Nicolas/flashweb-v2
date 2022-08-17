@@ -1,6 +1,6 @@
 import { deleteFlashcardFromDB } from '@/database/deleteInDB';
 import {
-  setClassicFlashcard,
+  setFlashcardToEdit,
   setModalIsOpen,
   setNameOfElementToEdit,
   setTypeOfElementToEdit,
@@ -74,7 +74,7 @@ const Flashcards = (props: Props) => {
     dispatch(setTypeOfFlashcard(typeOfFlashcard));
     dispatch(setModalIsOpen(true));
     dispatch(setNameOfElementToEdit('My Flashcard'));
-    dispatch(setClassicFlashcard({ front, back }));
+    dispatch(setFlashcardToEdit({ front, back }));
   };
 
   const handleOnDeleteFlashcard = async (flashcardID: string) => {
@@ -135,7 +135,7 @@ const Flashcards = (props: Props) => {
           flashcards.map((flashcard: FlashcardType) => {
             const { front, back } = flashcard.flashcardData;
             const { typeOfFlashcard } = flashcard;
-            if (typeOfFlashcard === 'classic') {
+            if (typeOfFlashcard === 'classic' && typeof back === 'string') {
               return (
                 <ClassicFlashcard
                   style={{ fontSize: '18px' }}
