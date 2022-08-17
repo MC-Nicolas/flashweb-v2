@@ -24,6 +24,8 @@ import Smartcard from './components/Smartcard';
 import RadarIcon from '@mui/icons-material/Radar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Link from 'next/link';
+import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
+import MCQFlashcard from './components/MCQFlashcard';
 
 type Props = {};
 
@@ -170,6 +172,17 @@ const Flashcards = (props: Props) => {
                     onEdit={() => handleOnEditFlashcard('smart', front, back)}
                   />
                 </FlexContainer>
+              );
+            } else if (typeOfFlashcard === 'mcq') {
+              return (
+                <MCQFlashcard
+                  front={front}
+                  back={back}
+                  onDelete={() =>
+                    handleOnDeleteFlashcard(removeSpecialChars(front))
+                  }
+                  onEdit={() => handleOnEditFlashcard('classic', front, back)}
+                />
               );
             }
           })
