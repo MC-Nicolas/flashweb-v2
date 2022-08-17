@@ -20,6 +20,7 @@ type ClassicProps = {
   showEditIcons?: boolean;
   onDelete?: any;
   onEdit?: any;
+  fontSize?: string;
 };
 
 const ClassicFlashcard = ({
@@ -35,6 +36,7 @@ const ClassicFlashcard = ({
   showEditIcons = false,
   onDelete,
   onEdit,
+  fontSize,
 }: ClassicProps) => {
   return (
     <FlexContainer
@@ -85,8 +87,18 @@ const ClassicFlashcard = ({
           </>
         ) : (
           <>
-            <div className={`${styles['flippable-front']}`}>{front}</div>
-            <div className={`${styles['flippable-back']}`}>{back}</div>
+            <div
+              style={{ fontSize: fontSize ? fontSize : '22px' }}
+              className={`${styles['flippable-front']}`}
+            >
+              {front}
+            </div>
+            <div
+              style={{ fontSize: fontSize ? fontSize : '22px' }}
+              className={`${styles['flippable-back']}`}
+            >
+              {back}
+            </div>
           </>
         )}
       </div>

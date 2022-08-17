@@ -26,6 +26,7 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
         padding: '10px',
         textAlign: 'center',
         position: 'relative',
+        marginTop: '10px',
       }}
     >
       <FlexContainer
@@ -47,7 +48,7 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
         />
       </FlexContainer>
       <FlexContainer height='200px'>
-        <p style={{ color: 'white' }}>{front}</p>
+        <p style={{ color: 'white', letterSpacing: '1px' }}>{front}</p>
         {back.map((answer: any) => (
           <FlexContainer
             key={answer.text}
@@ -58,12 +59,28 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
             <p>
               {' '}
               {answer.isCorrect ? (
-                <CheckIcon sx={{ color: 'green' }} />
+                <FlexContainer
+                  justifyContent='center'
+                  alignItems='center'
+                  height='40px'
+                  width='40px'
+                >
+                  <CheckIcon sx={{ color: 'green' }} />
+                </FlexContainer>
               ) : (
-                <CloseIcon sx={{ color: 'red' }} />
+                <FlexContainer
+                  justifyContent='center'
+                  alignItems='center'
+                  height='40px'
+                  width='40px'
+                >
+                  <CloseIcon sx={{ color: 'red' }} />
+                </FlexContainer>
               )}
             </p>
-            <p>{answer.text}</p>
+            <p style={{ color: 'white', letterSpacing: '1px' }}>
+              {answer.text}
+            </p>
           </FlexContainer>
         ))}
       </FlexContainer>

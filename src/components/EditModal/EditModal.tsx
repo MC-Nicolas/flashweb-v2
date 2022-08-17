@@ -239,14 +239,22 @@ const EditModal = () => {
                 />
               </FlexContainer>
             )}
-          <ButtonWithIcon
-            style={{ backgroundColor: 'green', width: '200px' }}
-            title='Save'
-            iconIsComponent
-            iconPosition='right'
-            icon={<ArrowRightAltIcon />}
-            onClick={handleSaveEdit}
-          />
+          {typeOfFlashcard === 'mcq' && (
+            <p style={{ width: '50%' }}>
+              This feature is not available just yet, pleas try again in a few
+              days...{' '}
+            </p>
+          )}
+          {typeOfFlashcard !== 'mcq' && typeOfFlashcard !== 'smart' && (
+            <ButtonWithIcon
+              style={{ backgroundColor: 'green', width: '200px' }}
+              title='Save'
+              iconIsComponent
+              iconPosition='right'
+              icon={<ArrowRightAltIcon />}
+              onClick={handleSaveEdit}
+            />
+          )}
         </FlexContainer>
       </NeumorphicContainer>
     </FlexContainer>

@@ -138,6 +138,7 @@ const Flashcards = (props: Props) => {
             if (typeOfFlashcard === 'classic') {
               return (
                 <ClassicFlashcard
+                  style={{ fontSize: '18px' }}
                   key={front}
                   height='300px'
                   width='300px'
@@ -181,7 +182,7 @@ const Flashcards = (props: Props) => {
                   onDelete={() =>
                     handleOnDeleteFlashcard(removeSpecialChars(front))
                   }
-                  onEdit={() => handleOnEditFlashcard('classic', front, back)}
+                  onEdit={() => handleOnEditFlashcard('mcq', front, back)}
                 />
               );
             }
