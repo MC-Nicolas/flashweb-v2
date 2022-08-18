@@ -112,10 +112,9 @@ const EditModal = () => {
           removeSpecialChars(flashcardToEdit.front),
           flashcardToEdit,
           removeSpecialChars(initialFlashcardFront),
-          typeOfFlashcardToEdit
+          typeOfFlashcard
         );
         if (success) {
-          console.log(activeFolder, activeDeck, initialFlashcardFront);
           dispatch(
             removeFlashcard({
               folderId: activeFolder,
@@ -125,7 +124,7 @@ const EditModal = () => {
           );
           dispatch(
             addFlashcard({
-              typeOfFlashcard: 'classic',
+              typeOfFlashcard: typeOfFlashcard,
               deckId: activeDeck,
               front: flashcardToEdit.front,
               back: flashcardToEdit.back,

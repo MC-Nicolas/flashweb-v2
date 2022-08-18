@@ -71,10 +71,10 @@ const Flashcards = (props: Props) => {
     front: string,
     back: string
   ) => {
-    dispatch(setTypeOfFlashcard(typeOfFlashcard));
     dispatch(setModalIsOpen(true));
     dispatch(setNameOfElementToEdit('My Flashcard'));
     dispatch(setFlashcardToEdit({ front, back }));
+    dispatch(setTypeOfFlashcard(typeOfFlashcard));
   };
 
   const handleOnDeleteFlashcard = async (flashcardID: string) => {
@@ -180,9 +180,10 @@ const Flashcards = (props: Props) => {
                   key={front}
                   front={front}
                   back={back}
-                  onDelete={() =>
-                    handleOnDeleteFlashcard(removeSpecialChars(front))
-                  }
+                  onDelete={() => {
+                    dispatch(setTypeOfFlashcard('mcq'));
+                    handleOnDeleteFlashcard(removeSpecialChars(front));
+                  }}
                   onEdit={() => handleOnEditFlashcard('mcq', front, back)}
                 />
               );

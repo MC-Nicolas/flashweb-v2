@@ -5,6 +5,7 @@ import React from 'react';
 import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppDispatch } from '@/redux/redux.hooks';
 
 type MCQFlashcardProps = {
   onEdit: any;
@@ -56,7 +57,7 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
             justifyContent='flex-start'
             alignItems='center'
           >
-            <p>
+            <div>
               {' '}
               {answer.isCorrect ? (
                 <FlexContainer
@@ -77,7 +78,7 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
                   <CloseIcon sx={{ color: 'red' }} />
                 </FlexContainer>
               )}
-            </p>
+            </div>
             <p style={{ color: 'white', letterSpacing: '1px' }}>
               {answer.text}
             </p>

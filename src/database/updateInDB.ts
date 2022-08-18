@@ -77,7 +77,7 @@ export const updateClassicFlashcardInDB = async (
 
     await setDoc(docRef, {
       flashcardData,
-      typeOfFlashcard: 'classic',
+      typeOfFlashcard: type,
     });
 
     // ! TODO update in redux and update in DB allreviews
