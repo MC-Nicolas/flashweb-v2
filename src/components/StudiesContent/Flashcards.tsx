@@ -177,6 +177,7 @@ const Flashcards = (props: Props) => {
             } else if (typeOfFlashcard === 'mcq') {
               return (
                 <MCQFlashcard
+                  key={front}
                   front={front}
                   back={back}
                   onDelete={() =>

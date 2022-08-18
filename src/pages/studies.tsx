@@ -30,7 +30,6 @@ const Studies = (props: Props) => {
           width='80%'
           height='150px'
           style={{
-            display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: 'white',
