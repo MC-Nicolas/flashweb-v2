@@ -79,7 +79,15 @@ const MCQFlashcard = ({ onEdit, onDelete, front, back }: MCQFlashcardProps) => {
                 </FlexContainer>
               )}
             </div>
-            <p style={{ color: 'white', letterSpacing: '1px' }}>
+            <p
+              style={{
+                color: 'white',
+                letterSpacing: '1px',
+                width: '80%',
+                textAlign: 'left',
+                overflowY: 'auto',
+              }}
+            >
               {answer.text}
             </p>
           </FlexContainer>
