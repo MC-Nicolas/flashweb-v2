@@ -57,6 +57,7 @@ export const userSlice = createSlice({
     },
     addFolder: (state, action) => {
       const formattedFolder = {
+        id: removeSpecialChars(action.payload),
         title: action.payload,
         decks: [],
       };
@@ -69,10 +70,10 @@ export const userSlice = createSlice({
     },
 
     removeFolder: (state, action) => {
-      const folderIndex = state.folders.findIndex(
-        (folder: any) =>
-          removeSpecialChars(folder.id) === removeSpecialChars(action.payload)
-      );
+      const folderIndex = state.folders.findIndex((folder: any) => {
+        console.log(folder, action.payload);
+        removeSpecialChars(folder.id) === removeSpecialChars(action.payload);
+      });
       state.folders.splice(folderIndex, 1);
       state.foldersOptions.splice(folderIndex, 1);
       if (state.folders.length > 0) {

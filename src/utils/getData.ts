@@ -14,8 +14,14 @@ export const getDeckData = (
   );
 
   const deckData: DeckType = folders[activeFolderIndex].decks[activeDeckIndex];
-
   return deckData;
+};
+
+export const getFolderFromDeck = (deckId: string, folders: FolderType[]) => {
+  const folder = folders.find((folder) => {
+    return folder.decks.find((deck) => deck.id === deckId);
+  });
+  return removeSpecialChars(folder?.title ?? '');
 };
 
 export const getVariableById = (variables: any, id: string) => {

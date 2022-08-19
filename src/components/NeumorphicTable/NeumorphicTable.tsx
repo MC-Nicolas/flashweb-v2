@@ -5,7 +5,6 @@ import HeaderRow from './HeaderRow';
 
 type NeumorphicTableProps = {
   width?: string;
-  height?: string;
   headerElements: string[];
   data: string[][];
   style?: {};
@@ -13,7 +12,6 @@ type NeumorphicTableProps = {
 
 const NeumorphicTable = ({
   width = '100%',
-  height = '100%',
   headerElements,
   data,
   style = {},

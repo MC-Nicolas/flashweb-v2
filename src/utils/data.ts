@@ -18,3 +18,12 @@ export const createRandomNumberWithMinMax = (
   }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+export const generateRandomId = (): string => {
+  const randomNumber = createRandomNumberWithMinMax(1, 100000);
+  return `${randomNumber}-${randomNumber}-${randomNumber}`;
+};
+
+export const fromStringToBoolean = (string: string): boolean => {
+  return string === 'true';
+};
