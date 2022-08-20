@@ -13,9 +13,7 @@ import {
 import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
 import { headerElements } from '../NeumorphicTable/data';
 
-type Props = {};
-
-const Decks = (props: Props) => {
+const Decks = () => {
   const dispatch = useAppDispatch();
   const { folders, foldersOptions, activeFolder } = useAppSelector(
     (state) => state.folders
@@ -36,6 +34,7 @@ const Decks = (props: Props) => {
 
   useEffect(() => {
     dispatch(setTypeOfElementToEdit('deck'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

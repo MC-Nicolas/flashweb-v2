@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { shuffleFlashcards } from '@/utils/shuffle';
 
 import InsetNeumorphicContainer from '../Containers/InsetNeumorphicContainer/InsetNeumorphicContainer';
-import ClassicFlashcard from '../Flashcard/Classic';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import StudyDeckInfo from '../StudyDeckInfo/StudyDeckInfo';
 import ButtonWithIcon from '../Buttons/ButtonWithIcon';
@@ -16,10 +15,14 @@ import {
   addRightAnswer,
   addWrongAnswer,
   setFlashcardIsFlipped,
+  setTypeOfFlashcardBeingStudied,
 } from '@/redux/study/StudySlice';
 import { DoneAll } from '@mui/icons-material';
 import { variablesWithIdType } from '@/types/smartCard';
-import { deepCopy, removeSpecialChars } from '@/utils/dataFormatting';
+import { removeSpecialChars } from '@/utils/dataFormatting';
+import FlipFlashcardButton from './components/FlipFlashcardButton/FlipFlashcardButton';
+import MistakeSuccessButtons from './components/MistakeSuccessButtons/MistakeSuccessButtons';
+import NextButton from './components/NextButton/NextButton';
 
 type StudySectionProps = {
   deck: any;
@@ -29,11 +32,54 @@ const StudySection = ({ deck }: StudySectionProps) => {
   const dispatch = useAppDispatch();
   const { flashcardIsFlipped, typeOfFlashcardBeingStudied, answerIsSuccess } =
     useAppSelector((state) => state.study);
+
   const [shuffledFlashcards, setShuffledFlashcards] = useState<any>(null);
   const [usedOrders, setUsedOrders] = useState<any>([]);
   const [order, setOrder] = useState(0);
+  const [renderFlashcard, setRenderFlashcard] = useState(false);
+  const [typeOfFlipButton, setTypeOfFlipButton] = useState<null | String>(null);
 
   const { flashcards } = deck;
+
+  useEffect(() => {
+    if (flashcardIsFlipped) {
+      if (
+        typeOfFlashcardBeingStudied === 'smart' ||
+        typeOfFlashcardBeingStudied === 'mcq'
+      ) {
+        return setTypeOfFlipButton('Next');
+      } else {
+        return setTypeOfFlipButton('mistakeSuccess');
+      }
+    }
+    if (!shuffledFlashcards || shuffledFlashcards?.length <= usedOrders.length)
+      return setTypeOfFlipButton(null);
+
+    if (typeOfFlashcardBeingStudied === 'classic') {
+      setTypeOfFlipButton('DoneAll');
+    } else if (
+      typeOfFlashcardBeingStudied === 'mcq' ||
+      typeOfFlashcardBeingStudied === 'smart'
+    ) {
+      setTypeOfFlipButton('SwapHoriz');
+    } else if (typeOfFlashcardBeingStudied === 'classic') {
+      setTypeOfFlipButton('mistakeSuccess');
+    }
+  }, [
+    flashcardIsFlipped,
+    shuffledFlashcards,
+    usedOrders,
+    typeOfFlashcardBeingStudied,
+  ]);
+
+  useEffect(() => {
+    if (!shuffledFlashcards) return setRenderFlashcard(false);
+    if (shuffledFlashcards?.length > usedOrders.length) {
+      setRenderFlashcard(true);
+    } else {
+      setRenderFlashcard(false);
+    }
+  }, [shuffledFlashcards, usedOrders]);
 
   useEffect(() => {
     if (flashcards.length > 0) {
@@ -45,8 +91,10 @@ const StudySection = ({ deck }: StudySectionProps) => {
   const handleOnAnswerClick = (flashcardFront: string, isRight: boolean) => {
     if (isRight) dispatch(addRightAnswer(flashcardFront));
     if (!isRight) dispatch(addWrongAnswer(flashcardFront));
+
     dispatch(setFlashcardIsFlipped(false));
     setTimeout(() => {
+      // if the next is not of type 'classic', dont use setimeout
       setUsedOrders([...usedOrders, order]);
       setOrder(order + 1);
     }, 225);
@@ -56,109 +104,31 @@ const StudySection = ({ deck }: StudySectionProps) => {
     <InsetNeumorphicContainer width='80%' height='80vh'>
       <StudyDeckInfo />
       <FlexContainer height='70%'>
-        {shuffledFlashcards &&
-          shuffledFlashcards?.length > usedOrders.length && (
-            <ActiveFlashcard index={order} flashcards={shuffledFlashcards} />
-          )}
+        {renderFlashcard && (
+          <ActiveFlashcard index={order} flashcards={shuffledFlashcards} />
+        )}
       </FlexContainer>
       <FlexContainer height='20%'>
-        {flashcardIsFlipped &&
-          shuffledFlashcards?.length > usedOrders.length &&
-          typeOfFlashcardBeingStudied !== 'smart' &&
-          typeOfFlashcardBeingStudied !== 'mcq' && (
-            <>
-              <Button
-                variant='contained'
-                color='error'
-                onClick={() =>
-                  handleOnAnswerClick(
-                    shuffledFlashcards[order].flashcardData.front,
-                    false
-                  )
-                }
-              >
-                Mistake
-              </Button>
-              <Button
-                variant='contained'
-                color='success'
-                onClick={() =>
-                  handleOnAnswerClick(
-                    shuffledFlashcards[order].flashcardData.front,
-                    true
-                  )
-                }
-              >
-                Success
-              </Button>
-            </>
-          )}
-        {flashcardIsFlipped &&
-          shuffledFlashcards?.length > usedOrders.length &&
-          typeOfFlashcardBeingStudied !== 'classic' && (
-            <>
-              <Button
-                variant='contained'
-                color='success'
-                onClick={() => {
-                  if (typeOfFlashcardBeingStudied === 'smart') {
-                    const results = shuffledFlashcards[
-                      order
-                    ].flashcardData.front.variables.filter(
-                      (variable: variablesWithIdType) =>
-                        variable.type === 'result'
-                    );
-                    const flashcardTitle = `${removeSpecialChars(
-                      results[results.length - 1].name
-                    ).toLowerCase()}`;
-                    handleOnAnswerClick(flashcardTitle, answerIsSuccess);
-                  } else if (typeOfFlashcardBeingStudied === 'mcq') {
-                    handleOnAnswerClick(
-                      shuffledFlashcards[order].flashcardData.front,
-                      answerIsSuccess
-                    );
-                  }
-                }}
-              >
-                Next
-              </Button>
-            </>
-          )}
-        {!flashcardIsFlipped &&
-          shuffledFlashcards &&
-          typeOfFlashcardBeingStudied === 'classic' &&
-          shuffledFlashcards.length > usedOrders.length && (
-            <ButtonWithIcon
-              style={{
-                backgroundColor: 'white',
-                color: 'black',
-                width: '150px',
-              }}
-              title='Flip'
-              iconPosition='right'
-              iconIsComponent
-              icon={<SwapHorizIcon />}
-              onClick={() => dispatch(setFlashcardIsFlipped(true))}
-            />
-          )}
-        {!flashcardIsFlipped &&
-          shuffledFlashcards &&
-          (typeOfFlashcardBeingStudied === 'smart' ||
-            typeOfFlashcardBeingStudied === 'mcq') &&
-          shuffledFlashcards.length > usedOrders.length && (
-            <ButtonWithIcon
-              style={{
-                backgroundColor: 'white',
-                color: 'black',
-                width: '150px',
-              }}
-              title='Check'
-              iconPosition='right'
-              iconIsComponent
-              icon={<DoneAll />}
-              onClick={() => dispatch(setFlashcardIsFlipped(true))}
-            />
-          )}
+        {flashcardIsFlipped && typeOfFlipButton === 'mistakeSuccess' && (
+          <MistakeSuccessButtons
+            shuffledFlashcards={shuffledFlashcards}
+            order={order}
+            handleOnAnswerClick={handleOnAnswerClick}
+          />
+        )}
+        {flashcardIsFlipped && typeOfFlipButton === 'Next' && (
+          <NextButton
+            shuffledFlashcards={shuffledFlashcards}
+            order={order}
+            handleOnAnswerClick={handleOnAnswerClick}
+          />
+        )}
+        {!flashcardIsFlipped && typeOfFlipButton === 'DoneAll' && (
+          <FlipFlashcardButton icon='DoneAll' />
+        )}
+        {!flashcardIsFlipped && typeOfFlipButton === 'SwapHoriz' && (
+          <FlipFlashcardButton icon='SwapHoriz' />
+        )}
       </FlexContainer>
     </InsetNeumorphicContainer>
   );

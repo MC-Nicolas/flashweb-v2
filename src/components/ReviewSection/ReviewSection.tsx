@@ -10,7 +10,7 @@ import ReviewInfo from './components/ReviewInfo';
 import { saveReviewInDB } from '@/database/createInDB';
 import { removeSpecialChars } from '@/utils/dataFormatting';
 import { addReview } from '@/redux/folders/FolderSlice';
-import { funcWithError } from '@/utils/funcWithError';
+import toast from 'react-hot-toast';
 
 const ReviewSection = () => {
   const dispatch = useAppDispatch();
@@ -23,27 +23,25 @@ const ReviewSection = () => {
   };
 
   const handleSaveInDB = async () => {
-    await funcWithError(
-      [saveReviewInDB],
-      [
-        [
-          email,
-          removeSpecialChars(activeFolder),
-          removeSpecialChars(activeDeck),
+    const { success } = await saveReviewInDB(
+      email,
+      removeSpecialChars(activeFolder),
+      removeSpecialChars(activeDeck),
+      answers,
+      timeSpent
+    );
+    if (success) {
+      dispatch(
+        addReview({
+          folderId: removeSpecialChars(activeFolder),
+          deckId: removeSpecialChars(activeDeck),
           answers,
           timeSpent,
-        ],
-      ]
-    );
-
-    dispatch(
-      addReview({
-        folderId: removeSpecialChars(activeFolder),
-        deckId: removeSpecialChars(activeDeck),
-        answers,
-        timeSpent,
-      })
-    );
+        })
+      );
+    } else {
+      toast.error('Oops, a problem has occured while saving the review...');
+    }
   };
 
   useEffect(() => {
