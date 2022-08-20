@@ -1,11 +1,11 @@
 import React from 'react';
-import FlexContainer from '../FlexContainer/FlexContainer';
-import FlashcardTextarea from '../Texts/FlashcardTextarea';
 
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import FlexContainer from '../FlexContainer/FlexContainer';
+import EditableClassic from './components/EditableClassic/EditableClassic';
+import FlashcardActions from './components/FlashcardActions/FlashcardActions';
 
 import styles from './Classic.module.scss';
+import StaticClassic from './components/StaticClassic/StaticClassic';
 
 type ClassicProps = {
   front: string;
@@ -50,56 +50,17 @@ const ClassicFlashcard = ({
         }`}
       >
         {showEditIcons && (
-          <FlexContainer
-            flexDirection='row'
-            width='70px'
-            height='30px'
-            justifyContent='space-between'
-            style={{
-              position: 'absolute',
-              top: 10,
-              right: 10,
-              zIndex: 10000,
-            }}
-          >
-            <EditIcon
-              sx={{ color: 'white', cursor: 'pointer' }}
-              onClick={onEdit}
-            />
-            <DeleteIcon
-              sx={{ color: 'white', cursor: 'pointer' }}
-              onClick={onDelete}
-            />
-          </FlexContainer>
+          <FlashcardActions onEdit={onEdit} onDelete={onDelete} />
         )}
         {editable ? (
-          <>
-            <div className={`${styles['flippable-front']}`}>
-              <FlashcardTextarea value={front} onChangeValue={setFront} />
-            </div>
-            <div className={`${styles['flippable-back']}`}>
-              <FlashcardTextarea
-                value={back}
-                onChangeValue={setBack}
-                color='black'
-              />
-            </div>
-          </>
+          <EditableClassic
+            front={front}
+            setFront={setFront}
+            back={back}
+            setBack={setBack}
+          />
         ) : (
-          <>
-            <div
-              style={{ fontSize: fontSize ? fontSize : '22px' }}
-              className={`${styles['flippable-front']}`}
-            >
-              {front}
-            </div>
-            <div
-              style={{ fontSize: fontSize ? fontSize : '22px' }}
-              className={`${styles['flippable-back']}`}
-            >
-              {back}
-            </div>
-          </>
+          <StaticClassic front={front} back={back} fontSize={fontSize} />
         )}
       </div>
     </FlexContainer>

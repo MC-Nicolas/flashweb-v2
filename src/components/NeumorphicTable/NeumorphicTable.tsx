@@ -8,6 +8,7 @@ type NeumorphicTableProps = {
   headerElements: string[];
   data: string[][];
   style?: {};
+  height?: string;
 };
 
 const NeumorphicTable = ({
@@ -15,15 +16,16 @@ const NeumorphicTable = ({
   headerElements,
   data,
   style = {},
+  height = 'auto',
 }: NeumorphicTableProps) => {
   return (
     <FlexContainer
       width={width}
-      height='auto'
+      height={height}
       flexDirection='column'
       flexWrap='nowrap'
       justifyContent='flex-start'
-      style={{ ...style }}
+      style={{ ...style, overflowY: 'auto' }}
     >
       <HeaderRow headerElements={headerElements} />
       {data.map((el, index) => (

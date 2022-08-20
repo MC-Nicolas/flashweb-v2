@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NeumorphicContainer from '@/components/Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import { useAppDispatch } from '@/redux/redux.hooks';
@@ -5,7 +6,7 @@ import { setAnswerIsSuccess } from '@/redux/study/StudySlice';
 import { MCQAnswerType } from '@/types/mcq';
 import { deepCopy } from '@firebase/util';
 import React, { useEffect, useState } from 'react';
-import MCQAnswer from './MCQAnswer';
+import MCQAnswer from './components/MCQAnswer/MCQAnswer';
 
 type MCQFlashcardProps = {
   front: string;

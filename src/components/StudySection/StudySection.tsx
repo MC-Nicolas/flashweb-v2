@@ -32,6 +32,7 @@ const StudySection = ({ deck }: StudySectionProps) => {
   const dispatch = useAppDispatch();
   const { flashcardIsFlipped, typeOfFlashcardBeingStudied, answerIsSuccess } =
     useAppSelector((state) => state.study);
+
   const [shuffledFlashcards, setShuffledFlashcards] = useState<any>(null);
   const [usedOrders, setUsedOrders] = useState<any>([]);
   const [order, setOrder] = useState(0);

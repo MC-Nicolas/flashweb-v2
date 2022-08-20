@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
 import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { extractDataForFolderTable } from '@/utils/dataFormatting';
-import React, { useEffect, useState } from 'react';
-import FlexContainer from '../FlexContainer/FlexContainer';
+
 import { headerElements } from '../NeumorphicTable/data';
 import NeumorphicTable from '../NeumorphicTable/NeumorphicTable';
 import SectionTitle from '../Texts/SectionTitle';
@@ -19,6 +20,7 @@ const Folders = () => {
 
   useEffect(() => {
     dispatch(setTypeOfElementToEdit('folder'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (folders.length === 0) {
@@ -28,7 +30,7 @@ const Folders = () => {
   return (
     <NeumorphicTable
       width='85%'
-      height='80%'
+      height='85%'
       headerElements={headerElements.folder}
       data={foldersDataForTable}
     />
