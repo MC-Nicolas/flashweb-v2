@@ -2,13 +2,10 @@ import React from 'react';
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '../FlexContainer/FlexContainer';
 
-import CloseIcon from '@mui/icons-material/Close';
-import { useAppDispatch } from '@/redux/redux.hooks';
-import { setEditModalIsOpen } from '@/redux/smartCard/smartCardSlice';
 import Variables from './components/Variables/Variables';
+import CloseContainer from './components/CloseContainer/CloseContainer';
 
 const SmartcardModal = () => {
-  const dispatch = useAppDispatch();
   return (
     <FlexContainer
       style={{
@@ -26,12 +23,7 @@ const SmartcardModal = () => {
         height='50%'
         style={{ padding: '10px 30px' }}
       >
-        <FlexContainer height='50px' justifyContent='flex-end'>
-          <CloseIcon
-            sx={{ color: 'white', cursor: 'pointer' }}
-            onClick={() => dispatch(setEditModalIsOpen(false))}
-          />
-        </FlexContainer>
+        <CloseContainer />
         <FlexContainer justifyContent='flex-start' alignItems='flex-start'>
           <Variables />
         </FlexContainer>

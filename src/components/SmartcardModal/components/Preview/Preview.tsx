@@ -22,8 +22,8 @@ const Preview = () => {
     <FlexContainer height='80%' flexDirection='column'>
       <p style={{ color: 'white', fontSize: '22px', letterSpacing: 2 }}>
         {formattedVariables.map((variable: any) => {
-          if (variable.type !== 'result') {
-            return `${variable.value} ${variable.symbol} `;
+          if (variable.type !== 'result' && variable.isVisible) {
+            return `${variable.value}${variable.symbol} `;
           }
         })}
       </p>

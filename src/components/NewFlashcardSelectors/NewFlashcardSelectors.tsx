@@ -1,7 +1,7 @@
 import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import { ArrowBackIosNew, KeyboardArrowDown } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Select from '../Inputs/Select';

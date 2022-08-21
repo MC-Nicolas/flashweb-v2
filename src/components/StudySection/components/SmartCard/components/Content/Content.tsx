@@ -10,8 +10,8 @@ const Content = ({ variables }: ContentProps) => {
     <FlexContainer height='70%' justifyContent='space-evenly'>
       <p style={{ color: 'white', fontSize: '22px', letterSpacing: 2 }}>
         {variables.map((variable: any) => {
-          if (variable.type !== 'result') {
-            return `${variable.value} ${variable.symbol} `;
+          if (variable.type !== 'result' && variable.isVisible) {
+            return `${variable.value}${variable.symbol} `;
           }
         })}
       </p>

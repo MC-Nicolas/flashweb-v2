@@ -47,6 +47,9 @@ export const userSlice = createSlice({
       if (decks.length > 0) {
         state.activeDeck = state.folders[folderIndex].decks[0].title;
         state.decksOptions = transformFoldersFromDBToOptions(decks);
+      } else {
+        state.activeDeck = '';
+        state.decksOptions = [];
       }
     },
     setDecksOptions: (state, action) => {

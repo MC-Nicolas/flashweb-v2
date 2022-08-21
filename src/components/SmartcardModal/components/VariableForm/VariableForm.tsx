@@ -28,7 +28,9 @@ const VariableForm = (props: Props) => {
       dispatch(updateVariable({ id: variableToAdd.id, data: variableToAdd }));
       dispatch(setIsEdit(false));
     } else {
-      dispatch(addVariable({ ...variableToAdd, type: typeOfVariable }));
+      dispatch(
+        addVariable({ ...variableToAdd, isVisible: true, type: typeOfVariable })
+      );
     }
   };
 

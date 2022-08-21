@@ -1,4 +1,5 @@
 import { DeckType, FolderType } from '@/types/folders';
+import { calculateFromTwoOpsAndOperator } from './calculations';
 import { findIndexOfFolder, removeSpecialChars } from './dataFormatting';
 
 export const getDeckData = (
@@ -49,7 +50,11 @@ export const getValueByRecursive = (variables: any, id: string) => {
         variableFound.value['secondOp']
       );
       const operator = variableFound.value['operator'];
-      const result = eval(`${firstOpValue} ${operator} ${secondOpValue}`);
+      const result = calculateFromTwoOpsAndOperator(
+        firstOpValue,
+        secondOpValue,
+        operator
+      );
       return result;
     }
   } else return variableFound.value;
@@ -62,6 +67,10 @@ export const calculateResultByRecursion = (variable: any, variables: any[]) => {
   const operator = value.operator;
   const firstOpValue = getValueByRecursive(variables, firstOp);
   const secondOpValue = getValueByRecursive(variables, secondOp);
-  const result = eval(`${firstOpValue} ${operator} ${secondOpValue}`);
+  const result = calculateFromTwoOpsAndOperator(
+    firstOpValue,
+    secondOpValue,
+    operator
+  );
   return result;
 };
