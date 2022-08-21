@@ -136,6 +136,7 @@ const Flashcard = (props: Props) => {
 
   const handleSaveSmartcard = (type: string) => {
     if (type === 'smart') {
+      console.log(variables);
       handleCreateNewFlashcard(undefined, variables);
     } else if (type === 'mcq') {
       handleCreateNewFlashcard(undefined, undefined, { front, back });

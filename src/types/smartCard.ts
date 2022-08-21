@@ -10,6 +10,7 @@ export interface variableToAddType {
 }
 export interface variablesWithIdType extends variableToAddType {
   id: string;
+  isVisible: boolean;
 }
 
 export interface SmartCardState {

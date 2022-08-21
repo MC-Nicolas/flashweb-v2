@@ -1,6 +1,7 @@
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import { variablesWithIdType } from '@/types/smartCard';
 import React from 'react';
+import Visibility from '../Visibility/Visibility';
 
 type DraggableElementProps = {
   variable: variablesWithIdType;
@@ -11,7 +12,6 @@ type DraggableElementProps = {
 const DraggableElement = ({
   variable,
   onDragStart,
-
   onDrop,
 }: DraggableElementProps) => {
   return (
@@ -19,10 +19,15 @@ const DraggableElement = ({
       width='70px'
       height='50px'
       draggable
-      style={{ border: '1px solid white', cursor: 'move' }}
+      style={{
+        border: '1px solid white',
+        cursor: 'move',
+        position: 'relative',
+      }}
       onDragStart={onDragStart}
       onDrop={onDrop}
     >
+      <Visibility variable={variable} />
       <p style={{ color: 'white' }}>{variable.name}</p>
     </FlexContainer>
   );

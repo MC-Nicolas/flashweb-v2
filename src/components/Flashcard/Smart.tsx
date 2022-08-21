@@ -54,8 +54,8 @@ const Smart = ({ isFrontActive }: { isFrontActive: boolean }) => {
               }}
             >
               {formattedVariables.map((variable: any) => {
-                if (variable.type !== 'result') {
-                  return `${variable.value} ${variable.symbol} `;
+                if (variable.type !== 'result' && variable.isVisible) {
+                  return `${variable.value}${variable.symbol} `;
                 }
               })}
             </p>

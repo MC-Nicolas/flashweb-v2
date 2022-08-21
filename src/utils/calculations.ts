@@ -62,3 +62,24 @@ export const createDateWithTimeFromSeconds = (seconds: number) => {
     'left'
   )}:${manageSingleNumber(d.getMinutes(), 'right')}`;
 };
+
+export const calculateFromTwoOpsAndOperator = (
+  op1: number,
+  op2: number,
+  operator: string
+) => {
+  const firstOp = op1 * 1;
+  const secondOp = op2 * 1;
+  switch (operator) {
+    case '+':
+      return firstOp + secondOp;
+    case '-':
+      return firstOp - secondOp;
+    case '*':
+      return firstOp * secondOp;
+    case '/':
+      return firstOp / secondOp;
+    default:
+      return 0;
+  }
+};
