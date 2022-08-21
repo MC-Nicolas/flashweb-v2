@@ -8,6 +8,7 @@ import Select from '../Inputs/Select';
 import { setActiveFolder } from '@/redux/folders/FolderSlice';
 import {
   extractDataForDeckTable,
+  findIndexOfFolder,
   removeSpecialChars,
 } from '@/utils/dataFormatting';
 import { setTypeOfElementToEdit } from '@/redux/editModal/editModalSlice';
@@ -21,9 +22,7 @@ const Decks = () => {
   const [deckDataForTable, setDeckDataForTable] = useState<any>([]);
 
   useEffect(() => {
-    const folderIndex = folders.findIndex(
-      (folder) => removeSpecialChars(folder.title) === activeFolder
-    );
+    const folderIndex = findIndexOfFolder(folders, activeFolder);
     if (folderIndex === -1) return;
     const decks = folders[folderIndex].decks;
 
