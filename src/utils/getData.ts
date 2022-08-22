@@ -53,7 +53,9 @@ export const getValueByRecursive = (variables: any, id: string) => {
       const result = calculateFromTwoOpsAndOperator(
         firstOpValue,
         secondOpValue,
-        operator
+        operator,
+        variableFound.rounded ?? undefined,
+        variableFound.roundNumber ?? undefined
       );
       return result;
     }
@@ -65,12 +67,16 @@ export const calculateResultByRecursion = (variable: any, variables: any[]) => {
   const firstOp = value.firstOp;
   const secondOp = value.secondOp;
   const operator = value.operator;
+  const rounded = value.rounded;
+  const roundNumber = value.roundNumber;
   const firstOpValue = getValueByRecursive(variables, firstOp);
   const secondOpValue = getValueByRecursive(variables, secondOp);
   const result = calculateFromTwoOpsAndOperator(
     firstOpValue,
     secondOpValue,
-    operator
+    operator,
+    rounded ?? undefined,
+    roundNumber ?? undefined
   );
   return result;
 };

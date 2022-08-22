@@ -20,6 +20,7 @@ import { setAllVariables } from '@/redux/smartCard/smartCardSlice';
 import MCQ from '@/components/Flashcard/MCQ/MCQ';
 import { MCQAnswerType } from '@/types/mcq';
 import { resetMCQFlashcard } from '@/redux/mcqFlashcard/mcqFlashcardSlice';
+import PageContainerWithNavAndTitle from '@/components/Containers/PageContainerWithNavAndTitle/PageContainerWithNavAndTitle';
 
 type Props = {};
 
@@ -136,7 +137,6 @@ const Flashcard = (props: Props) => {
 
   const handleSaveSmartcard = (type: string) => {
     if (type === 'smart') {
-      console.log(variables);
       handleCreateNewFlashcard(undefined, variables);
     } else if (type === 'mcq') {
       handleCreateNewFlashcard(undefined, undefined, { front, back });
@@ -144,32 +144,26 @@ const Flashcard = (props: Props) => {
   };
 
   return (
-    <PageContainerWithNav pageTitle='GLP - New Flashcard'>
-      <FlexContainer
-        height='100vh'
-        flexDirection='column'
-        justifyContent='flex-start'
-        style={{ flexWrap: 'nowrap' }}
+    <PageContainerWithNavAndTitle
+      tabTitle='GLP - New Flashcard'
+      pageTitle='New Flashcard'
+    >
+      <NewFlashcardSelectors
+        typeOfFlashcard={typeOfFlashcard}
+        setTypeOfFlashcard={setTypeOfFlashcard}
+        isCollapsed={paramsAreCollapsed}
+        setIsCollapsed={setParamsAreCollapsed}
+      />
+
+      <InsetNeumorphicContainer
+        width='80%'
+        height={paramsAreCollapsed ? '50%' : '70%'}
+        style={{
+          marginTop: '40px',
+          transition: 'all 0.2s ease-in-out',
+        }}
       >
-        <FlexContainer height='100px'>
-          <SectionTitle title='New Flashcard' color='white' />
-        </FlexContainer>
-
-        <NewFlashcardSelectors
-          typeOfFlashcard={typeOfFlashcard}
-          setTypeOfFlashcard={setTypeOfFlashcard}
-          isCollapsed={paramsAreCollapsed}
-          setIsCollapsed={setParamsAreCollapsed}
-        />
-
-        <InsetNeumorphicContainer
-          width='80%'
-          height={paramsAreCollapsed ? '50%' : '70%'}
-          style={{
-            marginTop: '40px',
-            transition: 'all 0.2s ease-in-out',
-          }}
-        >
+        {activeDeck ? (
           <form
             style={{ width: '100%', height: '100%' }}
             onSubmit={handleCreateNewFlashcard}
@@ -274,9 +268,11 @@ const Flashcard = (props: Props) => {
               </FlexContainer>
             )}
           </form>
-        </InsetNeumorphicContainer>
-      </FlexContainer>
-    </PageContainerWithNav>
+        ) : (
+          <h2 style={{ color: 'white' }}>No deck here</h2>
+        )}
+      </InsetNeumorphicContainer>
+    </PageContainerWithNavAndTitle>
   );
 };
 

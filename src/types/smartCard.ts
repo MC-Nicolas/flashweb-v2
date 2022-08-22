@@ -4,7 +4,13 @@ export interface variableToAddType {
     | string
     | number
     | { min: number; max: number }
-    | { firstOp: string; secondOp: string; operator: string };
+    | {
+        firstOp: string;
+        secondOp: string;
+        operator: string;
+        rounded?: boolean;
+        roundNumber?: number;
+      };
   symbol: string;
   type: string;
 }

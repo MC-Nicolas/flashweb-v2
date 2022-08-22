@@ -54,7 +54,7 @@ export const smartCardSlice = createSlice({
     },
     setVariableToAdd: (
       state: any,
-      action: { payload: { key: string; value: string | number | {} } }
+      action: { payload: { key: string; value: string | number | any } }
     ) => {
       state.variableToAdd[action.payload.key] = action.payload.value;
     },
@@ -69,7 +69,7 @@ export const smartCardSlice = createSlice({
     },
     setVariableResult: (
       state,
-      action: { payload: { key: string; value: string } }
+      action: { payload: { key: string; value: any } }
     ) => {
       //@ts-ignore
       state.variableToAdd.value[action.payload.key] = action.payload.value;

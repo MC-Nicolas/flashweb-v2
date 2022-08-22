@@ -24,6 +24,13 @@ const NewFlashcardSelectors = ({
   const { activeFolder, foldersOptions, activeDeck, decksOptions } =
     useAppSelector((state) => state.folders);
 
+  useEffect(() => {
+    if (decksOptions.length === 0) {
+      dispatch(setActiveDeck(''));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFolder, activeDeck]);
+
   return (
     <NeumorphicContainer
       width='80%'

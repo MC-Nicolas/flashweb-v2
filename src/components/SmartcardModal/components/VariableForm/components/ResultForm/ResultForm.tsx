@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FlexContainer from '@/components/FlexContainer/FlexContainer';
 import Select from '@/components/Inputs/Select';
-import WhiteBasicInput from '@/components/Inputs/WhiteBasicInput';
 import {
   formatVariablesForOptions,
   handleVariablesCalculationsAndValues,
@@ -9,20 +8,14 @@ import {
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
 import {
   addVariable,
-  setOpenedModal,
   setVariableResult,
   setVariableToAdd,
 } from '@/redux/smartCard/smartCardSlice';
 import { Button } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  calculateResultByRecursion,
-  getVariableById,
-  getVariableOfType,
-} from '@/utils/getData';
-import { deepCopy } from '@/utils/dataFormatting';
-import { createRandomNumberWithMinMax } from '@/utils/data';
-import { modals } from '@/redux/smartCard/modals';
+
+import { getVariableById } from '@/utils/getData';
+import Checkbox from '@mui/material/Checkbox';
+import RoundNumberForm from './RoundNumberForm/RoundNumberForm';
 
 const operators = [
   { value: '+', name: '+' },
@@ -36,10 +29,9 @@ const ResultForm = () => {
   const dispatch = useAppDispatch();
   const {
     variables,
-    variableToAdd: { name, value, symbol },
+    variableToAdd: { value },
   } = useAppSelector((state) => state.smartcard);
   const [variablesOptions, setVariablesOptions] = useState<any>([]);
-  const [randomNumberVars, setRandomNumberVars] = useState<any>([]);
   const [finalResult, setFinalResult] = useState(0);
 
   useEffect(() => {
@@ -51,6 +43,8 @@ const ResultForm = () => {
           firstOp: formatVariablesForOptions(variables)[0].value,
           secondOp: formatVariablesForOptions(variables)[0].value,
           operator: operators[0].value,
+          rounded: false,
+          roundNumber: 0,
         },
       })
     );
@@ -58,10 +52,9 @@ const ResultForm = () => {
   }, []);
 
   useEffect(() => {
-    const { result, variablesOptions, randomNumberValues } =
+    const { result, variablesOptions } =
       handleVariablesCalculationsAndValues(variables);
     setVariablesOptions(variablesOptions);
-    setRandomNumberVars(randomNumberValues);
     setFinalResult(result);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,15 +83,30 @@ const ResultForm = () => {
       style={{ position: 'relative' }}
     >
       <FlexContainer
-        width='50px'
         height='50px'
-        style={{ position: 'absolute', top: 0, right: 0 }}
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+        width='100px'
       >
-        <CloseIcon
+        <p style={{ color: 'white' }}>Round</p>
+        <Checkbox
           sx={{ color: 'white', cursor: 'pointer' }}
-          onClick={() => dispatch(setOpenedModal(modals.ADD_VARIABLE))}
+          //@ts-ignore
+          checked={value.rounded ?? false}
+          onClick={() => {
+            dispatch(
+              //@ts-ignore
+              setVariableResult({ key: 'rounded', value: !value.rounded })
+            );
+          }}
         />
       </FlexContainer>
+
+      {
+        //@ts-ignore
+        value?.rounded && <RoundNumberForm />
+      }
       <FlexContainer height='80px'>
         <p style={{ color: 'white', fontSize: '20px' }}>{finalResult}</p>
       </FlexContainer>
@@ -143,9 +151,6 @@ const ResultForm = () => {
       <Button variant='contained' onClick={handleAddVarResult}>
         Then
       </Button>
-      {/* <Button variant='contained' sx={{ backgroundColor: 'green' }}>
-        Save
-      </Button> */}
     </FlexContainer>
   );
 };

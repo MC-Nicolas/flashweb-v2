@@ -66,20 +66,29 @@ export const createDateWithTimeFromSeconds = (seconds: number) => {
 export const calculateFromTwoOpsAndOperator = (
   op1: number,
   op2: number,
-  operator: string
+  operator: string,
+  rounded?: boolean,
+  roundNumber?: number
 ) => {
   const firstOp = op1 * 1;
   const secondOp = op2 * 1;
+  let result = 0;
   switch (operator) {
     case '+':
-      return firstOp + secondOp;
+      result = firstOp + secondOp;
+      break;
     case '-':
-      return firstOp - secondOp;
+      result = firstOp - secondOp;
+      break;
     case '*':
-      return firstOp * secondOp;
+      result = firstOp * secondOp;
+      break;
     case '/':
-      return firstOp / secondOp;
-    default:
-      return 0;
+      result = firstOp / secondOp;
+      break;
   }
+  if (rounded !== undefined && rounded) {
+    return result.toFixed(roundNumber);
+  }
+  return result;
 };
