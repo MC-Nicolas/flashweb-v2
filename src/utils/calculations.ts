@@ -86,6 +86,15 @@ export const calculateFromTwoOpsAndOperator = (
     case '/':
       result = firstOp / secondOp;
       break;
+    case 'sin (°)':
+      result = Math.sin((firstOp * Math.PI) / 180);
+      break;
+    case 'cos (°)':
+      result = Math.cos((firstOp * Math.PI) / 180);
+      break;
+    case 'tan':
+      result = Math.tan(firstOp);
+      break;
   }
   if (rounded !== undefined && rounded) {
     return result.toFixed(roundNumber);

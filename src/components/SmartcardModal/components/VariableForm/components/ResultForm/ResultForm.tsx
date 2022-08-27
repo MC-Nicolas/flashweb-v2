@@ -23,6 +23,9 @@ const operators = [
   { value: '*', name: '*' },
   { value: '/', name: '/' },
   { value: '%', name: '%' },
+  { value: 'sin (°)', name: 'sin (°)' },
+  { value: 'cos (°)', name: 'cos (°)' },
+  { value: 'tan', name: 'tan' },
 ];
 
 const ResultForm = () => {
@@ -33,6 +36,14 @@ const ResultForm = () => {
   } = useAppSelector((state) => state.smartcard);
   const [variablesOptions, setVariablesOptions] = useState<any>([]);
   const [finalResult, setFinalResult] = useState(0);
+  const [showSecondSelect, setShowSecondSelect] = useState(true);
+
+  useEffect(() => {
+    //@ts-ignore
+    if (value.operator === 'sin (°)' || value.operator === 'cos (°)') {
+      setShowSecondSelect(false);
+    }
+  }, [value]);
 
   useEffect(() => {
     if (variables.length === 0) return;
@@ -135,18 +146,23 @@ const ResultForm = () => {
             )
           }
         />
-        <Select
-          label=''
-          options={variablesOptions}
-          //@ts-ignore
-          value={value.secondOp}
-          width='100px'
-          onChange={(e) =>
-            dispatch(
-              setVariableResult({ key: 'secondOp', value: e.target.value })
-            )
-          }
-        />
+        {showSecondSelect && (
+          <Select
+            label=''
+            options={variablesOptions}
+            //@ts-ignore
+            value={value.secondOp}
+            width='100px'
+            onChange={(e) =>
+              dispatch(
+                setVariableResult({
+                  key: 'secondOp',
+                  value: e.target.value,
+                })
+              )
+            }
+          />
+        )}
       </FlexContainer>
       <Button variant='contained' onClick={handleAddVarResult}>
         Then

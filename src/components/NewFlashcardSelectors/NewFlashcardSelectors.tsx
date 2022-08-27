@@ -1,11 +1,10 @@
 import { setActiveDeck, setActiveFolder } from '@/redux/folders/FolderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/redux.hooks';
-import { ArrowBackIosNew, KeyboardArrowDown } from '@mui/icons-material';
+import { KeyboardArrowDown } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import NeumorphicContainer from '../Containers/NeumorphicContainer/NeumorphicContainer';
 import FlexContainer from '../FlexContainer/FlexContainer';
 import Select from '../Inputs/Select';
-import SectionDescription from '../Texts/SectionDescription';
 
 type NewFlashcardSelectorsProps = {
   typeOfFlashcard: string;
