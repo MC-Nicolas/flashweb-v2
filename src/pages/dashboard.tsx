@@ -33,6 +33,8 @@ const Dashboard = () => {
     dispatch(setSeries({ values: seriesData, categories }));
   }, [allReviews, dispatch]);
 
+
+
   return (
     <PageContainerWithNavAndTitle tabTitle='Dashboard' pageTitle='Dashboard'>
       <InsetNeumorphicContainer

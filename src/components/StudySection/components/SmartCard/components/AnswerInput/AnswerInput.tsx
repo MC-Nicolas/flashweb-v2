@@ -29,7 +29,7 @@ const AnswerInput = ({
         label=''
         placeholder='Enter your answer'
         value={userResult}
-        type='number'
+        type='text'
         onChange={(e: { target: { value: string } }) => {
           if (!isFlipped) {
             e.target.value
