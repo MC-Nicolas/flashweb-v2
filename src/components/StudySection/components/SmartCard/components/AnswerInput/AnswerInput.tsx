@@ -32,9 +32,7 @@ const AnswerInput = ({
         type='text'
         onChange={(e: { target: { value: string } }) => {
           if (!isFlipped) {
-            e.target.value
-              ? setUserResult(parseInt(e.target.value))
-              : setUserResult('');
+            e.target.value ? setUserResult(e.target.value) : setUserResult('');
           }
         }}
         width='40%'
