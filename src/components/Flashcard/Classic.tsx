@@ -63,7 +63,17 @@ const ClassicFlashcard = ({
               alignItems: 'center',
             }}
           >
-            <p>{back}</p>
+            <p
+              style={{
+                fontSize: 20,
+                color: 'white',
+                letterSpacing: 1,
+                textAlign: 'center',
+                width: '80%',
+              }}
+            >
+              {back}
+            </p>
           </div>
         )}
         {showEditIcons && (
