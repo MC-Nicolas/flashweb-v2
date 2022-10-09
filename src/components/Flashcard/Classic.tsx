@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import FlexContainer from '../FlexContainer/FlexContainer';
 import EditableClassic from './components/EditableClassic/EditableClassic';
@@ -38,6 +38,7 @@ const ClassicFlashcard = ({
   onEdit,
   fontSize,
 }: ClassicProps) => {
+  const [isRevealed, setIsRevealed] = useState(false);
   return (
     <FlexContainer
       style={{ perspective: '1000px', ...style, position: 'relative' }}
@@ -49,8 +50,28 @@ const ClassicFlashcard = ({
           isFlipped ? styles.flipped : ''
         }`}
       >
+        {isRevealed && (
+          <div
+            style={{
+              backgroundColor: '#222',
+              borderRadius: 10,
+              height: '100%',
+              width: '100%',
+              zIndex: 10000,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <p>{back}</p>
+          </div>
+        )}
         {showEditIcons && (
-          <FlashcardActions onEdit={onEdit} onDelete={onDelete} />
+          <FlashcardActions
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onReveal={() => setIsRevealed(!isRevealed)}
+          />
         )}
         {editable ? (
           <EditableClassic

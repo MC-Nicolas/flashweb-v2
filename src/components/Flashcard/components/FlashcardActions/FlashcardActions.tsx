@@ -3,17 +3,23 @@ import React from 'react';
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PreviewIcon from '@mui/icons-material/Preview';
 
 type FlashcardActionsProps = {
   onEdit: any;
   onDelete: any;
+  onReveal: any;
 };
 
-const FlashcardActions = ({ onEdit, onDelete }: FlashcardActionsProps) => {
+const FlashcardActions = ({
+  onEdit,
+  onDelete,
+  onReveal,
+}: FlashcardActionsProps) => {
   return (
     <FlexContainer
       flexDirection='row'
-      width='70px'
+      width='100px'
       height='30px'
       justifyContent='space-between'
       style={{
@@ -23,6 +29,10 @@ const FlashcardActions = ({ onEdit, onDelete }: FlashcardActionsProps) => {
         zIndex: 10000,
       }}
     >
+      <PreviewIcon
+        sx={{ color: 'white', cursor: 'pointer' }}
+        onClick={onReveal}
+      />
       <EditIcon sx={{ color: 'white', cursor: 'pointer' }} onClick={onEdit} />
       <DeleteIcon
         sx={{ color: 'white', cursor: 'pointer' }}
