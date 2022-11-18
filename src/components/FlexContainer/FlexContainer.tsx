@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 
 export interface FlexContainerProps {
   children: any;
   justifyContent?:
-    | 'center'
-    | 'flex-start'
-    | 'flex-end'
-    | 'space-between'
-    | 'space-evenly'
-    | 'space-around';
-  alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch';
-  flexDirection?: 'row' | 'column';
-  flexWrap?: 'wrap' | 'nowrap';
+    | "center"
+    | "flex-start"
+    | "flex-end"
+    | "space-between"
+    | "space-evenly"
+    | "space-around";
+  alignItems?: "center" | "flex-start" | "flex-end" | "stretch";
+  flexDirection?: "row" | "column";
+  flexWrap?: "wrap" | "nowrap";
   gap?: string;
   width?: string;
   height?: string;
@@ -28,13 +28,13 @@ export interface FlexContainerProps {
 
 const FlexContainer = ({
   children,
-  width = '100%',
-  height = '100%',
-  justifyContent = 'space-evenly',
-  alignItems = 'center',
-  flexDirection = 'row',
-  flexWrap = 'wrap',
-  gap = '5px',
+  width = "100%",
+  height = "100%",
+  justifyContent = "space-evenly",
+  alignItems = "center",
+  flexDirection = "row",
+  flexWrap = "wrap",
+  gap = "5px",
   isTest,
   style = {},
   className,
@@ -42,16 +42,17 @@ const FlexContainer = ({
 }: FlexContainerProps) => {
   return (
     <div
+      data-cy={...rest.dataCy}
       style={{
         width,
         height,
-        display: 'flex',
+        display: "flex",
         flexDirection,
         justifyContent,
         alignItems,
         flexWrap,
         gap,
-        backgroundColor: isTest ? 'red' : '',
+        backgroundColor: isTest ? "red" : "",
         ...style,
       }}
       className={className}

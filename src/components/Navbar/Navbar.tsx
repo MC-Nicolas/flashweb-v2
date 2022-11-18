@@ -1,20 +1,20 @@
-import React from 'react';
-import NeumorphicButtonWithIcon from '../Buttons/Neumorphics/NeumorphicButtonWithIcon';
+import React from "react";
+import NeumorphicButtonWithIcon from "../Buttons/Neumorphics/NeumorphicButtonWithIcon";
 
-import AddIcon from '@mui/icons-material/Add';
-import SettingsIcon from '@mui/icons-material/Settings';
-import SchoolIcon from '@mui/icons-material/School';
+import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SchoolIcon from "@mui/icons-material/School";
 
-import EqualizerIcon from '@mui/icons-material/Equalizer';
-import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import HomeIcon from '@mui/icons-material/Home';
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
+import HomeIcon from "@mui/icons-material/Home";
 
-import FlexContainer from '../FlexContainer/FlexContainer';
-import NeumorphicSquaredButton from '../Buttons/Neumorphics/NeumorphicSquaredButton';
+import FlexContainer from "../FlexContainer/FlexContainer";
+import NeumorphicSquaredButton from "../Buttons/Neumorphics/NeumorphicSquaredButton";
 
-import styles from './Navbar.module.scss';
-import { useRouter } from 'next/router';
-import CollapsableMenu from './CollapsableMenu/CollapsableMenu';
+import styles from "./Navbar.module.scss";
+import { useRouter } from "next/router";
+import CollapsableMenu from "./CollapsableMenu/CollapsableMenu";
 
 const Navbar = () => {
   const { pathname } = useRouter();
@@ -22,44 +22,49 @@ const Navbar = () => {
   return (
     <div
       className={styles.navbar}
-      style={{ position: 'fixed', width: '100px' }}
+      style={{ position: "fixed", width: "100px" }}
     >
-      <FlexContainer height='10%'>
+      <FlexContainer height="10%">
         <CollapsableMenu
           icon={<NeumorphicButtonWithIcon icon={<AddIcon />} />}
         />
       </FlexContainer>
 
-      <FlexContainer height='50%'>
+      <FlexContainer height="50%">
         <NeumorphicSquaredButton
-          active={pathname === '/dashboard'}
+          dataCy="nav-dashboard"
+          active={pathname === "/dashboard"}
           icon={<HomeIcon />}
           isLink
-          pushTo='/dashboard'
+          pushTo="/dashboard"
         />
         <NeumorphicSquaredButton
-          active={pathname === '/study'}
+          dataCy="nav-study"
+          active={pathname === "/study"}
           icon={<SchoolIcon />}
           isLink
-          pushTo='/study'
+          pushTo="/study"
         />
         <NeumorphicSquaredButton
-          active={pathname === '/studies'}
+          dataCy="nav-studies"
+          active={pathname === "/studies"}
           icon={<ViewCarouselIcon />}
           isLink
-          pushTo='/studies'
+          pushTo="/studies"
         />
         <NeumorphicSquaredButton
-          active={pathname === '/performances'}
+          dataCy="nav-performances"
+          active={pathname === "/performances"}
           icon={<EqualizerIcon />}
           isLink
-          pushTo='/performances'
+          pushTo="/performances"
         />
         <NeumorphicSquaredButton
-          active={pathname === '/settings'}
+          dataCy="nav-settings"
+          active={pathname === "/settings"}
           icon={<SettingsIcon />}
           isLink
-          pushTo='/settings'
+          pushTo="/settings"
         />
       </FlexContainer>
     </div>
