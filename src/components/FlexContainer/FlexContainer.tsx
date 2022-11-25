@@ -40,9 +40,10 @@ const FlexContainer = ({
   className,
   ...rest
 }: FlexContainerProps) => {
+  const { dataCy } = rest;
   return (
     <div
-      data-cy={...rest.dataCy}
+      data-cy={dataCy}
       style={{
         width,
         height,
@@ -57,9 +58,6 @@ const FlexContainer = ({
       }}
       className={className}
       {...rest}
-      onDragOver={(e) => {
-        e.preventDefault();
-      }}
     >
       {children}
     </div>
