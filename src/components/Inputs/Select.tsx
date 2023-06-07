@@ -1,7 +1,7 @@
-import React from 'react';
-import FlexContainer from '../FlexContainer/FlexContainer';
+import React from "react";
+import FlexContainer from "../FlexContainer/FlexContainer";
 
-import styles from './Inputs.module.scss';
+import styles from "./Inputs.module.scss";
 
 type SelectProps = {
   label: string;
@@ -16,16 +16,16 @@ const Select = ({
   onChange,
   label,
   options,
-  width = '100%',
+  width = "100%",
 }: SelectProps) => {
   return (
-    <FlexContainer height='50px' width={width} justifyContent='flex-start'>
+    <FlexContainer height="50px" width={width} justifyContent="flex-start">
       <label
         className={styles.label}
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          color: 'grey',
+          display: "flex",
+          flexDirection: "column",
+          color: "grey",
           letterSpacing: 1,
         }}
       >
@@ -36,7 +36,11 @@ const Select = ({
           onChange={onChange}
         >
           {options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              style={{ backgroundColor: "#222" }}
+            >
               {option.name}
             </option>
           ))}
